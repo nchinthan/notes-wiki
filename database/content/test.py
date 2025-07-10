@@ -1,11 +1,9 @@
-from notes_io import create_file, write_chunk, read_file,CHUNK_SIZE
+from notes_io import  create_file,write_chunk, read_file,CHUNK_SIZE
 import random
 
 def test_notes_file():
     filename = "testfile"
-    title = "My Notes File"
-    create_file(filename, title)
-    
+    create_file("testfile")
     def random_str(l):
         s = str(random.randbytes(l))[2:l+2]
         return s
@@ -29,15 +27,12 @@ def test_notes_file():
         original_chunks[chunk_id] = chunk
 
     # Step 3: Read full file
-    res = read_file(filename)
-    read_title = res["title"]
-    read_content = res["html"]
+    read_content = read_file(filename)
 
     # Step 4: Construct expected content
     expected_content = ''.join(original_chunks)
 
     # Step 5: Validation
-    assert read_title == title, f"Title mismatch: {read_title} != {title}"
     assert expected_content == read_content
     
     print("✅ All tests passed.")

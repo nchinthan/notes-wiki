@@ -2,6 +2,8 @@ from .sqlInterface import DataBase
 from .queryRetreival import Retreiver,RetreiverType
 import json
 from .config import HTML_PATH
+from .content.notes_io import read_file,write_chunk,create_file,CHUNK_SIZE
+import math 
 
 db = DataBase()
 queryRet = Retreiver()
@@ -75,15 +77,41 @@ class Page:
     def create(title,content,parentMapid,keywords:list) -> int:
         keyword_str = ",".join(keywords)
         pageId = db.call_procedure("createNote",[title, parentMapid, keyword_str,None],capture_out=True)[-1]
-        save_html(pageId,title,content)
+        
+        filename = str(pageId)
+        
+        # create the file with title
+        create_file(filename)
+        
+        # write each chunk
+        for chunk_index in range(math.ceil(len(content)/CHUNK_SIZE)):
+            write_chunk(filename,content[chunk_index*CHUNK_SIZE:(chunk_index+1)*CHUNK_SIZE],chunk_index)
+            # add hash of each file to table 
+
         keywords.extend(title.split())
         Page.addKeywords(pageId,keywords)
         return pageId
     
+    @staticmethod
+    def update(pageId,content):
+        """
+        get all chunk_index,chunk_hash from table 
+        modified = false
+        for chunk_index in range(math.ceil(len(content)/CHUNK_SIZE)):
+            chunk = content[chunk_index*CHUNK_SIZE:(chunk_index+1)*CHUNK_SIZE]
+            if (not modified) and (hash(chunk) == tables hash):
+                continue 
+            else:
+                modified = true
+                write_chunk(filename,chunk,chunk_index)
+        """
+        pass
+    
     # getting the html of page
     @staticmethod
     def getPage(page_id):
-        return get_html(page_id)
+        # get page title , keywords from sql
+        return read_file(f'{page_id}')
     
     @staticmethod
     def search(query):
