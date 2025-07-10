@@ -1,0 +1,1 @@
+insert into map (title) VALUES('root');

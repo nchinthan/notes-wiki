@@ -1,0 +1,4 @@
+{
+    "title": "orphan vs zombie process",
+    "html": "An orphan process is formed when its parent dies while the process continues to execute, while a zombie process is a process that has terminated but its entry is there in the system.25 Oct 2023\n"
+}

@@ -1,0 +1,5 @@
+host = 'localhost'
+username = 'root'
+password = 'nchn@2004'
+dbname = 'notes_db'
+HTML_PATH = r'database\Pages'

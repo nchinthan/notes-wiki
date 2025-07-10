@@ -1,0 +1,63 @@
+using the links in above views make the ui using html, css(bootstrap) ,js: 
+
+main structure : 
+    1. top heading {
+        1. home link at left -> on click goes to root page i.e load map(id=1)
+        2. search bar at middle {  with event listener on Enter which updates the content container with result using query }
+    }
+    2. middle container {
+        1. options bar {
+            1. at left back arrow , front arrow { maintain a stack of (ids, type:map or page) which can be used to go back and forth }
+            2. at right end {
+                if current page is map { 
+                    then it should have options {
+                        1. add page (dropdown){
+                            1. existing page -> open modal:AddExistingPage
+                            2. new page -> open Modal:CreatePage
+                        }
+                        2. add map -> open modal:createMap
+                    }
+                }
+                if current page is page {
+                    1. add keyword -> open modal:AddKeyWord
+                }
+            }
+        }
+        2. content container {
+            if page then{
+                get page by id then place it in container 
+            }
+            if map then {
+                get use get_map_children to get children and list them as clickable links which on click will on open respective page or map  
+            }
+        }
+    }
+    3. footer 
+
+
+Modals : 
+    1. Modal:AddKeyWord : {
+        take multiple keywords , use the current pages id and then send to server to add keywords 
+        }
+    2. Modal:AddExistingPage : {
+        have a search bar at top to search for pages then 
+        keep track of checked pages using set .
+        after getting result -> create checkbox for each page then if present in checked pages auto check it else leave it unchecked and for each add eventlistener to update the list on check/uncheck
+        also a button at bottom to cancel or submit 
+        on submit send page_ids , current_map_id to server to create 
+    }
+    3.Modal:CreatePage : {
+        create a form with title , content: large text blob , -> then send to createPage with current map id 
+    }
+    4.Modal:CreateMap : {
+        prompt for title then send to server
+    }
+
+start with map:id = 1
+
+
+
+js : 
+create abstraction : class History -> keeps navStack , pushState, goback and goforw.. 
+
+create abstraction : class ContentRegion -> keeps loadMap,loadPage,searchPages

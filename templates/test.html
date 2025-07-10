@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Text Highlight & Link</title>
+</head>
+<body>
+
+    <h1>Highlight Text and Add Link</h1>
+
+    <div id="editableContent" >
+        <p>This is some example text. You can select any part of this text and right-click to add a link.</p>
+        <p>Try selecting a word like "example" or a whole sentence. Then, right-click to bring up the custom menu.</p>
+        <p>You can also type or paste text here since it's `contenteditable`.</p>
+    </div>
+
+    <div id="customContextMenu" class="context-menu">
+        <div class="menu-item">
+            <label for="urlInput">Enter URL:</label>
+            <input type="text" id="urlInput" placeholder="e.g., https://www.google.com">
+        </div>
+        <div class="menu-item">
+            <button id="addLinkBtn">Add Link</button>
+        </div>
+    </div>
+</body>
+</html>
