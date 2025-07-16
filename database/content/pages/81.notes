@@ -1,0 +1,118 @@
+<ul data-start="1319" data-end="1658">
+<li data-start="1319" data-end="1427">
+<p data-start="1321" data-end="1427"><strong data-start="1321" data-end="1340">Race Conditions</strong>: <span class="relative -mx-px my-[-0.2rem] rounded px-px py-[0.2rem]">Signals are asynchronous, and if not handled carefully, they can lead to race conditions. For instance, if a signal interrupts a critical section of code, it might leave shared resources in an inconsistent state.</span>&ZeroWidthSpace;</p>
+</li>
+<li data-start="1429" data-end="1539">
+<p data-start="1431" data-end="1539"><strong data-start="1431" data-end="1452">Reentrancy Issues</strong>: <span class="relative -mx-px my-[-0.2rem] rounded px-px py-[0.2rem]">Not all functions are safe to call within a signal handler. Using non-reentrant functions can lead to undefined behavior. It's recommended to use only async-signal-safe functions within signal handlers.</span>&ZeroWidthSpace;<span class="" data-state="closed"><span class="ml-1 inline-flex max-w-full items-center justify-center relative top-[-0.094rem]" style="width: 86px;"><a href="https://en.wikipedia.org/wiki/Signal_%28IPC%29" target="_blank" rel="noopener" class="flex h-6 overflow-hidden rounded-xl px-2.5 text-[0.5625em] font-medium !bg-[#F4F4F4] !text-token-text-secondary dark:!bg-[#303030]" style="max-width: 86px;"><span class="relative bottom-0 left-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between overflow-hidden" style="opacity: 1; will-change: transform, opacity; transform: none;"><span class="max-w-full grow overflow-hidden truncate text-center">en.wikipedia.org</span></span></span></a></span></span></p>
+</li>
+<li data-start="1541" data-end="1658">
+<p data-start="1543" data-end="1658"><strong data-start="1543" data-end="1571">Interrupted System Calls</strong>: <span class="relative -mx-px my-[-0.2rem] rounded px-px py-[0.2rem]">Signals can interrupt system calls, causing them to return prematurely. Developers need to handle such interruptions to ensure program stability.</span>&ZeroWidthSpace;</p>
+</li>
+</ul>
+<div class="markdown prose w-full break-words dark:prose-invert dark"><h3 data-start="0" data-end="59"><strong data-start="4" data-end="57">Race Condition Due to Signals (Example with Code)</strong></h3>
+<p data-start="61" data-end="382">A <strong data-start="63" data-end="81">race condition</strong> occurs when multiple processes or threads access and manipulate shared data concurrently, and the outcome depends on the order of execution. In the context of <strong data-start="241" data-end="252">signals</strong>, a race condition can arise when a signal handler interrupts a critical section where a process is modifying a shared resource.</p>
+<hr data-start="384" data-end="387">
+<h3 data-start="389" data-end="444"><strong data-start="393" data-end="444">Example: Signal Interrupting a Critical Section</strong></h3>
+<p data-start="445" data-end="619">Let's take a simple example where a global variable is being modified. The modification should be atomic, but a signal interrupts the operation, leading to inconsistent data.</p>
+<h4 data-start="621" data-end="667"><strong data-start="626" data-end="667">Faulty Code (Prone to Race Condition)</strong></h4>
+<pre class="!overflow-visible" data-start="668" data-end="1347"><div class="contain-inline-size rounded-md border-[0.5px] border-token-border-medium relative bg-token-sidebar-surface-primary dark:bg-gray-950"><div class="flex items-center text-token-text-secondary px-4 py-2 text-xs font-sans justify-between rounded-t-[5px] h-9 bg-token-sidebar-surface-primary dark:bg-token-main-surface-secondary select-none">c</div><div class="sticky top-9 md:top-[5.75rem]"><div class="absolute bottom-0 right-2 flex h-9 items-center"><div class="flex items-center rounded bg-token-sidebar-surface-primary px-2 font-sans text-xs text-token-text-secondary dark:bg-token-main-surface-secondary"><span class="" data-state="closed"><button class="flex gap-1 items-center select-none px-4 py-1" aria-label="Copy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>Copy</button></span><span class="" data-state="closed"><button class="flex select-none items-center gap-1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path d="M2.5 5.5C4.3 5.2 5.2 4 5.5 2.5C5.8 4 6.7 5.2 8.5 5.5C6.7 5.8 5.8 7 5.5 8.5C5.2 7 4.3 5.8 2.5 5.5Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.66282 16.5231L5.18413 19.3952C5.12203 19.7678 5.09098 19.9541 5.14876 20.0888C5.19933 20.2067 5.29328 20.3007 5.41118 20.3512C5.54589 20.409 5.73218 20.378 6.10476 20.3159L8.97693 19.8372C9.72813 19.712 10.1037 19.6494 10.4542 19.521C10.7652 19.407 11.0608 19.2549 11.3343 19.068C11.6425 18.8575 11.9118 18.5882 12.4503 18.0497L20 10.5C21.3807 9.11929 21.3807 6.88071 20 5.5C18.6193 4.11929 16.3807 4.11929 15 5.5L7.45026 13.0497C6.91175 13.5882 6.6425 13.8575 6.43197 14.1657C6.24513 14.4392 6.09299 14.7348 5.97903 15.0458C5.85062 15.3963 5.78802 15.7719 5.66282 16.5231Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.5 7L18.5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Edit</button></span></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="!whitespace-pre language-c"><span><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
+
+<span class="hljs-keyword">volatile</span> <span class="hljs-type">int</span> balance = <span class="hljs-number">1000</span>;  <span class="hljs-comment">// Shared resource (global variable)</span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">signal_handler</span><span class="hljs-params">(<span class="hljs-type">int</span> sig)</span> {
+    balance = <span class="hljs-number">0</span>;  <span class="hljs-comment">// Reset balance when signal is received (not safe!)</span>
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n[Signal Handler] Balance reset to 0\n"</span>);
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
+    signal(SIGINT, signal_handler); <span class="hljs-comment">// Register SIGINT (Ctrl+C) handler</span>
+
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Initial balance: %d\n"</span>, balance);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) {
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Updating balance... Iteration %d\n"</span>, i+<span class="hljs-number">1</span>);
+        balance += <span class="hljs-number">500</span>; <span class="hljs-comment">// Critical section (modifying shared resource)</span>
+        sleep(<span class="hljs-number">2</span>);
+    }
+
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Final balance: %d\n"</span>, balance);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</span></code></div></div></pre>
+<hr data-start="1348" data-end="1351">
+<h3 data-start="1353" data-end="1386"><strong data-start="1357" data-end="1386">How Race Condition Occurs</strong></h3>
+<ol data-start="1387" data-end="1941">
+<li data-start="1387" data-end="1459">The <code data-start="1394" data-end="1403">balance</code> variable is <strong data-start="1416" data-end="1438">modified in a loop</strong> (<code data-start="1440" data-end="1457">balance += 500;</code>).</li>
+<li data-start="1460" data-end="1583">If the user presses <strong data-start="1483" data-end="1493">Ctrl+C</strong>, <code data-start="1495" data-end="1503">SIGINT</code> is sent, and the signal handler <code data-start="1536" data-end="1554">signal_handler()</code> is executed <strong data-start="1567" data-end="1582">immediately</strong>.</li>
+<li data-start="1584" data-end="1722">If the signal arrives <strong data-start="1609" data-end="1647">midway through an update operation</strong>, the balance gets <strong data-start="1666" data-end="1691">set to 0 unexpectedly</strong> before the update is complete.</li>
+<li data-start="1723" data-end="1941">This creates an <strong data-start="1742" data-end="1764">inconsistent state</strong> where:
+<ul data-start="1775" data-end="1941">
+<li data-start="1775" data-end="1889">The main function is still trying to modify <code data-start="1821" data-end="1830">balance</code>, but it has already been set to <code data-start="1863" data-end="1866">0</code> by the signal handler.</li>
+<li data-start="1893" data-end="1941">The program's logic is <strong data-start="1918" data-end="1928">broken</strong> as a result.</li>
+</ul>
+</li>
+</ol>
+<hr data-start="1943" data-end="1946">
+<h3 data-start="1948" data-end="1991"><strong data-start="1952" data-end="1991">Output Example (Inconsistent State)</strong></h3>
+<pre class="!overflow-visible" data-start="1992" data-end="2292"><div class="contain-inline-size rounded-md border-[0.5px] border-token-border-medium relative bg-token-sidebar-surface-primary dark:bg-gray-950"><div class="flex items-center text-token-text-secondary px-4 py-2 text-xs font-sans justify-between rounded-t-[5px] h-9 bg-token-sidebar-surface-primary dark:bg-token-main-surface-secondary select-none">yaml</div><div class="sticky top-9 md:top-[5.75rem]"><div class="absolute bottom-0 right-2 flex h-9 items-center"><div class="flex items-center rounded bg-token-sidebar-surface-primary px-2 font-sans text-xs text-token-text-secondary dark:bg-token-main-surface-secondary"><span class="" data-state="closed"><button class="flex gap-1 items-center select-none px-4 py-1" aria-label="Copy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>Copy</button></span><span class="" data-state="closed"><button class="flex select-none items-center gap-1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path d="M2.5 5.5C4.3 5.2 5.2 4 5.5 2.5C5.8 4 6.7 5.2 8.5 5.5C6.7 5.8 5.8 7 5.5 8.5C5.2 7 4.3 5.8 2.5 5.5Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.66282 16.5231L5.18413 19.3952C5.12203 19.7678 5.09098 19.9541 5.14876 20.0888C5.19933 20.2067 5.29328 20.3007 5.41118 20.3512C5.54589 20.409 5.73218 20.378 6.10476 20.3159L8.97693 19.8372C9.72813 19.712 10.1037 19.6494 10.4542 19.521C10.7652 19.407 11.0608 19.2549 11.3343 19.068C11.6425 18.8575 11.9118 18.5882 12.4503 18.0497L20 10.5C21.3807 9.11929 21.3807 6.88071 20 5.5C18.6193 4.11929 16.3807 4.11929 15 5.5L7.45026 13.0497C6.91175 13.5882 6.6425 13.8575 6.43197 14.1657C6.24513 14.4392 6.09299 14.7348 5.97903 15.0458C5.85062 15.3963 5.78802 15.7719 5.66282 16.5231Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.5 7L18.5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Edit</button></span></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="!whitespace-pre"><span><span class="hljs-attr">Initial balance:</span> <span class="hljs-number">1000</span>
+<span class="hljs-string">Updating</span> <span class="hljs-string">balance...</span> <span class="hljs-string">Iteration</span> <span class="hljs-number">1</span>
+<span class="hljs-string">Updating</span> <span class="hljs-string">balance...</span> <span class="hljs-string">Iteration</span> <span class="hljs-number">2</span>
+<span class="hljs-string">^C</span>
+[<span class="hljs-string">Signal</span> <span class="hljs-string">Handler</span>] <span class="hljs-string">Balance</span> <span class="hljs-string">reset</span> <span class="hljs-string">to</span> <span class="hljs-number">0</span>
+<span class="hljs-string">Updating</span> <span class="hljs-string">balance...</span> <span class="hljs-string">Iteration</span> <span class="hljs-number">3</span>
+<span class="hljs-string">Updating</span> <span class="hljs-string">balance...</span> <span class="hljs-string">Iteration</span> <span class="hljs-number">4</span>
+<span class="hljs-string">Updating</span> <span class="hljs-string">balance...</span> <span class="hljs-string">Iteration</span> <span class="hljs-number">5</span>
+<span class="hljs-attr">Final balance:</span> <span class="hljs-number">2500</span>   <span class="hljs-string">&lt;--</span> <span class="hljs-attr">Expected:</span> <span class="hljs-number">3500</span><span class="hljs-string">,</span> <span class="hljs-string">but</span> <span class="hljs-string">it's</span> <span class="hljs-string">wrong</span> <span class="hljs-string">due</span> <span class="hljs-string">to</span> <span class="hljs-string">signal!</span>
+</span></code></div></div></pre>
+<p data-start="2293" data-end="2309"><strong data-start="2293" data-end="2308">Explanation</strong>:</p>
+<ul data-start="2310" data-end="2521">
+<li data-start="2310" data-end="2375">The expected final balance should be <strong data-start="2349" data-end="2357">3500</strong> (<code data-start="2359" data-end="2373">1000 + 500*5</code>).</li>
+<li data-start="2376" data-end="2521">But due to the <strong data-start="2393" data-end="2409">asynchronous</strong> signal interruption, the <code data-start="2435" data-end="2444">balance</code> was reset to <code data-start="2458" data-end="2461">0</code> in the middle of execution, causing the wrong final result.</li>
+</ul>
+<hr data-start="2523" data-end="2526">
+<h3 data-start="2528" data-end="2573"><strong data-start="2532" data-end="2573">How to Fix It? (Using <code data-start="2556" data-end="2570">sig_atomic_t</code>)</strong></h3>
+<p data-start="2574" data-end="2707">One way to prevent this race condition is to use <code data-start="2623" data-end="2637">sig_atomic_t</code>, which ensures that the variable modification <strong data-start="2684" data-end="2706">happens atomically</strong>.</p>
+<h4 data-start="2709" data-end="2735"><strong data-start="2714" data-end="2735">Fixed Code (Safe)</strong></h4>
+<pre class="!overflow-visible" data-start="2736" data-end="3316"><div class="contain-inline-size rounded-md border-[0.5px] border-token-border-medium relative bg-token-sidebar-surface-primary dark:bg-gray-950"><div class="flex items-center text-token-text-secondary px-4 py-2 text-xs font-sans justify-between rounded-t-[5px] h-9 bg-token-sidebar-surface-primary dark:bg-token-main-surface-secondary select-none">c</div><div class="sticky top-9 md:top-[5.75rem]"><div class="absolute bottom-0 right-2 flex h-9 items-center"><div class="flex items-center rounded bg-token-sidebar-surface-primary px-2 font-sans text-xs text-token-text-secondary dark:bg-token-main-surface-secondary"><span class="" data-state="closed"><button class="flex gap-1 items-center select-none px-4 py-1" aria-label="Copy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>Copy</button></span><span class="" data-state="closed"><button class="flex select-none items-center gap-1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path d="M2.5 5.5C4.3 5.2 5.2 4 5.5 2.5C5.8 4 6.7 5.2 8.5 5.5C6.7 5.8 5.8 7 5.5 8.5C5.2 7 4.3 5.8 2.5 5.5Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.66282 16.5231L5.18413 19.3952C5.12203 19.7678 5.09098 19.9541 5.14876 20.0888C5.19933 20.2067 5.29328 20.3007 5.41118 20.3512C5.54589 20.409 5.73218 20.378 6.10476 20.3159L8.97693 19.8372C9.72813 19.712 10.1037 19.6494 10.4542 19.521C10.7652 19.407 11.0608 19.2549 11.3343 19.068C11.6425 18.8575 11.9118 18.5882 12.4503 18.0497L20 10.5C21.3807 9.11929 21.3807 6.88071 20 5.5C18.6193 4.11929 16.3807 4.11929 15 5.5L7.45026 13.0497C6.91175 13.5882 6.6425 13.8575 6.43197 14.1657C6.24513 14.4392 6.09299 14.7348 5.97903 15.0458C5.85062 15.3963 5.78802 15.7719 5.66282 16.5231Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.5 7L18.5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Edit</button></span></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="!whitespace-pre language-c"><span><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;signal.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
+
+<span class="hljs-keyword">volatile</span> <span class="hljs-type">sig_atomic_t</span> balance = <span class="hljs-number">1000</span>;  <span class="hljs-comment">// Atomic variable</span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">signal_handler</span><span class="hljs-params">(<span class="hljs-type">int</span> sig)</span> {
+    balance = <span class="hljs-number">0</span>;  <span class="hljs-comment">// Safe because sig_atomic_t ensures atomicity</span>
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\n[Signal Handler] Balance reset to 0\n"</span>);
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
+    signal(SIGINT, signal_handler);
+
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Initial balance: %d\n"</span>, balance);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) {
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Updating balance... Iteration %d\n"</span>, i+<span class="hljs-number">1</span>);
+        balance += <span class="hljs-number">500</span>;
+        sleep(<span class="hljs-number">2</span>);
+    }
+
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Final balance: %d\n"</span>, balance);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</span></code></div></div></pre>
+<hr data-start="3317" data-end="3320">
+<h3 data-start="3322" data-end="3348"><strong data-start="3326" data-end="3348">How This Fix Works</strong></h3>
+<ul data-start="3349" data-end="3720">
+<li data-start="3349" data-end="3510"><code data-start="3351" data-end="3365">sig_atomic_t</code> ensures that <code data-start="3379" data-end="3388">balance</code> is modified <strong data-start="3401" data-end="3415">atomically</strong> so that even if a signal occurs, the update won’t be interrupted in an <strong data-start="3487" data-end="3509">inconsistent state</strong>.</li>
+<li data-start="3511" data-end="3720">However, this fix <strong data-start="3531" data-end="3573">only works for single-variable updates</strong>. If modifying <strong data-start="3588" data-end="3610">multiple variables</strong>, consider using <strong data-start="3627" data-end="3686">signal blocking (<code data-start="3646" data-end="3659">sigprocmask</code>) or disabling interrupts</strong> while updating critical sections.</li>
+</ul>
+<hr data-start="3722" data-end="3725">
+<h3 data-start="3727" data-end="3748"><strong data-start="3731" data-end="48">Key Takeaways</strong></h3>
+<ul data-start="3749" data-end="4084">
+<li data-start="3749" data-end="3815">Signals are <strong data-start="3763" data-end="3779">asynchronous</strong> and can interrupt code at any time.</li>
+<li data-start="3816" data-end="3904">If a signal handler modifies <strong data-start="3847" data-end="3867">shared resources</strong>, it can lead to <strong data-start="3884" data-end="3903">race conditions</strong>.</li>
+<li data-start="3905" data-end="3971">Use <strong data-start="3911" data-end="3929"><code data-start="3913" data-end="3927">sig_atomic_t</code></strong> for atomic operations in signal handlers.</li>
+<li data-start="3972" data-end="4084">For complex operations, <strong data-start="3998" data-end="4015">block signals</strong> before entering a critical section and <strong data-start="4055" data-end="4083">unblock after completion</strong>.</li>
+</ul>
+<p data-start="4086" data-end="4164" data-is-last-node="" data-is-only-node="">Would you like an example of <strong data-start="4115" data-end="4135">blocking signals</strong> during critical sections? 🚀</p></div>

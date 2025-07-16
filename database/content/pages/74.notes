@@ -1,0 +1,378 @@
+<article class="content post-142466 post type-post status-publish format-standard hentry category-operating-systems tag-os-deadlocks tag-process-management" id="post-142466">
+                                                                                    <div style="width:100%; min-height:90px; display:flex; justify-content:center;margin: 5px 0;">
+                              <div id="GFG_AD_gfg_direct_728x90"><span style="color: var(--bs-heading-color,inherit); font-size: 2.5rem; font-family: var(--bs-body-font-family); text-align: var(--bs-body-text-align);">Introduction of Deadlock in Operating System</span></div></div><div class="main_wrapper" style="display:flex;"><div style="width: 100%;">
+                                                                                    <div class="last_updated_parent">
+                                                <div><br></div>
+
+                                                 <!-- three dot menu -->
+                                                <div class="three_dot_dropdown"> 
+                                                                                                            <div style="display: flex;">
+                                                                                                                    <div pid="142466" ptitle="Introduction of Deadlock in Operating System" class="top-summary-icon-div ">
+                                                                <div class="three_dot_dropdown_div tooltip">
+                                                                    <span class="summary_tooltiptext">Summarize</span>
+                                                                    <div class="summarize_header">
+                                                                    <i class="summary_button" style="position: relative;"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                                                                                                                                                        <div pid="142466" ptitle="Introduction of Deadlock in Operating System" class="article--viewer_comment tooltip top-comment-icon-div">
+                                                                    <span class="comment_tooltiptext">Comments</span>
+                                                                    <div class="three_dot_dropdown_div" data-gfg-action="loadComments">
+                                                                        <div class="comment_header">
+                                                                        <i class="discussion_button" style="position: relative; transform: scale(0.9);"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                                                                        <div pid="142466" ptitle="Introduction of Deadlock in Operating System" class="article--viewer_improve tooltip">
+                                                                <span class="improve_tooltiptext">Impr</span></div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                                                            </div>
+                                                            </div>
+                            <!-- menu -->
+                            <div id="myDropdown" class="three_dot_dropdown_content">
+                                        <div class="article-buttons drop" onmouseleave="closeKebabMenu()" style="position: absolute !important; right: 0px;">
+                                            <!-- If the status of the summary API is true than we are showing the summarize button otherwise not  -->
+                                                                                         <div pid="142466" ptitle="Introduction of Deadlock in Operating System" class="improve_article--viewer tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_improve" onclick="suggestionArticleCall()" style="margin-top: 1px;">
+                                                    <div class="three_dot_dropdown_inner_div improve_dot_dropdown_inner_div">
+                                                        <i class="gfg-icon gfg-icon_suggest_changes gfg-icon_edit"></i>
+                                                        <span>Suggest changes</span>
+                                                    </div>
+                                                </div>
+                                            </div>                                                                                          <div pid="142466" class="article--viewer_like tooltip">
+                                            <div class="three_dot_dropdown_div three_dot_dropdown_likearticle" onmouseleave="toggleLikeElementVisibility(&quot;showLikesContainer&quot;, false)" onmouseenter="toggleLikeElementVisibility(&quot;showLikesContainer&quot;, true)">
+                                                    <div class="showLikesContainer"> 
+                                                        <span class="likeTooltip">265 Likes</span>
+                                                    </div>
+                                                    <div class="three_dot_dropdown_inner_div" data-gfg-action="like-article" data-bookmark-value="0">
+                                                        <i class="gfg-icon gfg-icon_thumbs"></i>
+                                                        <span>Like</span>
+                                                    </div>
+                                                </div>
+<!-- <button data-gfg-action="like-article" data-bookmark-value="0">
+                                                    <i class="gfg-icon gfg-icon_thumbs"></i>
+                                                </button> -->
+                                            </div>
+                                            <div pid="142466" class="article--viewer_bookmark tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_save">
+                                                    <div class="three_dot_dropdown_inner_div" data-gfg-action="bookmark-article" data-bookmark-value="false">
+                                                        <i class="gfg-icon gfg-icon_bookmark"></i>
+                                                        <span>Save</span>
+                                                    </div>
+                                                </div>
+<!-- <button data-gfg-action="bookmark-article" data-bookmark-value="0">
+                                                    <i class="gfg-icon gfg-icon_bookmark"></i>
+                                                </button> -->
+                                            </div>
+                                            <div pid="142466" class="article--viewer_share tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_share" onmouseleave="closeShareModal()" onmouseenter="openShareModal()">
+                                                    <div style="display: flex;align-items: center;" class="three_dot_dropdown_inner_div" data-gfg-action="share-article" data-bookmark-value="0">
+                                                        <i class="gfg-share-icon"></i>
+                                                        <span>Share</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="article--viewer_report tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_reportarticle">
+                                                    <div class="three_dot_dropdown_inner_div" data-gfg-action="report-article" onclick="report_article();">
+                                                        <i class="gfg-icon gfg-icon_report"></i>
+                                                        <span>Report</span>
+                                                    </div>
+                                                </div>
+<!-- <button data-gfg-action="like-article" data-bookmark-value="0">
+                                                    <i class="gfg-icon gfg-icon_thumbs"></i>
+                                                </button> -->
+                                            </div>
+                                            <div class="article--viewer_Gnews tooltip">
+                                                <a class="three_dot_dropdown_inner_div Gnews_wrapper" href="https://news.google.com/publications/CAAqBwgKMLTrzwsw44bnAw?hl=en-IN&amp;gl=IN&amp;ceid=IN%3Aen" target="_blank">
+                                                    <img class="gfg-icon_Gnews no-zoom-in-cursor" src="https://media.geeksforgeeks.org/auth-dashboard-uploads/Google-news.svg" loading="lazy" alt="News">
+                                                    <span class="kebab_menu_news_text">Follow</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <div class="text">
+                                                                <p style="text-align: justify;" dir="ltr"><span>A deadlock is a situation where a set of processes is blocked because each process is holding a resource and waiting for another resource acquired by some other process.&nbsp;In this article, we will discuss deadlock, its necessary conditions, etc. in detail.</span></p>
+<ul>
+<li value="1"><b><strong>Deadlock</strong></b><span> is a situation in computing where two or more processes are unable to proceed because each is waiting for the other to release resources.</span></li>
+<li value="2"><span>Key concepts include mutual exclusion, resource holding, circular wait, and no preemption.</span></li>
+</ul>
+<p style="text-align: justify;" dir="ltr"><span>Consider an example when two trains are coming toward each other on the same track and there is only one track, none of the trains can move once they are in front of each other. This is a practical example of deadlock. </span></p>
+<h2 style="text-align:left"><span>How Does Deadlock occur in the Operating System?</span></h2>
+<p style="text-align: justify;" dir="ltr"><span>Before going into detail about how deadlock occurs in the Operating System, let’s first discuss how the Operating System uses the resours present. A process in an operating system uses resources in the following way.&nbsp;</span></p>
+<ul>
+<li value="1"><b><strong>Requests a resource&nbsp;</strong></b></li>
+<li value="2"><b><strong>Use the resource&nbsp;</strong></b></li>
+<li value="3"><b><strong>Releases the resource&nbsp;</strong></b></li>
+</ul>
+<p style="text-align: justify;" dir="ltr"><span>A situation occurs in operating systems when there are two or more processes that hold some resources and wait for resources held by other(s). </span><b><strong>For example</strong></b><span>, in the below diagram, Process 1 is holding Resource 1 and waiting for resource 2 which is acquired by process 2, and process 2 is waiting for resource 1.&nbsp;</span></p>
+<img src="https://media.geeksforgeeks.org/wp-content/uploads/20250116142222043136/d.webp" alt="d" width="800" height="400" srcset="https://media.geeksforgeeks.org/wp-content/uploads/20250116142222043136/d.webp 800w,https://media.geeksforgeeks.org/wp-content/uploads/20250116142222043136/d-100.webp 100w,https://media.geeksforgeeks.org/wp-content/uploads/20250116142222043136/d-200.webp 200w,https://media.geeksforgeeks.org/wp-content/uploads/20250116142222043136/d-300.webp 300w,https://media.geeksforgeeks.org/wp-content/uploads/20250116142222043136/d-660.webp 660w,https://media.geeksforgeeks.org/wp-content/uploads/20250116142222043136/d-768.webp 768w">
+<h3 style="text-align:left"><b><strong>Examples of Deadlock</strong></b></h3>
+<p dir="ltr"><span>There are several examples of deadlock. Some of them are mentioned below.</span></p><div id="GFG_AD_Desktop_InContent_ATF_728x280" style="text-align: center; margin: 10px 0px; display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5em;"><div id="GFG_AD_Desktop_InContent_ATF_300x250_1" style="width: 320px;"></div><div id="GFG_AD_Desktop_InContent_ATF_300x250_2" style="width: 320px;"></div></div>
+<p dir="ltr"><b><strong>1.</strong></b><span> The system has 2 tape drives. P0 and P1 each hold one tape drive and each needs another one.</span></p>
+<p dir="ltr"><b><strong>2. </strong></b><span>Semaphores A and B, initialized to 1, P0, and P1 are in deadlock as follows:</span></p>
+<ul>
+<li value="1"><span>P0 executes wait(A) and preempts.</span></li>
+<li value="2"><span>P1 executes wait(B).</span></li>
+<li value="3"><span>Now P0 and P1 enter in deadlock.</span></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;P0</span></p>
+</th>
+<th>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; P1</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; wait(A); &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+</td>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; wait(B) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; wait(B);</span></p>
+</td>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; wait(A) &nbsp;</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p dir="ltr"><b><strong>3.</strong></b><span> Assume the space is available for allocation of 200K bytes, and the following sequence of events occurs.</span></p>
+<table>
+<thead></thead>
+<tbody>
+<tr>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; P0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+</td>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;P1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Request 80KB; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+</td>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Request 70KB; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Request 60KB;</span></p>
+</td>
+<td>
+<p dir="ltr"><span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Request 80KB;</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p dir="ltr"><span>Deadlock occurs if both processes progress to their second request. &nbsp;</span></p>
+<h2 style="text-align:left"><span>Necessary Conditions for Deadlock in OS</span></h2>
+<p dir="ltr"><span>Deadlock can arise if the following four conditions hold simultaneously (Necessary Conditions)&nbsp;</span></p>
+<ul>
+<li value="1"><b><strong>Mutual Exclusion:</strong></b><span> Only one process can use a resource at any given time i.e. the resources are non-sharable.</span></li>
+</ul>
+<ul>
+<li value="1"><b><strong>Hold and Wait:</strong></b><span> A process is holding at least one resource at a time and is waiting to acquire other resources held by some other process.</span></li>
+</ul>
+<ul>
+<li value="1"><b><strong>No Preemption:</strong></b><span> A resource cannot be taken from a process unless the process releases the resource.&nbsp;</span></li>
+</ul>
+<ul>
+<li value="1"><b><strong>Circular Wait:</strong></b><span> &nbsp;set of processes are waiting for each other in a circular fashion. For example, lets say there are a set of processes {P0</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>0​,P1</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>1​,P2</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>2​,P3</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>3​} such that&nbsp;P0</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>0​&nbsp;depends on&nbsp;P1</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>1​,&nbsp;P1</span><i><em class="GFGEditorTheme__textI></i><span>1​&nbsp;depends on&nbsp;P2</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>2​,&nbsp;P2</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>2​&nbsp;depends on&nbsp;P3</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>3​&nbsp;and&nbsp;P3</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>3​&nbsp;depends on&nbsp;P0</span><i><em class="GFGEditorTheme__textItalic">P</em></i><span>0​. This creates a circular relation between all these processes and they have to wait forever to be executed.</span></li>
+</ul>
+<h2 style="text-align:left"><span>Methods of Handling Deadlocks in Operating System</span></h2>
+<p style="text-align: justify;" dir="ltr"><span>There are three ways to handle deadlock:</span></p>
+<ol>
+<li value="1"><span>Deadlock Prevention or Avoidance</span></li>
+<li value="2"><span>Deadlock Detection and Recovery</span></li>
+<li value="3"><span>Deadlock Ignorance</span></li>
+</ol>
+<h2 style="text-align:left"><b><strong>Deadlock Prevoidance</strong></b></h2>
+<p style="text-align: justify;" dir="ltr"><span>Deadlock Prevention and Avoidance is the one of the methods for handling deadlock. First, we will discuss Deadlock Prevention, then Deadlock Avoidance.</span></p>
+<h3 style="text-align:left"><span>Deadlock Prevention</span></h3>
+<p style="text-align: justify;" dir="ltr"><span>In deadlock prevention the aim is to not let full-fill one of the required condition of the deadlock. This can be done by this method:</span></p>
+<p style="text-align: justify;" dir="ltr"><b><strong>(i) Mutual Exclusion </strong></b></p>
+<p style="text-align: justify; text-indent: 20px;" dir="ltr"><span>We only use the Lock for the non-share-able resources and if the resource is share- able (like read only file) then we not use the locks here. That ensure that in case of share -able resource , multiple process can access it at same time. Problem- Here the problem is that we can only do it in case of share-able resources but in case of no-share-able resources like printer , we have to use Mutual exclusion.</span></p>
+<p style="text-align: justify;" dir="ltr"><span> </span><b><strong>(ii) Hold and Wait</strong></b></p>
+<p style="text-align: justify; text-indent: 20px;" dir="ltr"><span>To ensure that Hold and wait never occurs in the system, we must guarantee that whenever process request for resource , it does not hold any other resources. </span></p>
+<ul>
+<li value="1"><span> we can provide the all resources to the process that is required for it’s execution before starting it’s execution . </span><b><strong>problem –</strong></b><span> for example if there are three resource that is required by a process and we have given all that resource before starting execution of process then there might be a situation that initially we required only two resource and after one hour we want third resources and this will cause starvation for the another process that wants this resources and in that waiting time that resource can allocated to other process and complete their exn. </span></li>
+</ul>
+<ul>
+<li value="1"><span>We can ensure that when a process request for any resources that time the process does not hold any other resources. Ex- Let there are three resources DVD, File and Printer . First the process request for DVD and File for the copying data into the file and let suppose it is going to take 1 hour and after it the process free all resources then again request for File and Printer to print that file. </span></li>
+</ul>
+<p style="text-align: justify;" dir="ltr"><b><strong>(iii) No Preemption </strong></b></p>
+<p style="text-align: justify; text-indent: 20px;" dir="ltr"><span> If a process is holding some resource and requestion other resources that are acquired and these resource are not available immediately then the resources that current process is holding are preempted. After some time process again request for the old resources and other required resources to re-start.</span></p>
+<p style="text-align: justify; text-indent: 20px;" dir="ltr"><b><strong> For example</strong></b><span> – Process p1 have resource r1 and requesting for r2 that is hold by process p2. then process p1 preempt r1 and after some time it try to restart by requesting both r1 and r2 resources. </span></p>
+<p style="text-align: justify; text-indent: 20px;" dir="ltr"><b><strong>Problem – </strong></b><span>This can cause the Live Lock Problem . </span></p>
+<p style="text-align: justify; text-indent: 20px;" dir="ltr"><u><i><b><strong class="GFGEditorTheme__textItalic GFGEditorTheme__textUnderline">Live Lock</strong></b></i></u><u><b><strong class="GFGEditorTheme__textUnderline"> </strong></b></u><b><strong>: </strong></b><span>Live lock is the situation where two or more processes continuously changing their state in response to each other without making any real progress.</span></p>
+<p style="text-align: justify; text-indent: 20px;" dir="ltr"><span>Example:</span></p>
+<ul>
+<li value="1"><span>suppose there are two processes p1 and p2 and two resources r1 and r2. </span></li>
+<li value="2"><span> p1 acquired r1 and need r2 &amp; p2 acquired r2 and need r1.</span></li>
+<li value="3"><span>so according to above method- Both p1 and p2 detect that they can’t acquire second resource, so they release resource that they are holding and then try again.</span></li>
+<li value="4"><span>continuous cycle- p1 again acquired r1 and requesting to r2 p2 again acquired r2 and requesting to r1 so there is no overall progress still process are changing there state as they preempt resources and then again holding them. This the situation of Live Lock. </span></li>
+</ul>
+<p style="text-align: justify;" dir="ltr"><b><strong>(iv) Circular Wait: </strong></b></p>
+<p style="text-align: justify; text-indent: 20px;" dir="ltr"><span>To remove the circular wait in system we can give the ordering of resources in which a process needs to acquire.</span></p>
+<p style="text-align: justify; text-indent: 20px;" dir="ltr"><span>Ex: If there are process p1 and p2 and resources r1 and r2 then we can fix the resource acquiring order likthe process first need to acquire resource r1 and then resource r2. so the process that acquired r1 will be allowed to acquire r2 , other process needs to wait until r1 is free.</span></p>
+<p style="text-align: justify;" dir="ltr"><span>This is the Deadlock prevention methods but practically only fourth method is used as all other three condition removal method have some disadvantages with them.&nbsp;&nbsp;</span></p>
+<h3 style="text-align:left"><b><strong>Deadlock Avoidance</strong></b></h3>
+<p style="text-align: justify;" dir="ltr"><span>Avoidance is kind of futuristic. By using the strategy of “Avoidance”, we have to make an assumption. We need to ensure that all information about resources that the process will need is known to us before the execution of the process. We use Banker’s algorithm to avoid deadlock.&nbsp;</span></p>
+<p style="text-align: justify;" dir="ltr"><span>In prevention and avoidance, we get the correctness of data but performance decreases.</span></p>
+<h2 style="text-align:left">Deadlock Detection and Recovery</span></h2>
+<p style="text-align: justify;" dir="ltr"><span>If </span><a href="https://www.geeksforgeeks.org/deadlock-prevention/" target="_blank" rel="noopener"><span>Deadlock prevention or avoidance</span></a><span> is not applied to the software then we can handle this by deadlock detection and recovery. which consist of two phases:</span></p>
+<ol>
+<li value="1"><span>In the first phase, we examine the state of the process and check whether there is a deadlock or not in the system.</span></li>
+<li value="2"><span>If found deadlock in the first phase then we apply the algorithm for recovery of the deadlock.</span></li>
+</ol>
+<p style="text-align: justify;" dir="ltr"><span>In Deadlock detection and recovery, we get the correctness of data but performance decreases.</span></p>
+<h3 style="text-align:left"><span>Deadlock Detection</span></h3>
+<p style="text-align: justify;" dir="ltr"><span>Deadlock detection is a process in computing where the system checks if there are any sets of processes that are stuck waiting for each other indefinitely, preventing them from moving forward. In simple words, deadlock detection is the process of finding out whether any process are stuck in loop or not. There are several algorithms like;</span></p>
+<ul>
+<li value="1"><a href="https://www.geeksforgeeks.org/resource-allocation-graph-rag-in-operating-system/" target="_blank" rel="noopener"><span>Resource Allocation Graph</span></a></li>
+<li value="2"><a href="https://www.geeksforgeeks.org/resource-allocation-graph-rag-in-operating-system/" target="_blank" rel="noopener"><span>Banker’s Algorithm</span></a></li>
+</ul>
+<p style="text-align: justify;" dir="ltr"><span>These algorithms helps in detection of deadlock in Operating System.</span></p>
+<h3 style="text-align:left"><span>Deadlock Recovery</span></h3>
+<p style="text-align: justify;" dir="ltr"><span>There are several Deadlock Recovery Techniques:</span></p>
+<ul>
+<li value="1"><span>Manual Intervention</span></li>
+<li value="2"><span>Automatic Recory</span></li>
+<li value="3"><span>Process Termination</span></li>
+<li value="4"><span>Resource Preemption</span></li>
+</ul>
+<h3 style="text-align:left"><span>1. Manual Intervention </span></h3>
+<p style="text-align: justify;" dir="ltr"><span>When a deadlock is detected, one option is to inform the operator and let them handle the situation manually. While this approach allows for human judgment and decision-making, it can be time-consuming and may not be feasible in large-scale systems.</span></p>
+<h3 style="text-align:left"><span>2. Automatic Recovery</span></h3>
+<p style="text-align: justify;" dir="ltr"><span>An alternative approach is to enable the system to recover from deadlock automatically. This method involves breaking the deadlock cycle by either aborting processes or preempting resources. Let’s delve into these strategies in more detail.</span></p>
+<h3 style="text-align:left"><b><strong>3. Process Termination</strong></b></h3>
+<ul>
+<li value="1"><b><strong>Abort all Deadlocked Processes</strong><><br><span>This approach breaks the deadlock cycle, but it comes at a significant cost. The processes that were aborted may have executed for a considerable amount of time, resulting in the loss of partial computations. These computations may need to be recomputed later.</span></li>
+</ul>
+<ul>
+<li value="1"><b><strong>Abort one process at a time</strong></b><br><span>Instead of aborting all deadlocked processes simultaneously, this strategy involves selectively aborting one process at a time until the deadlock cycle is eliminated. However, this incurs overhead as a deadlock-detection algorithm must be invoked after each process termination to determine if any processes are still deadlocked.</span></li>
+</ul>
+<ul>
+<li value="1"><b><strong>Factors for choosing the termination order:</strong></b><br><span> The process’s priority</span><br><span> Completion time and the progress made so far</span><br><span> Resources consumed by the process</span><br><span> Resources required to complete the process</span><br><an> Number of processes to be terminated</span><br><span> Process type (interactive or batch)</span></li>
+</ul>
+<h3 style="text-align:left"><b><strong>4. Resource Preemption</strong></b></h3>
+<ul>
+<li value="1"><b><strong>Selecting a Victim</strong></b><br><span>Resource preemption involves choosing which resources and processes should be preempted to break the deadlock. The selection order aims to minimize the overall cost of recovery. Factors considered for victim selection may include the number of resources held by a deadlocked process and the amount of time the process has consumed.</span></li>
+</ul>
+<ul>
+<li value="1"><b><strong>Rollback</strong></b><br><span>If a resource is preempted from a process, the process cannot continue its normal execution as it lacks the required resource. Rolling back the process to a safe state and restarting it is a common approach. Determining a safe state can be challenging, leading to the use of total rollback, where the process is aborted and restarted from scratch.</span></li>
+</ul>
+<ul>
+<li value="1"><b><strong>Starvation Prevention</strong></b><br><span>To prevent resource starvation, it is essential to ensure that the same process is not always chosen as a victim. If victim selection is solely based on cost factors, one process might repeatedly lose its resources and never complete its designated task. To address this, it is advisable to limit the number of times a process can be chosen as a victim, including the number of rollbacks in the cost factor.</span></li>
+</ul>
+<h2 style="text-align:left"><b><strong>Deadlock Ignorance</strong></b></h2>
+<p style="text-align: justify;" dir="ltr"><span>If a deadlock is very rare, then let it happen and reboot the system. This is the approach that both Windows and UNIX take.&nbsp;we use the ostrich algorithm for deadlock ignorance.</span></p>
+<blockquote>
+<p style="text-align: justify;" dir="ltr"><span>“In Deadlock, ignorance performance is better than the above two methods but the correctness of data is not there.”</span></p>lockquote>
+<h3 style="text-align:left"><b><strong>Safe State</strong></b></h3>
+<p style="text-align: justify;" dir="ltr"><span>A safe state can be defined as a state in which there is no deadlock. It is achievable if:</span></p>
+<ul>
+<li value="1"><span>If a process needs an unavailable resource, it may wait until the same has been released by a process to which it has already been allocated. if such a sequence does not exist, it is an unsafe state.</span></li>
+<li value="2"><span>All the requested resources are allocated to the process.</span></li>
+</ul>
+<h2 style="text-align:left"><span>Difference between Starvation and Deadlocks</span></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">
+<p style="text-align: center;" dir="ltr"><span>Aspect</span></p>
+</th>
+<th style="text-align: center;">
+<p style="text-align: center;" dir="ltr"><span>Deadlock</span></p>
+</th>
+<th style="text-align: center;">
+<p style="text-align: center;" dir="ltr"><span>Starvation</span></p>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<p dir="ltr"><b><strong>Definition</strong></b></p>
+</td>
+<td>
+<p style="text-align: justify;" dir="ltr"><span>A condition where two or more processes are blocked forever, each waiting for a resource held by another.</span></p>
+</td>
+<td>
+<p style="text-align: justify;" dir="ltr"><span>A condition where a process is perpetually denied necessary resources, despite resources being available.</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr"><b><strong>Resource Availability</strong></b></p>
+</td>
+<td>
+<p dir="ltr"><span>Resources are held by processes involved in the deadlock.</span></p>
+</td>
+<td>
+<p style="text-align: justify;" dir="ltr"><span>Resources are available but are continuously allocated to other processes.</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr"><b><strong>Cause</strong></b></p>
+</td>
+<td>
+<p style="text-align: justify;" dir="ltr"><span>Circular dependency between processes, where each process is waiting for a resource from another.</span></p>
+</td>
+<td>
+<p style="text-align: justify;" dir="ltr"><span>Continuous preference or priority given to other processes, causing a process to wait indefinitely.</span></p>
+</td>
+</tr>
+<tr>
+<td>
+<p dir="ltr"><b><strong>Resolution</strong></b></p>
+</td>
+<td>
+<p style="text-align: justify;" dir="ltr"><span>Requires intervention, such as aborting processes or preempting resources to break the cycle.</span></p>
+</td>
+<td>
+<p style="text-align: justify;" dir="ltr"><span>Can be mitigated by adjusting scheduling policies to ensure fair resource allocation.</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 style="text-align:left"><span>Questions for Practice</span></h2>
+<p dir="ltr"><span>Please try </span><a href="https://www.geeksforgeeks.org/quizzes/deadlock-gq/" target="_blank" rel="noopener"><span>Quiz on Deadlock </span></a></p>
+<h2 style="text-align:left"><span>Frequently Asked Questions on Deadlock in OS – FAQs</span></h2>
+<h3 style="text-align:left"><b><strong>How does the operating system handle deadlock?</strong></b></h3>
+<blockquote>
+<p style="text-align: justify;dir="ltr"><span>Operating systems employ deadlock prevention, avoidance, or detection and recovery strategies to manage deadlock situations, such as resource allocation algorithms and deadlock detection algorithms.</span></p>
+</blockquote>
+<h3 style="text-align:left"><b><strong>Can deadlock occur in multi-threaded applications?</strong></b></h3>
+<blockquote>
+<p style="text-align: justify;" dir="ltr"><span>Yes, deadlock can occur in multi-threaded applications when threads within the same process or across different processes compete for resources in a way that leads to circular dependencies.</span></p>
+</blockquote>
+<h3 style="text-align:left"><b><strong>Can disk scheduling algorithms be used in SSDs (Solid State Drives)?</strong></b></h3>
+<blockquote>
+<p style="text-align: justify;" dir="ltr"><span>While SSDs have no moving parts and thus different characteristics than HDDs, scheduling algorithms can still help optimize the order of I/O operations to improve performance.</span></p>
+</blockquote>
+<h3 style="text-align:left"><span>Why is ignoring deadlocks sometimes acceptable?</span></h3>
+<blockquote>
+<p style="text-align: justify;" dir="ltr"><span>In systems where deadlocks are rare, the cost of prevention or detection may outweigh the likelihood of their occurrence. In such cases, ignoring them is a practical approach, as seen in UNIX-based systems.</span></p>
+</blockquote>
+<h3 style="text-align:left"><span>How do resource allocation graphs help in handling deadlocks?</span></h3>
+<blockquote>
+<p style="text-align: justify;" dir="ltr"><span>Resource allocation graphs visually represent processes and resources, showing dependencies. A cycle in the graph indicates a potential deadlock</span></p></blockquote><div class="more-info hidden-div"><div class="article-meta-author-details "><div class="article_bottom_suggestion_wrapper"><div pid="142466" class="article--viewer_like tooltip tooltipBottom" data-title="Like Article"><button id="likeButton" aria-label="like article" data-gfg-action="like-article" data-bookmark-value="0" data-liked="false" style="color: #5B5A5A !important; display: flex; align-items: center; background-color: unset; margin: 0px !important; padding: 5px 0px;"><figure id="likeCount" style="margin-left: 3px; margin-top: 4px; color: var(--like-count-color); font-size: 14px; font-weight: 600;" class="favoriteText"><br></figure></button></div></div></div>
+                        </div>
+
+                                                </div></article>

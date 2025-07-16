@@ -1,0 +1,100 @@
+<div class="markdown prose w-full break-words dark:prose-invert dark"><h3 data-start="0" data-end="54" class=""><strong data-start="4" data-end="52">Using <code data-start="12" data-end="22">select()</code> for Event-Based Concurrency</strong></h3>
+<p data-start="56" data-end="324" class="">Event-based concurrency relies on <strong data-start="90" data-end="110">non-blocking I/O</strong> mechanisms to detect events efficiently. The <code data-start="156" data-end="166">select()</code> system call is a fundamental API used in event-driven servers to check <strong data-start="238" data-end="270">which file descriptors (FDs)</strong> are <strong data-start="275" data-end="321">ready for reading, writing, or have errors</strong>.</p>
+<hr data-start="326" data-end="329" class="" style="">
+<h3 data-start="331" data-end="361" class=""><strong data-start="335" data-end="359">How <code data-start="341" data-end="351">select()</code> Works</strong></h3>
+<p data-start="362" data-end="514" class="">The <code data-start="366" data-end="376">select()</code> function allows a program to monitor multiple <strong data-start="423" data-end="442">I/O descriptors</strong> (e.g., network sockets, files) <strong data-start="474" data-end="492">simultaneously</strong>. It checks whether:</p>
+<ul data-start="515" data-end="737">
+<li data-start="515" data-end="587" class="" style="">
+<p data-start="517" data-end="587" class="">A <strong data-start="519" data-end="554">descriptor is ready for reading</strong> (e.g., incoming network data).</p>
+</li>
+<li data-start="588" data-end="668" class="" style="">
+<p data-start="590" data-end="668" class="">A <strong data-start="592" data-end="627">descriptor is ready for writing</strong> (e.g., an output buffer is available).</p>
+</li>
+<li data-start="669" data-end="737" class="" style="">
+<p data-start="671" data-end="737" class="">A <strong data-start="673" data-end="710">descriptor has an error condition</strong> (e.g., a broken socket).</p>
+</li>
+</ul>
+<h4 data-start="739" data-end="802" class=""><strong data-start="744" data-end="800">Function Signature (<code data-start="766" data-end="776">select()</code> on Unix-like systems)</strong></h4>
+<pre class="!overflow-visible" data-start="803" data-end="995"><div class="contain-inline-size rounded-md border-[0.5px] border-token-border-medium relative bg-token-sidebar-surface-primary"><div class="flex items-center text-token-text-secondary px-4 py-2 text-xs font-sans justify-between h-9 bg-token-sidebar-surface-primary dark:bg-token-main-surface-secondary select-none rounded-t-[5px]">c</div><div class="sticky top-9"><div class="absolute bottom-0 right-0 flex h-9 items-center pr-2"><div class="flex items-center rounded bg-token-sidebar-surface-primary px-2 font-sans text-xs text-token-text-secondary dark:bg-token-main-surface-secondary"><span class="" data-state="closed"><button class="flex gap-1 items-center select-none px-4 py-1" aria-label="Copy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>Copy</button></span><span class="" data-state="closed"><button class="flex select-none items-center gap-1 px-4 py-1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path d="M2.5 5.5C4.3 5.2 5.2 4 5.5 2.5C5.8 4 6.7 5.2 8.5 5.5C6.7 5.8 5.8 7 5.5 8.5C5.2 7 4.3 5.8 2.5 5.5Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.66282 16.5231L5.18413 19.3952C5.12203 19.7678 5.09098 19.9541 5.14876 20.0888C5.19933 20.2067 5.29328 20.3007 5.41118 20.3512C5.54589 20.409 5.73218 20.378 6.10476 20.3159L8.97693 19.8372C9.72813 19.712 10.1037 19.6494 10.4542 19.521C10.7652 19.407 11.0608 19.2549 11.3343 19.068C11.6425 18.8575 11.9118 18.5882 12.4503 18.0497L20 10.5C21.3807 9.11929 21.3807 6.88071 20 5.5C18.6193 4.11929 16.3807 4.11929 15 5.5L7.45026 13.0497C6.91175 13.5882 6.6425 13.8575 6.43197 14.1657C6.24513 14.4392 6.09299 14.7348 5.97903 15.0458C5.85062 15.3963 5.78802 15.7719 5.66282 16.5231Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.5 7L18.5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Edit</button></span></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="!whitespace-pre language-c"><span><span><span class="hljs-type">int</span></span><span> </span><span><span class="hljs-title function_">select</span></span><span><span class="hljs-params">(<span class="hljs-type">int</span></span></span><span> nfds, 
+           fd_set *</span><span><span class="hljs-keyword">restrict</span></span><span> readfds, 
+           fd_set *</span><span><span class="hljs-keyword">restrict</span></span><span> writefds, 
+           fd_set *</span><span><span class="hljs-keyword">restrict</span></span><span> errorfds, 
+           </span><span><span class="hljs-keyword">struct</span></span><span> timeval *</span><span><span class="hljs-keyword">restrict</span></span><span> timeout);
+</span></span></code></div></div></pre>
+<p data-start="996" data-end="1013" class=""><strong data-start="996" data-end="1011">Parameters:</strong></p>
+<ul data-start="1014" data-end="1348">
+<li data-start="1014" data-end="1067" class="" style="">
+<p data-start="1016" data-end="1067" class=""><code data-start="1016" data-end="1022">nfds</code>: The highest-numbered file descriptor + 1.</p>
+</li>
+<li data-start="1068" data-end="1134" class="" style="">
+<p data-start="1070" data-end="1134" class=""><code data-start="1070" data-end="1079">readfds</code>: A set of file descriptors to check for readability.</p>
+</li>
+<li data-start="1135" data-end="1202" class="" style="">
+<p data-start="1137" data-end="1202" class=""><code data-start="1137" data-end="1147">writefds</code>: A set of file descriptors to check for writability.</p>
+</li>
+<li data-start="1203" data-end="1269" class="" style="">
+<p data-start="1205" data-end="1269" class=""><code data-start="1205" data-end="1215">errorfds</code>: A set of file descriptors to check for exceptions.</p>
+</li>
+<li data-start="1270" data-end="1348" class="" style="">
+<p data-start="1272" data-end="1348" class=""><code data-start="1272" data-end="1281">timeout</code>: The maximum time to wait (<code data-start="1309" data-end="1315">NULL</code> means <strong data-start="1322" data-end="1344">block indefinitely</strong>).</p>
+</li>
+</ul>
+<p data-start="1350" data-end="1369" class=""><strong data-start="1350" data-end="1367">Return Value:</strong></p>
+<ul data-start="1370" data-end="1482">
+<li data-start="1370" data-end="1418" class="" style="">
+<p data-start="1372" data-end="1418" class="">Returns <strong data-start="1380" data-end="1415">the number of ready descriptors</strong>.</p>
+</li>
+<li data-start="1419" data-end="1451" class="" style="">
+<p data-start="1421" data-end="1451" class=""><strong data-start="1421" data-end="1426">0</strong> means timeout expired.</p>
+</li>
+<li data-start="1452" data-end="1482" class="" style="">
+<p data-start="1454" data-end="1482" class=""><strong data-start="1454" data-end="1460">-1</strong> indicates an error.</p>
+</li>
+</ul>
+<hr data-start="1484" data-end="1487" class="" style="">
+<h3 data-start="1489" data-end="1542" class=""><strong data-start="1493" data-end="1540">Example: Using <code data-start="1510" data-end="1520">select()</code> for an Event Loop</strong></h3>
+<p data-start="1543" data-end="1630" class="">Here’s a simple <strong data-start="1559" data-end="1587">event-driven server loop</strong> that monitors multiple file descrtors:</p>
+<pre class="!overflow-visible" data-start="1631" data-end="2441"><div class="contain-inline-size rounded-md border-[0.5px] border-token-border-medium relative bg-token-sidebar-surface-primary"><div class="flex items-center text-token-text-secondary px-4 py-2 text-xs font-sans justify-between h-9 bg-token-sidebar-surface-primary dark:bg-token-main-surface-secondary select-none rounded-t-[5px]">c</div><div class="sticky top-9"><div class="absolute bottom-0 right-0 flex h-9 items-center pr-2"><div class="flex items-center rounded bg-token-sidebar-surface-primary px-2 font-sans text-xs text-token-text-secondary dark:bg-token-main-surface-secondary"><span class="" data-state="closed"><button class="flex gap-1 items-center select-none px-4 py-1" aria-label="Copy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>Copy</button></span><span class="" data-state="closed"><button class="flex select-none items-center gap-1 px-4 py-1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path d="M2.5 5.5C4.3 5.2 5.2 4 5.5 2.5C5.8 4 6.7 5.2 8.5 5.5C6.7 5.8 5.8 7 5.5 8.5C5.2 7 4.3 5.8 2.5 5.5Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.66282 16.5231L5.18413 19.3952C5.12203 19.7678 5.09098 19.9541 5.14876 20.0888C5.19933 20.2067 5.29328 20.3007 5.41118 20.3512C5.54589 20.409 5.73218 20.378 6.10476 20.3159L8.97693 19.8372C9.72813 19.712 10.1037 19.6494 10.4542 19.521C10.7652 19.407 11.0608 19.2549 11.3343 19.068C11.6425 18.8575 11.9118 18.5882 12.4503 18.0497L20 10.5C21.3807 9.11929 21.3807 6.88071 20 5.5C18.6193 4.11929 16.3807 4.11929 15 5.5L7.45026 13.0497C6.91175 13.5882 6.6425 13.8575 6.43197 14.1657C6.24513 14.4392 6.09299 14.7348 5.97903 15.0458C5.85062 15.3963 5.78802 15.7719 5.66282 16.5231Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.5 7L18.5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Edit</button></span></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="!whitespace-pre language-c"><span><span><span class="hljs-meta">#<span class="hljs-keyword">include</span></span></span><span> </span><span><span class="hljs-string">&lt;stdio.h&gt;</span></span><span>
+</span><span><span class="hljs-meta">#<span class="hljs-keyword">include</span></span></span><span> </span><span><span class="hljs-string">&lt;stdlib.h&gt;</span></span><span>
+</span><span><span class="hljs-meta">#<span class="hljs-keyword">include</span></span></span><span> </span><span><span class="hljs-string">&lt;sys/time.h&gt;</span></span><span>
+</span><span><span class="hljs-meta">#<span class="hljs-keyword">include</span></span></span><span> </span><span><span class="hljs-string">&lt;sys/types.h&gt;</span></span><span>
+</span><span><span class="hljs-meta">#<span class="hljs-keyword">include</span></span></span><span> </span><span><span class="hljs-string">&lt;unistd.h&gt;</span></span><span>
+
+</span><span><span class="hljs-type">int</span></span><span> </span><span><span class="hljs-title function_">main</span></span><span><span class="hljs-params">(<span class="hljs-type">void</span></span></span><span>) {
+    </span><span><span class="hljs-comment">// Assume minFD and maxFD are already set up with open sockets</span></span><span>
+    </span><span><span class="hljs-keyword">while</span></span><span> (</span><span><span class="hljs-number">1</span></span><span>) {
+        fd_set readFDs;
+        FD_ZERO(&amp;readFDs);  </span><span><span class="hljs-comment">// Clear the set</span></span><span>
+
+        </span><span><span class="hljs-comment">// Add all file descriptors from minFD to maxFD</span></span><span>
+        </span><span><span class="hljs-keyword">for</span></span><span> (</span><span><span class="hljs-type">int</span></span><span> fd = minFD; fd &lt; maxFD; fd++) {
+            FD_SET(fd, &amp;readFDs);
+        }
+
+        </span><span><span class="hljs-comment">// Call select() to check for readable file descriptors</span></span><span>
+        </span><span><span class="hljs-type">int</span></span><span> rc = select(maxFD + </span><span><span class="hljs-number">1</span></span><span>, &amp;readFDs, </span><span><span class="hljs-literal">NULL</span></span><span>, </span><span><span class="hljs-literal">NULL</span></span><span>, </span><span><span class="hljs-literal">NULL</span></span><span>);
+
+        </span><span><span class="hljs-comment">// Process only the ready file descriptors</span></span><span>
+        </span><span><span class="hljs-keyword">for</span></span><span> (</span><span><span class="hljs-type">int</span></span><span> fd = minFD; fd &lt; maxFD; fd++) {
+            </span><span><span class="hljs-keyword">if</span></span><span> (FD_ISSET(fd, &amp;readFDs)) {
+                processFD(fd);  </span><span><span class="hljs-comment">// Handle the incoming data</span></span><span>
+            }
+        }
+    }
+    </span><span><span class="hljs-keyword">return</span></span><span> </span><span><span class="hljs-number">0</span></span><span>;
+}
+</span></span></code></div></div></pre>
+<hr data-start="2442" data-end="2445" class="" style="">
+<h3 data-start="2447" data-end="2481" class=""><strong data-start="2451" data-end="2481">Key Features of <code data-start="2469" data-end="2479">select()</code></strong></h3>
+<p data-start="2482" data-end="2713" class="">✅ <strong data-start="2484" data-end="2517">Monitors multiple I/O soues</strong> in a single-threaded event loop.<br data-start="2550" data-end="2553">
+✅ <strong data-start="2555" data-end="2574">Avoids blocking</strong> by specifying a timeout (<code data-start="2600" data-end="2603">0</code> for non-blocking, <code data-start="2622" data-end="2628">NULL</code> for indefinite waiting).<br data-start="2653" data-end="2656">
+✅ <strong data-start="2658" data-end="2710">Efficient for a small number of file descriptors</strong>.</p>
+<p data-start="2715" data-end="3037" class="">However, <strong data-start="2724" data-end="2754"><code data-start="2726" data-end="2736">select()</code> has limitations</strong>:<br data-start="2755" data-end="2758">
+❌ <strong data-start="2760" data-end="2782">Scalability issues</strong> – Checking many file descriptors is inefficient (O(n) complexity).<br data-start="2849" data-end="2852">
+❌ <strong data-start="2854" data-end="2874">Limited FD count</strong> – Many systems impose a hard limit (e.g., 1024 FDs).<br data-start="2927" data-endstrong data-start="2932" data-end="2955">Better alternatives</strong> – <code data-start="2958" data-end="2966">poll()</code>, <code data-start="2968" data-end="2975">epoll</code> (Linux), and <code data-start="2989" data-end="2997">kqueue</code> (BSD/macOS) offer better performance.</p>
+<hr data-start="3039" data-end="3042" class="">
+<h3 data-start="3044" data-end="3092" class=""><strong data-start="3048" data-end="3090">Best Practices for Event-Based Servers</strong></h3>
+<p data-start="3093" data-end="3344" class="">🚀 <strong data-start="3096" data-end="3127">Never block the event loop!</strong> Avoid <strong data-start="3134" data-end="3152">blocking calls</strong> (e.g., <code data-start="3160" data-end="3168">read()</code> on an empty socket).<br data-start="3189" data-end="3192">
+🚀 <strong data-start="3195" data-end="3219">Use non-blocking I/O</strong> (<code data-start="3221" data-end="3230">fcntl()</code> to set <code data-start="3238" data-end="3250">O_NONBLOCK</code> on sockets).<br data-st3" data-end="3266">
+🚀 <strong data-start="3269" data-end="3305">Consider <code data-start="3280" data-end="3289">epoll()</code> or <code data-start="3293" data-end="3303">kqueue()</code></strong> for high-performance event handling.</p>
+<p data-start="3346" data-end="3485" class="">By using <code data-start="3355" data-end="3365">select()</code> properly, we can build an <strong data-start="3392" data-end="3405">efficient</strong> and <strong data-start="3410" data-end="3424">responsive</strong> event-driven server without needing <strong data-start="3461" data-end="3481">multiple threads</strong>. 🚀</p></div>

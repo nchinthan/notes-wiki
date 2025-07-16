@@ -1,0 +1,199 @@
+<a href="https://blog.emumba.com/linux-signal-semantics-a-journey-from-painstaking-to-effortless-33763b80d799">link to a good page</a><div class="markdown prose w-full break-words dark:prose-invert dark"><h3 data-start="0" data-end="79"><strong data-start="4" data-end="77">Signals (SIGINT, SIGQUIT, etc.) and Their Effect on CPU Pipeline &amp; OS</strong></h3><img src="https://miro.medium.com/v2/resize:fit:640/format:webp/0*ngnEwyukWJMJHVjv.png">
+<h4 data-start="81" data-end="144"><strong data-start="86" data-end="144">1. Do signals modify pipeline flags and cause a flush?</strong></h4>
+<p data-start="145" data-end="340">No, <strong data-start="149" data-end="209">signals do not directly modify CPU flags in the pipeline</strong> like branch mispredictions or exceptions do. Signals are <strong data-start="267" data-end="301">OS-level (software) mechanisms</strong>, not low-level CPU control mechanisms.</p>
+<p data-start="342" data-end="417">However, <strong data-start="351" data-end="408">signal handling can indirectly cause a pipeline flush</strong> because:</p>
+<ul data-start="418" data-end="760">
+<li data-start="418" data-end="531">When a signal is delivered, the OS <strong data-start="455" data-end="469">interrupts</strong> the process and <strong data-start="486" data-end="530">switches execution to the signal handler</strong>.</li>
+<li data-start="532" data-end="646">This changes the execution flow, causing the CPU to <strong data-start="586" data-end="645">discard any in-flight instructions (flush the pipeline)</strong>.</li>
+<li data-start="647" data-end="760">If the signal handler modifies registers, memory, or flags, it may indirectly affect execution after returning.</li>
+</ul>
+<h4 data-start="762" data-end="831"><strong data-start="767" data-end="831">2. Is signal handling a Kernel-Level Thread (KLT) operation?</strong></h4>
+<p data-start="832" data-end="936">Yes, signal handling <strong data-start="853" data-end="893">requires a transition to Kernel Mode</strong> (via a system call or hardware interrupt):</p>
+<ul data-start="937" data-end="1326">
+<li data-start="937" data-end="1040">When a signal is sent (e.g., <code data-start="968" data-end="976">SIGINT</code> from <code data-start="982" data-end="990">Ctrl+C</code>), the OS catches it and decides how to handle it.</li>
+<li data-start="1041" data-end="1124">The OS switches the execution to the signal handler, which runs in <strong data-start="1110" data-end="1123">User Mode</strong>.</li>
+<li data-start="1125" data-end="1193">If a process ignores or blocks the signal, no mode switch happens.</li>
+<li data-start="1194" data-end="1326">If the signal results in process termination (<code data-start="1242" data-end="1251">SIGKILL</code>, <code data-start="1253" data-end="1262">SIGQUIT</code> with core dump, etc.), the OS takes control in <strong data-start="1310" data-end="1325">Kernel Mode</strong>.</li>
+</ul>
+<h3 data-start="1328" data-end="1349"><strong data-start="1332" data-end="1349">Key Takeaways</strong></h3>
+<table data-start="1350" data-end="1790"><thead data-start="1350" data-end="1414"><tr data-start="1350" data-end="1414"><th data-start="1350" data-end="1360">Feature</th><th data-start="1360" data-end="1382">Effect on Pipeline?</th><th data-start="1382" data-end="1398">OS Mechanism?</th><th data-start="1398" data-end="1414">Kernel Mode?</th></tr></thead><tbody data-start="1478" data-end="1790"><tr data-start="1478" data-end="1613"><td><strong data-start="1480" data-end="1499">SIGINT, SIGQUIT</strong></td><td>Indirect (causes flush if it interrupts execution)</td><td>Yes, managed by OS</td><td>Yes (signal delivery is via kernel)</td></tr><tr data-start="1614" data-end="1705"><td><strong data-start="1616" data-end="1658">Hardware Interrupts (e.g., page fault)</strong></td><td>Yes, directly flushes pipeline</td><td>Yes</td><td>Yes</td></tr><tr data-start="1706" data-end="1790"><td><strong data-start="1708" data-end="1747">Exceptions (e.g., division by zero)</strong></td><td>Yes</td><td>Partly hardware, partly OS</td><td>Yes</td></tr></tbody></table>
+<p data-start="1792" data-end="1923" data-is-last-node="" data-is-only-node="">So, <strong data-start="1796" data-end="1849">signals are software-driven and managed by the OS</strong> but can indirectly cause a <strong data-start="1877" data-end="1895">pipeline flush</strong> by altering execution flow.</p></div><article class="content post-945662 post type-post status-publish format-standard hentry category-linux-unix category-technical-scripter tag-picked tag-technical-scripter-2022" id="post-945662">
+                                                                                    <div style="width:100%; min-height:90px; display:flex; justify-content:center;margin: 5px 0;">
+                              <div id="GFG_AD_gfg_direct_728x90"></div>
+                            </div>
+                                                       <!-- when comment system will be scalable from practice side then we will display  Article/Discussion tab-->
+                            <div class="main_wrapper" style="display:flex;">
+                                                                <div style="width: 100%;">
+                                        <div class="article-title">
+                                            <h1>Signal Handling In Linux Through The signal() Function</h1></div><div class="last_updated_parent">
+
+                                                 <!-- three dot menu -->
+                                                <div class="three_dot_dropdown"> 
+                                                                                                            <div style="display: flex;">
+                                                                                                                    <div pid="945662" ptitle="Signal Handling In Linux Through The signal() Function" class="top-summary-icon-div ">
+                                                                <div class="three_dot_dropdown_div tooltip">
+                                                                    <span class="summary_tooltiptext">Summarize</span>
+                                                                    <div class="summarize_header">
+                                                                    <i class="summary_button" style="position: relative;"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                                                                                                                                                        <div pid="945662" ptitle="Signal Handling In Linux Through The signal() Function" class="article--viewer_comment tooltip top-comment-icon-div">
+                                                                    <span class="comment_tooltiptext">Comments</span>
+                                                                    <div class="three_dot_dropdown_div" data-gfg-action="loadComments">
+                                                                        <div class="comment_header">
+                                                                        <i class="discussion_button" style="position: relative; transform: scale(0.9);"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                                                                        <div pid="945662" ptitle="Signal Handling In Linux Through The signal() Function" class="article--viewer_improve tooltip">
+                                                                <span class="improve_tooltiptext">Improve</span></div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                                                            </div>
+                                                            </div>
+                            <!-- menu -->
+                            <div id="myDropdown" class="three_dot_dropdown_content">
+                            <div class="article-buttons drop" onmouseleave="closeKebabMenu()" style="position: absolute !important; right: 0px;">
+                                            <!-- If the status of the summary API is true than we are showing the summarize button otherwise not  -->
+                                                                                         <div pid="945662" ptitle="Signal Handling In Linux Through The signal() Function" class="improve_article--viewer tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_improve" onclick="suggestionArticleCall()" style="margin-top: 1px;">
+                                                    <div class="three_dot_dropdown_inner_div improve_dot_dropdown_inner_div">
+                                                        <i class="gfg-icon gfg-icon_suggest_changes gfg-icon_edit"></i>
+                                                        <span>Suggest changes</span>
+                                                    </div>
+                                                </div>
+                                            </div>                                                                                          <div pid="945662" class="article--viewer_like tooltip">
+                                            <div class="three_dot_dropdown_div three_dot_dropdown_likearticle" onmouseleave="toggleLikeElementVisibility(&quot;showLikesContainer&quot;, false)" onmouseenter="toggleLikeElementVisibility(&quot;showLikesContainer&quot;, true)">
+                                                    <div class="showLikesContainer"> 
+                                                        <span class="likeTooltip">Like Article</span>
+                                                    </div>
+                                                    <div class="three_dot_dropdown_inner_div" data-gfg-action="like-article" data-bookmark-value="0">
+                                                        <i class="gfg-icon gfg-icon_thumbs"></i>
+                                                        <span>Like</span>
+                                                    </div>
+                                                </div>
+<!-- <button data-gfg-action="like-article" data-bookmark-value="0">
+                                                    <i class="gfg-icon gfg-icon_thumbs"></i>
+                                                </button> -->
+                                            </div>
+                                            <div pid="945662" class="article--viewer_share tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_share" onmouseleave="closeShareModal()" onmouseenter="openShareModal()">
+                                                    <div style="display: flex;align-items: center;" class="three_dot_dropdown_inner_div" data-gfg-action="share-article" data-bookmark-value="0">
+                                                        <i class="gfg-share-icon"></i>
+                                                        <span>Share</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="article--viewer_report tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_reportarticle">
+                                                    <div class="three_dot_dropdown_inner_div" data-gfg-action="report-article" onclick="report_article();">
+                                                        <i class="gfg-icon gfg-icon_report"></i>
+                                                        <span>Report</span>
+                                                    </div>
+                                                </div>
+<!-- <button data-gfg-action="like-article" data-bookmark-value="0">
+                                                    <i class="gfg-icon gfg-icon_thumbs"></i>
+                                                </button> -->
+                                            </div>
+                                            <div class="article--viewer_Gnews tooltip">
+                                                <a class="three_dot_dropdown_inner_div Gnews_wrapper" href="https://news.google.com/publications/CAAqBwgKMLTrzwsw44bnAw?hl=en-IN&amp;gl=IN&amp;ceid=IN%3Aen" target="_blank">
+                                                    <img class="gfg-icon_Gnews no-zoom-in-cursor" src="https://media.geeksforgeeks.org/auth-dashboard-uploads/Google-news.svg" loading="lazy" alt="News">
+                                                    <span class="kebab_menu_news_text">Follow</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <div class="text">
+                                                                <p>A <a href="https://www.geeksforgeeks.org/program-error-signals/">signal </a>is a message or notification issued to your program by the<a href="https://www.geeksforgeeks.org/introduction-of-operating-system-set-1/"> operating system</a> or another application (or one of its threads). Each signal is assigned a number between 1 and 31. Signals are devoid of argument, and most of the time, their names are self-explanatory. For instance, signal number 9 or SIGKILL notifies the program that it is being attempted to be killed.</p>
+<h2>Types of Signals</h2>
+<ul>
+<li><strong>SIGHUP-</strong> This signal indicates that the controlling <a href="https://www.geeksforgeeks.org/what-is-terminal-console-shell-and-kernel/">terminal </a>has been killed. HUP is an abbreviation meaning “hang up.” Locate the terminal to be controlled or hang up on the control process’s demise. This signal is obtained when the process is performed from the terminal and that terminal abruptly terminates.</li>
+<li><strong>SIGINT- </strong>This is the signal generated when a user presses Ctrl + C from the keyboard.&nbsp;</li>
+<li><strong>SIGQUIT- </strong>This is the signal generated when a user presses Ctrl + D from the keyboard.&nbsp;</li>
+<li><strong>SIGILL- </strong>Signal for illegal instruction. This is an exception signal provided by the operating system to your application when it detects unlawful instruction within your program. For example, if some code is not understandable by your machine or if your program’s executable file is corrupted. Another possibility is that your program loads a corrupted dynamic library.&nbsp;</li>
+<li><strong>SIGABRT-</strong> Abort signates that you used the abort() API within your program. It is used to end a program. abort() generates the SIGABRT signal, which terminates your program (unless handled by your custom handler).&nbsp;</li>
+<li><strong>SIGFPE-</strong> Exception for floating point numbers. Another exception signal is generated by the operating system when your program causes an exception.</li>
+<li><strong>SIGPIPE- </strong>Broken pipe. When there is nothing to read on the other end, write to the pipe.</li>
+<li><strong>SIGSEGV- </strong>This is also an exception signal. When a program tries to access memory that does not belong to it, the operating system gives that application this signal.</li>
+<li><strong>SIGALRM- </strong>Alarm Signal sent through the alarm() system function to your program. The alarm() system call essentially acts as a timer that allows you to receive SIGALRM after a set amount of time. Although there are other timer APIs that are more accurate, this can be useful.</li>
+<li><strong>SIGTERM-</strong> This signal instructs your program to quit. While SIGKILL is an abnormal termination signal, think of this as a signal to cleanly shut down.</li>
+<li><strong>SIGCHLD- </strong>Informs you that a child’s process of your program has ended or stopped. This is useful if you want to synchronize your process with one that has children.</li>
+<li><strong>SIGUSR1 and SIGUSR2-</strong> SIGUSR1 and SIGUSR2 are two undefined signals that are provided for your consideration. These signals can be used to communicate with or synchronize your software with another program.</li>
+</ul>
+<h2>Signal as interrupt</h2>
+<ul>
+<li>Signals disrupt your program in addition to being instructive.&nbsp;</li>
+<li>For example, one of the threads in your application must briefly switch to signal handler mode in order to process a signal.&nbsp;</li>
+<li>As of the <a href="https://www.geeksforgeeks.org/introduction-to-linux-operating-system/">Linux </a>kernel version 2.6, it should be noted that most signals only interrupt one thread, as opposed to t previous practice of interrupting the entire application.</li>
+<li>Additionally, a signal handler itself may be halted by a different signal.</li>
+</ul>
+<h2>Signal masks</h2>
+<p>Each signal has one of three possible states:</p>
+<ul>
+<li>For the signal, we might have our own signal handler.</li>
+<li>The default handler may be used to handle a signal. Each signal has a default handler job that it performs. For instance, your application will be terminated by the SIGINT default handler.</li>
+<li>The signal could be overlooked. Signal blocking is another name for ignoring a signal.</li>
+</ul>
+<p>It is frequently simpler to handle a “signal mask” when manipulating signals and controlling signal setup. Each bit in a bit-mask has a matching signal. Since there are 32 (really 31, since 0 doesn’t count) different signals, we can store information about 32 signals in a single 32-bit integer (unsigned int).&nbsp;</p>
+<p>The operating system does exactly this. Signal masks are also utilized as arguments in other scalls, so we will need to work with them. Default signal handlers are assigned by the C library. This means that even if you ignore signals, your software will still process them and act on them as it would normally.&nbsp;</p><div id="GFG_AD_Desktop_InContent_ATF_728x280" style="text-align: center; margin: 10px 0px; display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5em;"><div id="GFG_AD_Desktop_InContent_ATF_300x250_1" style="width: 320px;"></div><div id="GFG_AD_Desktop_InContent_ATF_300x250_2" style="width: 320px;"></div></div>
+<h2>What signals are good for?</h2>
+<p>As their name suggests, signals are used to signal something. There are various signal types, and each one denotes a different meaning. Each signal’s designation is determined by its semantics. In other words, you might wish to select what action should be connected to each of the signals. You might determine that your application would print anything or draw something on the screen in response to a certain signal. Most of the tim it is your choice. There is, however, a standard norm for what each and every signal should do. This accepted practice states that SIGINT should force your program to end. It is in your best interest to maintain this as the SIGINT signal’s default response. Usability is an issue. Nobody desires a non-interruptible program.</p>
+<h2>Signals that report exceptions</h2>
+<p>Signals can also be used to suggest that something unpleasant has transpired. For instance, the operating system sends a <a href="https://www.geeksforgeeks.org/segmentation-fault-sigsegv-vs-bus-error-sigbus/">SIGSEGV </a>signal to your application when your software creates a segmentation failure.</p>
+<h2>Other uses of signals</h2>
+<p>There are various uses for signals.&nbsp;</p>
+<ul>
+<li>Debuggers, for example, depend on signals to receive events regarding programs that are being debugged.&nbsp;</li>
+<li>One of the so-called <a href="https://www.geeksforgeeks.org/inter-process-communication-ipc/">IPC </a>– Inter-Process Communication – ques are called signals. IPC once allowed processes to communicate with one another, as the acronym suggests.</li>
+<li>Another frequent application is when a user wants our program to restart itself rather than the end. In this scenario, the user can use software called kill to send a signal to our program from the terminal. This program might be one you’re already acquainted with. Previously, it killed processes. In actuality, it does convey a signal. Each signal is identified by a unique number. It can transmit any signal, but by default, it sends signal 15 or SIGTERM.</li>
+</ul>
+<h2>Signal Handler</h2>
+<p>You can register your own signal handler using one of the various interfaces.</p>
+<h3>1. signal()</h3>
+<p>The oldest one is this one. It takes two arguments: a reference to a signal handler code and a signal number (one of those SIGsomethings). A single integer input representing a sent signal number is taken by the signal handler function, which returns void. In this manner, you can apply the same sign handler function to numerous signals.</p>
+<p><strong>Syntax:</strong></p>
+<pre>signal(SIGINT, sig_handler);</pre>
+<p>Signal() allows you to specify the default signal handler that will be utilized for a specific signal. You can also instruct the system to disregard a certain signal. Choose SIG IGN as the signal handler if you want to ignore the signal. Set SIG DFL as the signal handler to restore the default signal handler.</p>
+<p>Even when it appears to be everything you would need, it is preferable to stay away from employing signal (). This system call has a problem with portability. In other words, it acts differently under various operating systems. There is a more recent system call that performs all the functions of signal() while additionally providing a little bit more details about the signal itself, its origin, etc.</p>
+<h3>2. sigaction()</h3>
+<p>Another system call that modifies the signal handler is sigaction().&nbsp;</p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<p>int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);</p>
+</blockquote>
+<p>A signal number is specified in its first argument. Pointers to the sigaction structure are provided as the second and third arguments. This structure describes how the given signal should be handled by the process.</p>
+<h2>Usage of signal()</h2>
+<ul>
+<li>For the signal with a number signum, the signal() system function installs a new signal handler. The signal handler is set to sighandler, which can be either SIG_IGN or SIG_DFL or a user-specified function.</li>
+<li>The following occurs when a signal with the number signum arrives. The signal is disregarded if the relevant handler is set to SIG_IGN. The signal’s default action takes place if the handler is set to SIG_DFL. Finally, if the handler is a function called sighandler, sighandler is executed after the handler has been reset to SIG_DFL or the signal has been blocked, depending on the implementation.</li>
+<li>“Catching the signal” refers to using a signal handler functi a signal. SIGKILL and SIGSTOP signals cannot be intercepted or disregarded.</li>
+<li>The signal() function either returns SIG ERR on failure or the previous value of the signal handler.</li>
+</ul>
+<h4><strong>Example 1: Illustrating the hangup of the signal using the below command</strong></h4>
+<p><strong>Syntax:</strong></p>
+<pre>kill -signal  pid</pre>
+<p><strong>Script:</strong></p>
+<pre><i>#!/bin/bash</i>
+kill -1  500</pre>
+<p><strong>Output:&nbsp;</strong></p>
+<div style="width: 810px" class="wp-caption alignnone"><img src="https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1.png" alt="Output for hangup signal" srcset="https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1.png 519w, https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1-100.png 100w, https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1-200.png 200w, https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1-300.png 300w, " sizes="100vw" width="519"><p class="wp-caption-text">&nbsp;</p></div>
+<p><strong>Explanation:</strong></p>
+<p>The signal is the name or number of the signal that has to be given in the kill command syntax above, and pid is the ID of the process to which the signal needs to be sent. The program executing with the 500 <a href="https://www.geeksforgeeks.org/process-control-commands-unixlinux/">process </a>ID receives the signal called hang-up, or HUP, from the aforementioned command. If no such process is running with pid 500 then a message will be displayed as shown in the above output.</p>
+<h4><strong>Example 2: Illustrating the killing of signal using the below command</strong></h4>
+<p><strong>Script:</strong></p>
+<pre>#!/bin/bash
+kill -9  500</pre>
+<p><strong>Output:</strong></p>
+<div style="width: 810px" class="wp-caption alignnone"><img src="https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1.png" alt="Output for killing signal" srcset="https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1.png 519w, https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1-100.png 100w, https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1-200.png 200w, https://media.geeksforgeeks.org/wp-content/uploads/20230112163159/kill1-300.png 300w, " sizes="100vw" width="519"><p class="wp-caption-text">&nbsp;</p></div>
+<p><strong>Explanation:</strong></p>
+<p>Use the above command to send the kill signal to a similar process. The process running under process ID 500 will be terminated by the command already mentioned. If no such process is running with pid 500 then a message will be displayed as shown in the above output.</p>
+<h2>Conclusion:</h2>
+<p>There is a default response for each signal. The action that a script or program executes in response to a signal is known as the default action for a signal. For example- stop the procedure, disregard the signal, stop the operation, carry on a halted procedure, etc.</p>
+<div hidead="MID"></div><div class="more-info hidden-div"><div class="bottom-wrap" style="margin-top: 12px; margin-bottom: 25px;"><div class="improved"><ul><br>                                    </ul>
+                                                                    </div>
+                                                                                </div>
+                        </div>
+
+                                                </div></article>

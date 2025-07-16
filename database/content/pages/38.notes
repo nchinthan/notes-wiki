@@ -1,0 +1,13 @@
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p data-start="0" data-end="99" class="">That's a fun analogy! You can definitely say that the <strong data-start="54" data-end="88">OS is like a mother to the CPU</strong> because:</p>
+<ol data-start="101" data-end="646">
+<li data-start="101" data-end="260" class="" style="">
+<p data-start="104" data-end="260" class=""><strong data-start="104" data-end="144">The CPU is clueless (like an infant)</strong> – It <strong data-start="150" data-end="178">blindly follows whatever</strong> instructions it's given, just like a baby that doesn’t know what's good or bad.</p>
+</li>
+<li data-start="261" data-end="473" class="" style="">
+<p data-start="264" data-end="473" class=""><strong data-start="264" data-end="307">The OS schedules and manages everything</strong> – Just like a mother <strong data-start="329" data-end="397">decides what the baby eats, when to sleep, and what to play with</strong>, the OS decides <strong data-start="414" data-en" data-is-only-node="">which processes run, manages memory, and handles I/O</strong>.</p>
+</li>
+<li data-start="474" data-end="646" class="" style="">
+<p data-start="477" data-end="646" class=""><strong data-start="477" data-end="520">Without the OS, the CPU would "eat mud"</strong> – If there’s no OS, the CPU might <strong data-start="555" data-end="588">execute garbage data or crash</strong>, just like a baby might put random things in its mouth.</p>
+</li>
+</ol>
+<p data-start="648" data-end="820" class="">Though, to stretch the analogy, you could say that <strong data-start="699" data-end="719">the CPU grows up</strong> a little when you run firmware or microcode updates, since it learns some built-in optimizations! 😆</p></div>

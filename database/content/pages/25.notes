@@ -1,0 +1,159 @@
+<article class="content post-937951 post type-post status-publish format-standard hentry category-operating-systems category-technical-scripter tag-operating-systems-memory-management tag-technical-scripter-2022" id="post-937951">
+                                                                                    <div style="width:100%; min-height:90px; display:flex; justify-content:center;margin: 5px 0;">
+                              <div id="GFG_AD_gfg_direct_728x90"></div>
+                            </div>
+                                                       <!-- when comment system will be scalable from practice side then we will display  Article/Discussion tab-->
+                            <div class="main_wrapper" style="display:flex;">
+                                                                <div style="width: 100%;">
+                                        <div class="article-title">
+                                            <h1>What is Fragmentation in Operating System?</h1></div><div class="last_updated_parent">
+
+                                                 <!-- three dot menu -->
+                                                <div class="three_dot_dropdown"> 
+                                                                                                            <div style="display: flex;">
+                                                                                                                    <div pid="937951" ptitle="What is Fragmentation in Operating System?" class="top-summary-icon-div ">
+                                                                <div class="three_dot_dropdown_div tooltip">
+                                                                    <span class="summary_tooltiptext">Summarize</span>
+                                                                    <div class="summarize_header">
+                                                                    <i class="summary_button" style="position: relative;"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                                                                                                                                                        <div pid="937951" ptitle="What is Fragmentation in Operating System?" class="article--viewer_comment tooltip top-comment-icon-div">
+                                                                    <span class="comment_tooltiptext">Comments</span>
+                                                                    <div class="three_dot_dropdown_div" data-gfg-action="loadComments">
+                                                                        <div class="comment_header">
+                                                                        <i class="discussion_button" style="position: relative; transform: scale(0.9);"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                                                                        <div pid="937951" ptitle="What is Fragmentation in Operating System?" class="article--viewer_improve tooltip">
+                                                                <span class="improve_tooltiptext">Improv</span></div>
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                                                            </div>
+                                                            </div>
+                            <!-- menu -->
+                            <div id="myDropdown" class="three_dot_dropdown_content">
+                            <div class="article-buttons drop" onmouseleave="closeKebabMenu()" style="position: absolute !important; right: 0px;">
+                                            <!-- If the status of the summary API is true than we are showing the summarize button otherwise not  -->
+                                                                                         <div pid="937951" ptitle="What is Fragmentation in Operating System?" class="improve_article--viewer tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_improve" onclick="suggestionArticleCall()" style="margin-top: 1px;">
+                                                    <div class="three_dot_dropdown_inner_div improve_dot_dropdown_inner_div">
+                                                        <i class="gfg-icon gfg-icon_suggest_changes gfg-icon_edit"></i>
+                                                        <span>Suggest changes</span>
+                                                    </div>
+                                                </div>
+                                            </div>                                                                                          <div pid="937951" class="article--viewer_like tooltip">
+                                            <div class="three_dot_dropdown_div three_dot_dropdown_likearticle" onmouseleave="toggleLikeElementVisibility(&quot;showLikesContainer&quot;, false)" onmouseenter="toggleLikeElementVisibility(&quot;showLikesContainer&quot;, true)">
+                                                    <div class="showLikesContainer"> 
+                                                        <span class="likeTooltip">6 Likes</span>
+                                                    </div>
+                                                    <div class="three_dot_dropdown_inner_div" data-gfg-action="like-article" data-bookmark-value="0">
+                                                        <i class="gfg-icon gfg-icon_thumbs"></i>
+                                                        <span>Like</span>
+                                                    </div>
+                                                </div>
+<!-- <button data-gfg-action="like-article" data-bookmark-value="0">
+                                                    <i class="gfg-icon gfg-icon_thumbs"></i>
+                                                </button> -->
+                                            </div>
+                                            <div pid="937951" class="article--viewer_share tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_share" onmouseleave="closeShareModal()" onmouseenter="openShareModal()">
+                                                    <div style="display: flex;align-items: center;" class="three_dot_dropdown_inner_div" data-gfg-action="share-article" data-bookmark-value="0">
+                                                        <i class="gfg-share-icon"></i>
+                                                        <span>Share</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="article--viewer_report tooltip">
+                                                <div class="three_dot_dropdown_div three_dot_dropdown_reportarticle">
+                                                    <div class="three_dot_dropdown_inner_div" data-gfg-action="report-article" onclick="report_article();">
+                                                        <i class="gfg-icon gfg-icon_report"></i>
+                                                        <span>Report</span>
+                                                    </div>
+                                                </div>
+<!-- <button data-gfg-action="like-article" data-bookmark-value="0">
+                                                    <i class="gfg-icon gfg-icon_thumbs"></i>
+                                                </button> -->
+                                            </div>
+                                            <div class="article--viewer_Gnews tooltip">
+                                                <a class="three_dot_dropdown_inner_div Gnews_wrapper" href="https://news.google.com/publications/CAAqBwgKMLTrzwsw44bnAw?hl=en-IN&amp;gl=IN&amp;ceid=IN%3Aen" target="_blank">
+                                                    <img class="gfg-icon_Gnews no-zoom-in-cursor" src="https://media.geeksforgeeks.org/auth-dashboard-uploads/Google-news.svg" loading="lazy" alt="News">
+                                                    <span class="kebab_menu_news_text">Follow</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <div class="text">
+                                                                <p dir="ltr" style="text-align: justify;"><span>The process of dividing a computer file, such as a data file or an executable program file, into fragments that are stored in different parts of a computer’s storage medium, such as its hard disc or RAM, is known as fragmentation in computing. </span></p>
+<p dir="ltr" style="text-align: justify;"><span>When a file is fragmented, it is stored on the storage medium in non-contiguous blocks, which means that the blocks are not stored next to each other.&nbsp;In this article, we are going to discuss fragmentation in detail along with its type, working, role,  advantages, and disadvantages.</span></p>
+<h2><span>What is Fragmentation in an Operating System?</span></h2>
+<p dir="ltr" style="text-align: justify;"><span>An unwanted problem&nbsp;with operating systems is fragmentation, which occurs when processes load and unload from memory and divide available memory. Because memory blocks are so small, they cannot be assigned to process, and thus remain idle. It’s also important to realize that programs create free space or holes in memory when they are loaded and unloaded. Because additional processes cannot be assigned to these little pieces, memory is used inefficiently.</span></p>
+<p dir="ltr" style="text-align: justify;"><span>The memory allocation scheme determines the fragmentation circumstances. These regions of memory become fragmented when the process loads and unloads from it, making it unusable for incoming processes. We refer to it as fragmentation.</span></p>
+<h2><span>Cause of Fragmentation</span></h2>
+<p dir="ltr" style="text-align: justify;"><span>This can happen when a file is too large to fit into a single contiguous block of free space on the storage medium, or when the blocks of free space on the medium are insufficient to hold the file. Because the system must search for and retrieve individual fragments from different locations in order to open the file, fragmentation can cause problems when reading or accessing theile.&nbsp;</span></p><div id="GFG_AD_Desktop_InContent_ATF_728x280" style="text-align: center; margin: 10px 0px; display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5em;"><div id="GFG_AD_Desktop_InContent_ATF_300x250_1" style="width: 320px;"></div><div id="GFG_AD_Desktop_InContent_ATF_300x250_2" style="width: 320px;"></div></div>
+<h2><span>Effect of Fragmentation</span></h2>
+<p dir="ltr" style="text-align: justify;"><span>This can reduce system performance and make it more difficult to access the file. It is generally best to defragment your hard disc on a regular basis to avoid fragmentation, which is a process that rearranges the blocks of data on the disc so that files are stored in contiguous blocks and can be accessed more quickly.</span></p>
+<h2><span>Types of Fragmentation</span></h2>
+<p dir="ltr" style="text-align: justify;"><span>There are two main types of fragmentation:&nbsp;</span></p>
+<ul>
+<li value="1"><span>Internal Fragmentation</span></li>
+<li value="2"><span>External Fragmentation</span></li>
+</ul>
+<h2><b><strong>1. Internal Fragmentation</strong></b></h2>
+<p dir="ltr" style="text-align: justify;"><span>Internal fragmentation occurs when there is unused space within a memory block. For example, if a system allocates a 64KB block of memory to store a file that is only 40KB in size, that block will contain 24KB of internal fragmentation. When the system employs a fixed-size block allocation method, such as a memory allocator with a fixed block size, this can occur.</span></p>
+<p><img alt="Internal fragmentation" height="inherit" src="https://media.geeksforgeeks.org/wp-content/uploads/20190924115421/Untitled-Diagram-146.png" width="inherit"></p>
+<h2><b><strong>2. External Fragmentation</strong></b></h2>
+<p dir="ltr" style="text-align: justify;"><span>External fragmentation occurs when a storage medium, such as a hard disc or solid-state drive, has many small blocks of free space scattered throughout it. This can happen when a system creates and deletes files frequently, leaving many small blocks of free space on the medium. When a system needs to store a new file, it may be unable to find a single contiguous block of free space large enough to store the file and must instead store the file in multiple smaller blocks. This can cause external fragmentation and performance problems when accessing the file.</span></p>
+<p><img alt="External fragmentation" height="inherit" loading="lazy" src="https://media.geeksforgeeks.org/wp-content/uploads/20200729172413/2581.png" width="inherit"></p>
+<p dir="ltr" style="text-align: justify;"><span>Fragmentation can also occur at various levels within a system. File fragmentation, for example, can occur at the file system level, in which a file is divided into multiple non-contiguous blocks and stored on a storage medium. Memory fragmentation can occur at the </span><a href="https://www.geeksforgeeks.org/memory-management-in-operating-system/" rel="noopener" target="_blank"><span>memory management</span></a><span> level, where the system allocates and deallocated&nbsp;memory blocks dynamically. Network fragmentation occurs when a packet of data is divided into smaller fragments for transmission over a network.</span></p>
+<h2><span>How Fragmentation in Operating System Affects the System?</span></h2>
+<ul>
+<li value="1"><b><strong>Slower Performance: </strong></b><span>Fragmentation slows down the read and write speed of the disk, as the disk head has to move to different locations to access the fragments of a file. This, in turn, increases the access time and reduces the overall speed of the system, causing slowdowns and lag in applications.</span></li>
+<li value="2"><b><strong>Disk Space Wasting: </strong></b><span>Fragmentation can also lead to disk space being wasted, as fragments may occupy more space than required. This can result in a shortage of disk space, causing the system to become unstable and vulnerable to crashes or errors.</span></li>
+<li value="3"><b><strong>Data Loss: </strong></b><span>In severe cases, fragmentation can also cause the system to run out of disk space, leading to data loss. This can be particularly detrimental to users who rely on their systems to store critical information and data.</span></li>
+<li value="4"><b><strong>Increased Risk of System Crashes: </strong></b><span>The more fragmented a disk becomes, the more prone it is to crashes and errors. This can cause the system to become unstable and vulnerable to data loss, crashes, and other issues.</span></li>
+<li value="5"><b><strong>Reduced Battery Life: </strong></b><span>Fragmentation can also negatively impact the battery life of laptops and other </span><a href="https://www.geeksforgeeks.org/challenge-in-mobile-device/" rel="noreferrer noopener"><span>mobile devices.</span></a><span> This is because fragmentation requires the disk to work harder, which in turn puts additional strain on the battery.</span></li>
+</ul>
+<h2><span>Role of Fragmentation in Operating System</span></h2>
+<p dir="ltr" style="text-align: justify;"><span>Fragmentation is a critical issue that can significantly impact the performance of an operating system. The primary role of fragmentation is to slow down the read and write speed of the disk. As the disk head has to move to different locations to access the fragments of a file, the access time increases, reducing the overall speed of the system. This can lead to a decrease in system performance, causing slowdowns and lag in applications. Moreover, fragmentation can also lead to disk space being wasted, as fragments may occupy more space than required. This can result in a shortage of disk space, causing the system to become unstable and vulnerable to crashes or errors. In severe cases, fragmentation can also cause the system to run out of disk space, leading to data loss.</span></p>
+<p dir="ltr" style="text-align: justify;"><span>To maintain optimal performance, it is essential to regularly defragment the disk. Defragmentation reorganizes the fragments of a file and allocates contiguous disk space to store the file. This helps to improve the read and write speed of the disk, reducing access time and increasing the overall speed of the system. By regularly defragmenting the disk, the performance of the operating system can be improved and maintained, ensuring a smooth and efficient user experience.</span></p>
+<h2><span>Advantages</span></h2>
+<ul>
+<li value="1"><span>It makes better use of storage space on a computer’s hard disc or other storage medium. When a file is fragmented, it can be stored in the medium’s available free-space blocks, even if those blocks are not contiguous. This is especially useful if the medium contains a large number of small blocks of free space that would otherwise be wasted.</span></li>
+<li value="2"><span>It can improve system performance by reducing the amount of seeking required by the system’s hard disc drive (HDD) or solid-state drive (SSD). When a file is stored on the medium in contiguous blocks, the </span><a href="https://www.geeksforgeeks.org/difference-between-hard-disk-drive-hdd-and-solid-state-drive-ssd/" rel="noopener"t="_blank"><span>HDD or SSD</span></a><span> must move its read/write head to different locations on the disc to access the various blocks.</span></li>
+<li value="3"><span>It can enable a system to store larger files than it could otherwise. If the system does not have a single contiguous block of free space large enough to store a specific file, the file can be fragmented and stored in multiple smaller blocks.</span></li>
+</ul>
+<p dir="ltr" style="text-align: justify;"><span>However, it is generally recommended to minimize fragmentation whenever possible, as it can have a negative impact on system performance and make accessing and managing files more difficult.</span></p>
+<h2><span>Disadvantages</span></h2>
+<ul>
+<li value="1"><span>It can degrade system performance, particularly when reading or accessing fragmented files. When a system needs to access a fragmented file, it must search for and retrieve the various fragments from various locations on the storage medium, which can take longer than accessing a contiguous file. This can reduce system performance and make it more difficult to access the file.</span></li>
+<li value="2"><span>It can make managing and organizing files on a system more difficult. When a file is fragmented, it is stored on the storage medium in multiple non-contiguous blocks, making it more difficult to locate and access the file.</span></li>
+<li value="3"><span>It has the potential to shorten the lifespan of a storage medium, such as a </span><a href="https://www.geeksforgeeks.org/hard-disk-drive-hdd-secondary-memory/" rel="noopener" target="_blank"><span>hard disc</span></a><span> or </span><a href="https://www.geeksforgeeks.org/introduction-to-solid-state-drive-ssd/" rel="noopener" target="_blank"><span>solid-state drive</span></a><span>. When a system writes data to a storage medium, it can cause the medium to wear out. Data stored in non-contiguous blocks can cause more wear and tear on the medium than data stored in contiguous blocks, potentially reducing the medium’s lifetime.</sn></li>
+<li value="4"><span>It can consume more system storage space. When a file is fragmented, the system must store additional information on the storage medium about the location of each fragment. This can consume more space and limit the amount of space available for other files.</span></li>
+</ul>
+<h2><span>Conclusion</span></h2>
+<p dir="ltr" style="text-align: justify;"><span>In conclusion, fragmentation in an </span><a href="https://www.geeksforgeeks.org/what-is-an-operating-system/" rel="noopener" target="_blank"><span>operating system</span></a><span> refers to the inefficient use of memory, where available memory is broken into small, non-contiguous blocks. This makes it difficult to allocate large blocks of memory to programs, reducing overall system performance. There are two main types: internal fragmentation, where allocated memory has unused space, and external fragmentation, where free memory is scattered. Reducing fragmentation helps improve the efficient use of memory and system performance.</span></p>
+<div id="video-tab-content" class="video-tab-content">
+                                        <div style="text-align: center; margin: 20px 0px; min-height: 0px;" id="GFG_AD_InContent_Desktop_728x280"></div>
+                                                                                </div><div id="preFaqContent"></div><h2><span>Frequently Asked Questions on Fragmentation – FAQs</span></h2>
+<h3><span>What is system fragmentation?</span></h3>
+<blockquote>
+<p dir="ltr" style="text-align: justify;"><span>In computing, file system fragmentation is also known as file system aging, System fragmentation is technique of a file system to lay out the contents of files non-continuously to allow in-place change of their contents.</span></p>
+</blockquote>
+<h3><span>What is difference between Segmentation and Fragmentation in OS?</span></h3>
+<blockquote>
+<p dir="ltr" style="text-align: justify;"><span>While segmentation is a technique that includes breaking a process up into several modules or sections, frmentation is a situation in which memory chunks are left unused.</span></p>
+</blockquote>
+<h3><span>What is memory fragmentation?</span></h3>
+<blockquote>
+<p dir="ltr" style="text-align: justify;"><span>Memory fragmentation occurs when your memory is divided up into several non-sequential chunks and gaps that are too big to be used for new memory allocations.</span></p>
+</blockquote>
+<div hidead="MID"></div><div class="more-info hidden-div"><div class="article-meta-author-details "><div class="article-meta-author-details-block"><div class="article-meta-author-details-profile-display"><div class="author_info"><div class="article-meta-author-details-profile-display-icon"><br></div></div></div></div></div><div class="bottom-wrap" style="margin-top: 12px; margin-bottom: 25px;"><div class="improved"><ul>                                    </ul>
+                                                                    </div>
+                                                                                </div>
+                        </div>
+
+                                                </div></article>

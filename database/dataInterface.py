@@ -5,6 +5,7 @@ from .config import HTML_PATH
 from .content.notes_io import read_file,write_chunk,create_file,CHUNK_SIZE
 import math 
 import hashlib
+import os 
 
 def sha256_string(text):
     # Create a SHA-256 hash object
@@ -85,11 +86,11 @@ class Map:
     
 class Page:
     @staticmethod
-    def create(title,content,parentMapid,keywords:list) -> int:
+    def create(title,content,parentMapid,keywords=[]) -> int:
         keyword_str = ",".join(keywords)
-        pageId = db.call_procedure("createNote",[title, parentMapid, keyword_str,None],capture_out=True)[-1]
-        
-        filename = str(pageId)
+        pageId = db.call_procedure("createNote", [title, parentMapid, keyword_str, None], capture_out=True)[-1]
+    
+        filename = os.path.join(HTML_PATH,str(pageId))
         
         # create the file with title
         create_file(filename)
@@ -101,10 +102,10 @@ class Page:
             write_chunk(filename,chunk,chunk_index)
             # add hash of each file to table 
             chunk_hash = sha256_string(chunk)
-            hashInsertSql += f'({pageId},{chunk_index},{chunk_hash})'
+            hashInsertSql += f"({pageId},{chunk_index},'{chunk_hash}'),"
         
         # insert hashes 
-        db.run(hashInsertSql)    
+        db.run(hashInsertSql.removesuffix(","))    
 
         keywords.extend(title.split())
         Page.addKeywords(pageId,keywords)
@@ -118,7 +119,6 @@ class Page:
         new_content_chunks = math.ceil(len(content)/CHUNK_SIZE)
         
         updation_sql = 'INSERT INTO pageChunkHash(page_id,chunk_index,chunk_hash) VALUES'
-        chunk_cnt = 0
         
         modified = False
         for chunk_index in range(new_content_chunks):
@@ -126,7 +126,6 @@ class Page:
             chunk_hash = sha256_string(chunk)
             if chunk_index < prev_content_chunks and not modified:
                 if chunk_hash == all_prev_chunks[chunk_index][1]:
-                    chunk_cnt += 1 
                     continue 
                 # hash change in chunk
                 else:
@@ -163,8 +162,13 @@ class Page:
     # getting the html of page
     @staticmethod
     def getPage(page_id):
-        # get page title , keywords from sql
-        return read_file(f'{page_id}')
+        # Get page title and keywords from SQL
+        res = db.run(f"SELECT title FROM page WHERE id = {page_id}")
+        if not res:
+            return None
+        title = res[0][0]
+        content = read_file(os.path.join(HTML_PATH,str(page_id)))
+        return {"id": page_id, "title": title, "html": content}
     
     @staticmethod
     def search(query):

@@ -1,0 +1,20 @@
+<div class="markdown prose w-full break-words dark:prose-invert dark"><p data-start="0" data-end="203">When a <strong data-start="7" data-end="27">file-backed page</strong> in <code data-start="31" data-end="37">mmap</code> is evicted from RAM due to <strong data-start="65" data-end="85">page replacement</strong>, it is <strong data-start="93" data-end="139">not stored in a random hard drive location</strong>—instead, it is written back to the <strong data-start="175" data-end="200">original file on disk</strong>.</p>
+<h3 data-start="205" data-end="262"><strong data-start="209" data-end="262">How File-Backed mmap Works with Page Replacement:</strong></h3>
+<ol data-start="263" data-end="902">
+<li data-start="263" data-end="368">When a file is <strong data-start="281" data-end="298">memory-mapped</strong>, the OS does <strong data-start="312" data-end="328">lazy loading</strong> (doesn't load all pages immediately).</li>
+<li data-start="369" data-end="496">When a process accesses a page, a <strong data-start=06" data-end="420">page fault</strong> occurs, and the OS loads the required portion from the <strong data-start="476" data-end="484">file</strong> into RAM.</li>
+<li data-start="497" data-end="783">If memory gets full and <strong data-start="524" data-end="544">page replacement</strong> is triggered, the OS identifies a page to evict:
+<ul data-start="599" data-end="783">
+<li data-start="599" data-end="683"><strong data-start="601" data-end="637">If the page is modified (dirty),</strong> it is <strong data-start="644" data-end="680">written back to the file on disk</strong>.</li>
+<li data-start="687" data-end="783"><strong data-start="689" data-end="719">If the page is unmodified,</strong> it is simply discarded (can be reloaded later from the file).</li>
+</ul>
+</li>
+<li data-start="784" data-end="902">Later, if the process accesses the evicted page again, the OS reloads it from the <strong data-start="869" data-end="899">same file location on disk</strong>.</li>
+</ol>
+<h3 data-start="904" data-end="942"><strong data-start="908" data-end="942">Comparison with Anonymous mmap</strong></h3>
+<ul data-start="943" data-end="1208">
+<li data-start="943" data-end="1073"><strong data-start="945" data-end="981">Anonymous mmap (<code data-start="963" data-end="978">MAP_ANONYMOUS</code>)</strong> does not have a file backing, so evicted pages are stored in <strong data-start="1043" data-end="1057">swap space</strong> (not a file).</li>
+<li data-start="1074" data-end="1208"><strong data-start="1076" data-end="1128">File-backed mmap (<code data-start="1096" data-end="1108">MAP_SHARED</code> or <code data-start="1112" data-end="1125">MAP_PRIVATE</code>)</strong> ensures that modified pages go back to the <strong data-start="1172" data-end="1189">original file</strong> instead of swap.</li>
+</ul>
+<h3 data-start="1210" data-end="1225"><strong data-start="1214" data-end="1225">Summary</strong></h3>
+<p data-start="1226" data-end="1389" data-is-last-node="" data-is-only-node="">When a <strong data-start="1233" data-end="1258">file-backed mmap page</strong> is evicted due to page replacement, it is <strong data-start="1301" data-end="1361">written back to its original location in the mapped file</strong>—not a random place on disk.</p></div>

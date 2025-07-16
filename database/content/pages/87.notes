@@ -1,0 +1,44 @@
+<div class="markdown prose w-full break-words dark:prose-invert dark"><h3 data-start="0" data-end="49"><strong data-start="4" data-end="49">Do Threads Share the Same Virtual Memory?</strong></h3>
+<p data-start="50" data-end="126">Yes, <strong data-start="55" data-end="113">all threads of a process share the same virtual memory</strong>. This means:</p>
+<ul data-start="127" data-end="234">
+<li data-start="127" data-end="157"><strong data-start="129" data-end="157">Same code (text) segment</strong></li>
+<li data-start="158" data-end="204"><strong data-start="160" data-end="204">Same heap (dynamically allocated memory)</strong></li>
+<li data-start="205" data-end="234"><strong data-start="207" data-end="234">Same global/static data</strong></li>
+</ul>
+<p data-start="236" data-end="339">However, each thread <strong data-start="257" data-end="280">needs its own stack</strong> for function calls, local variables, and return addresses.</p>
+<hr data-start="341" data-end="344">
+<h3 data-start="346" data-end="389"><strong data-start="350" data-end="389">How Are Multiple Stacks Maintained?</strong></h3>
+<p data-start="390" data-end="534">Even though threads share the same virtual memory, the <strong data-start="445" data-end="498">kernel allocates a separate stack for each thread</strong> within the process’s address space.</p>
+<h4 data-start="536" data-end="578"><strong data-start="541" data-end="578">Stack Layout for Multiple Threads</strong></h4>
+<p data-start="579" data-end="747">Each thread gets its own stack at different locations in virtual memory. The OS <strong data-start="659" data-end="699">allocates a fixed-size memory region</strong> for each stack, typically <strong data-start="726" data-end="746">growing downward</strong>.</p>
+<pre class="!overflow-visible" data-start="749" data-end="1251"><div class="contain-inline-size rounded-md border-[0.5px] border-token-border-medium relative bg-token-sidebar-surface-primary dark:bg-gray-950"><div class="flex items-center text-token-text-secondary px-4 py-2 text-xs fonsans justify-between rounded-t-[5px] h-9 bg-token-sidebar-surface-primary dark:bg-token-main-surface-secondary select-none">sql</div><div class="sticky top-9 md:top-[5.75rem]"><div class="absolute bottom-0 right-2 flex h-9 items-center"><div class="flex items-center rounded bg-token-sidebar-surface-primary px-2 font-sans text-xs text-token-text-secondary dark:bg-token-main-surface-secondary"><span class="" data-state="closed"><button class="flex gap-1 items-center select-none px-4 py-1" aria-label="Copy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>Copy</button></span><span class="" data-state="closed"><button class="flex select-none items-center gap-1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path d="M2.5 5.5C4.3 5.2 5.2 4 5.5 2.5C5.8 4 6.7 5.2 8.5 5.5C6.7 5.8 5.8 7 5.5 8.5C5.2 7 4.3 5.8 2.5 5.5Z" fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.66282 16.5231L5.18413 19.3952C5.12203 19.7678 5.09098 19.9541 5.14876 20.0888C5.19933 20.2067 5.29328 20.3007 5.41118 20.3512C5.54589 20.409 5.73218 20.378 6.10476 20.3159L8.97693 19.8372C9.72813 19.712 10.1037 19.6494 10.4542 19.521C10.7652 19.407 11.0608 19.2549 11.3343 19.068C11.6425 18.8575 11.9118 18.5882 12.4503 18.0497L20 10.5C21.3807 9.11929 21.3807 6.88071 20 5.5C18.6193 4.11929 16.3807 4.11929 15 5.5L7.45026 13.0497C6.91175 13.5882 6.6425 13.8575 6.43197 14.1657C6.24513 14.4392 6.09299 14.7348 5.97903 15.0458C5.85062 15.3963 5.78802 15.7719 5.66282 16.5231Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.5 7L18.5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Edit</button></span></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="!whitespace-pre"><span><span class="hljs-operator">+</span><span class="hljs-comment">---------------------------+  Higher Memory Addresses</span>
+<span class="hljs-operator">|</span> Main Thread Stack         <span class="hljs-operator">|</span>
+<span class="hljs-operator">+</span><span class="hljs-comment">---------------------------+</span>
+<span class="hljs-operator">|</span> Thread <span class="hljs-number">1</span> Stack           <span class="hljs-operator">|</span>
+<span class="hljs-operator">+</span><span class="hljs-comment">---------------------------+</span>
+<span class="hljs-operator">|</span> Thread <span class="hljs-number">2</span> Stack           <span class="hljs-operator">|</span>
+<span class="hljs-operator">+</span><span class="hljs-comment">---------------------------+</span>
+<span class="hljs-operator">|</span> Thread <span class="hljs-number">3</span> Stack           <span class="hljs-operator">|</span>
+<span class="hljs-operator">+</span><span class="hljs-comment">---------------------------+</span>
+<span class="hljs-operator">|</span> Heap (Shared)            <span class="hljs-operator">|</span>
+<span class="hljs-operator">+</span><span class="hljs-comment">---------------------------+</span>
+<span class="hljs-operator">|</span> <span class="hljs-keyword">Global</span> <span class="hljs-operator">&amp;</span> <span class="hljs-keyword">Static</span> Data      <span class="hljs-operator">|</span>
+<span class="hljs-operator">+</span><span class="hljs-comment">---------------------------+</span>
+<span class="hljs-operator">|</span> Code (Instructions)       <span class="hljs-operator">|</span>
+<span class="hljs-operator">+</span><span class="hljs-comment">---------------------------+  Lower Memory Addresses</span>
+</span></code></div></div></pre>
+<hr data-start="1253" data-end="1256">
+<h3 data-start="1258" data-end="1297"><strong data-start="1262" data-end="1297">Where Are Thread Stacks Stored?</strong></h3>
+<ol data-start="1298" data-end="1547">
+<li data-start="1298" data-end="1421"><strong data-start="1301" data-end="1324">User-Space Threads:</strong> Stack is allocated in <strong data-start="1347" data-end="1373">process virtual memory</strong> by the C library (<code data-start="1392" data-end="1410">pthread_create()</code> in Linux).</li>
+<li data-start="1422" data-end="1547"><strong data-start="1425" data-end="1450">Kernel-Space Threads:</strong> The kernel allocates a <strong data-start="1474" data-end="1489">small stack</strong> for kernel execution, separate from the user-space stack.</li>
+</ol>
+<hr data-start="1549" data-end="1552">
+<h3 data-start="1554" data-end="1572"><strong data-start="1558" data-end="1572">Key Points</strong></h3>
+<ul data-start="1573" data-end="1876">
+<li data-start="1573" data-end="1633"><strong data-start="1575" data-end="1633">Threads share virtual memory but have separate stacks.</strong></li>
+<li data-start="1634" data-end="1711"><strong data-start="1636" data-end="1671">Each stack is in virtual memory</strong> but mapped to different physical pages.</li>
+<li data-start="1712" data-end="1789"><strong data-start="1714" data-end="1749">The OS manages stack allocation</strong> and deallocates it when a thread exits.</li>
+<li data-start="1790" data-end="1876"><strong data-start="1792" data-end="1820">Stack overflow can occur</strong> if too many threads are created with large stack sizes.</li>
+</ul>
+<p data-start="1878" data-end="1949" data-is-last-node="" data-is-only-node="">Would you like an example of setting custom stack sizes for threads? 🚀</p></div>

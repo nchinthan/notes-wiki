@@ -2,7 +2,7 @@ import base64
 import json
 import os,time,threading
 
-data_loc = r'D:\projects\notes\notes_new\database\queryRet.json'
+data_loc = r'D:\projects\notes_new\database\queryRet.json'
 
 class RetreiverType:
     PAGE = 0

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Link Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7rxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            color: #f8f9fa; /* Light text color */
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .link-container {
+            background-color: #1e1e1e; /* Slightly lighter background for container */
+            padding: 20px;
+            border-radius: 15px; /* Rounded corners for the container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+        }
+
+
+        .link-item {
+            margin-bottom: 15px; /* Spacing between links */
+        }
+
+        .link-box {
+            background-color: #282828; /* Darker background for boxes */
+            padding: 15px;
+            border-radius: 10px; /* Rounded corners for boxes */
+            text-decoration: none;
+            color: #f8f9fa;
+            display: block; /* Makes the box clickable */
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+             /* Curved square effect */
+            width: fit-content; /* Adjust width as needed */
+            padding: 15px 20px; /* Adjust padding as needed */
+            border-radius: 10px; /* Adjust radius for curvature */
+            
+        }
+
+        .link-box:hover {
+            background-color: #383838; /* Darker background on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="link-container">
+                    <h2 class="text-center mb-4">My Links</h2>
+                    <ul class="list-unstyled">
+                        <li class="link-item">
+                            <a class="link-box" href="https://en.wikipedia.org/wiki/Cache_coherence">Cache coherence</a>
+                        </li>
+                        <li class="link-item">
+                            <a class="link-box" href="#">Link 2</a>
+                        </li>
+                        <li class="link-item">
+                            <a class="link-box" href="#">Link 3</a>
+                        </li>
+                        </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -163,6 +163,7 @@ function searchQuery(query) {
 function submitKeywords() {
   const input = document.getElementById("keyword-input").value;
   const keywords = input.split(",").map(k => k.trim()).filter(k => k);
+  const current = history.getCurrent()
   if (!keywords.length) return;
 
   fetch(`/page/${current.id}/keywords`, {
@@ -202,7 +203,7 @@ function searchPages(query) {
 function submitExistingPages() {
   const ids = Array.from(selectedPageIds);
   if (!ids.length) return;
-
+  const current = history.getCurrent();
   ids.forEach(pid => {
     fetch(`/map/${current.id}/child`, {
       method: "POST",
@@ -219,7 +220,7 @@ function submitExistingPages() {
 function submitNewPage() {
   const title = document.getElementById("new-page-title").value.trim();
   const content = document.getElementById("new-page-content").value;
-
+  const current = history.getCurrent();
   if (!title || !content) return;
 
   fetch(`/page`, {
@@ -239,6 +240,7 @@ function submitNewPage() {
 function submitNewMap() {
   const title = document.getElementById("new-map-title").value.trim();
   if (!title) return;
+  const current = history.getCurrent();
 
   fetch(`/map`, {
     method: "POST",

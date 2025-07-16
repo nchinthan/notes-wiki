@@ -1,0 +1,54 @@
+<article class="post-full post">
+                
+                
+                    
+                
+                <figure class="post-full-image"><picture><span style="color: var(--bs-heading-color,inherit); font-family: var(--bs-body-font-family); font-size: 2rem; text-align: var(--bs-body-text-align); font-weight: var(--bs-body-font-weight);">What is Endianness?</span></picture></figure><section class="post-full-content"><div class="post-and-sidebar"><section class="post-content " data-test-label="post-content">
+<p><span style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);">If my computer reads </span><strong style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); text-align: var(--bs-body-text-align);">bytes</strong><span style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);"> from left to right, and your computer reads from right to left, we're going to have issues when we need to communicate.</span></p>
+<p><strong style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); text-align: var(--bs-body-text-align);">Endianness</strong><span style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);"> is represented two ways </span><strong style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); text-align: var(--bs-body-text-align);">Big-endian</strong><span style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);"> (</span><strong style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); text-align: var(--bs-body-text-align);">BE</strong><span style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);">) and </span><strong style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); text-align: var(--bs-body-text-align);">Little-endian</strong><span style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);"> (</span><strong style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); text-align: var(--bs-body-text-align);">LE</strong><span style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);">).</span></p>
+<ul>
+<li><strong>BE</strong> stores the <strong>big-end</strong> first. When reading multiple bytes the first byte (or the lowest memory address) is the biggest - so it makes the most sense to people who read left to right.</li>
+<li><strong>LE</strong> stores the <strong>little-end</strong> first. When reading multiple bytes the first byte (or the lowest memory address) is the littlest -  so it makes most sense to people who read right to left.</li>
+</ul>
+<p><span style="color: var(--bs-heading-color,inherit); font-size: 2rem; font-family: var(--bs-body-font-family); text-align: var(--bs-body-text-align);">Example of How Endianness Works</span></p>
+<p><img src="https://www.freecodecamp.org/news/content/images/2021/01/Decimal-number_--1-.png" alt="Image" width="600" height="400" loading="lazy" style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);"><span style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);">
+</span><em style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);">A binary example where big-endian and little-endian numbers are arranged in the order they would be read.</em></p>
+<ul>
+<li>Big endian stores data <strong>MSbyte</strong> first</li>
+<li>Little endian stores data <strong>MSbyte</strong> last</li>
+</ul>
+<h2 id="heading-when-might-this-be-an-issue">When might this be an issue?</h2>
+<p>Endianness has to be a consideration in computing in a few different cases.</p>
+<p>For example Unicode characters (the character set used to render characters on your phone, PC, TV, everywhere!) have to pass a special character byte sequence (U+FEFF BYTE ORDER MARK) called the <strong>Byte Order Mark</strong> or <strong>BOM</strong>. The <strong>BOM</strong> serves a few purposes.</p>
+<p>The <strong>BOM</strong> makes the system aware:</p>
+<ul>
+<li>That the incoming stream is Unicode.</li>
+<li>Of which Unicode character encoding is used.</li>
+<li>Of the <strong>endian</strong> order of the incoming stream.</li>
+</ul>
+<p>Some programming languages even expect you to detail what byte order sequence is being used. So one program may use, send, and receive numbers in <strong>BE</strong> or <strong>LE</strong> depending on what you want. Swift is one example of this (the language used to do iOS development).</p>
+<p><em>&nbsp;</em></p>
+<h2 id="heading-why-is-this-even-an-issue-in-the-first-place">Why is this even an issue in the first place?</h2>
+<p>It just happens that different protocols emerged and then later had to interact with one another. <strong>BE</strong> is the dominant order in any network protocols, and is referred to as <strong>network order</strong>, for example. On the other hand, most PC's are <strong>little-endian</strong>. </p>
+<p>You can run a C++ code snippet online <a target="_blank" href="http://cpp.sh/524wi">here</a> to see what endian your machine is (mine is <strong>little-endian</strong>).</p>
+<p><br></p>
+<h2 id="heading-conclusion"><br></h2></section><div class="sidebar"><div class="ad-wrapper"><div id="side-gam-ad-10" class="side-bar-ad-slot"></div></div></div>
+                        
+                    </div>
+                    <hr>
+                    
+                        <div class="post-full-author-header" data-test-label="author-header-with-bio">
+                            
+                                
+    
+    
+    
+
+    <section class="author-card" data-test-label="author-card"><br></section></div></section><div class="banner-ad-bottom">
+<div style="display: block; height: auto" id="gam-ad-bottom">
+</div>
+
+                        
+                    </div>
+                
+            </article>

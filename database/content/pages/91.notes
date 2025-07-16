@@ -1,0 +1,96 @@
+<div class="markdown prose w-full break-words dark:prose-invert dark"><h3 data-start="0" data-end="36" class=""><strong data-start="4" data-end="34">Disk Scheduling Strategies</strong></h3>
+<p data-start="38" data-end="193" class="">Disk scheduling determines the order in which disk I/O requests are processed to minimize seek time and improve performance. Below are common strategies:</p>
+<h4 data-start="195" data-end="240" class=""><strong data-start="200" data-end="238">1. First-Come, First-Served (FCFS)</strong></h4>
+<ul data-start="241" data-end="394">
+<li data-start="241" data-end="291" class="" style="">
+<p data-start="243" data-end="291" class="">Requests are handled in the order they arrive.</p>
+</li>
+<li data-start="292" data-end="319" class="" style="">
+<p data-start="294" data-end="319" class=""><strong data-start="294" data-end="303">Pros:</strong> Simple, fair.</p>
+</li>
+<li data-start="320" data-end="394" class="" style="">
+<p data-start="322" data-end="394" class=""><strong data-start="322" data-end="331">Cons:</strong> High seek time if requests are scattered (poor performance).</p>
+</li>
+</ul>
+<h4 data-start="396" data-end="441" class=""><strong data-start="401" data-end="439">2. Shortest Seek Time First (SSTF)</strong></h4>
+<ul data-start="442" data-end="615">
+<li data-start="442" data-end="510" class="" style="">
+<p data-start="444" data-end="510" class="">The request closest to the current head position is served next.</p>
+</li>
+<li data-start="511" data-end="557" class="" style="">
+<p data-start="513" data-end="557" class=""><strong data-start="513" data-end="522">Pros:</strong> Reduces seek time significantly.</p>
+</li>
+<li data-start="558" data-end="615" class="" style="">
+<p data-start="560" data-end="615" class=""><strong data-start="560" data-end="569">Cons:</strong> Causes <strong data-start="577" data-end="591">starvation</strong> for far-off requests.</p>
+</li>
+</ul>
+<h4 data-start="617" data-end="656" class=""><strong data-start="622" data-end="654">3. SCAN (Elevator Algorithm)</strong></h4>
+<ul data-start="657" data-end="829">
+<li data-start="657" data-end="730" class="" style="">
+<p data-start="659" data-end="730" class="">The disk arm moves in one direction, serving requests, then reverses.</p>
+</li>
+<li data-start="731" data-end="781" class="" style="">
+<p data-start="733" data-end="781" class=""><strong data-start="733" data-end="742">Pros:</strong> Avoids starvation, better than SSTF.</p>
+</li>
+<li data-start="782" data-end="829" class="" style="">
+<p data-start="784" data-end="829" class=""><strong data-start="784" data-end="793">Cons:</strong> More seek time for edge requests.</p>
+</li>
+</ul>
+<h4 data-start="831" data-end="867" class=""><strong data-start="836" data-end="865">4. C-SCAN (Circular SCAN)</strong></h4>
+<ul data-start="868" data-end="1122">
+<li data-start="868" data-end="1027" class="" style="">
+<p data-start="870" data-end="1027" class="">Similar to SCAN but always moves in one direction. When it reaches the last request, it jumps back to the start without serving requests while moving back.</p>
+</li>
+<li data-start="1028" data-end="1069" class="" style="">
+<p data-start="1030" data-end="1069" class=""><strong data-start="1030" data-end="1039">Pros:</strong> More uniform response time.</p>
+</li>
+<li data-start="1070" data-end="1122" class="" style="">
+<p data-start="1072" data-end="1122" class=""><strong data-start="1072" data-end="1081">Cons:</strong> Longer initial wait for some requests.</p>
+</li>
+</ul>
+<h4 data-start="1124" data-end="1151" class=""><strong data-start="1129" data-end="1149">5. LOOK &amp; C-LOOK</strong></h4>
+<ul data-start="1152" data-end="1377">
+<li data-start="1152" data-end="1241" class="" style="">
+<p data-start="1154" data-end="1241" class=""><strong data-start="1154" data-end="1163">LOOK:</strong> Like SCAN but stops at the last request instead of going to the disk's end.</p>
+</li>
+<li data-start="1242" data-end="1333" class="" style="">
+<p data-start="1244" data-end="1333" class=""><strong data-start="1244" data-end="1255">C-LOOK:</strong> Like C-SCAN but jumps back only to the first request instead of full reset.</p>
+</li>
+<li data-start="1334" data-end="1377" class="" style="">
+<p data-start="1336" data-end="1377" class=""><strong data-start="1336" data-end="1345">Pros:</strong> Reduces unnecessary movement.</p>
+</li>
+</ul>
+<h4 data-start="1379" data-end="1404" class=""><strong data-start="1384" data-end="1402">6. N-Step SCAN</strong></h4>
+<ul data-start="1405" data-end="1529">
+<li data-start="1405" data-end="1477" class="" style="">
+<p data-start="1407" data-end="1477" class="">Divides requests into smaller batches and processes them using SCAN.</p>
+</li>
+<li data-start="1478" data-end="1529" class="" style="">
+<p data-start="1480" data-end="1529" class=""><strong data-start="1480" data-end="1489">Pros:</strong> Prevents starvation better than SCAN.</p>
+</li>
+</ul>
+<h4 data-start="1531" data-end="1551" class=""><strong data-start="1536" data-end="1549">7. F-SCAN</strong></h4>
+<ul data-start="1552" data-end="1679">
+<li data-start="1552" data-end="1615" class="" style="">
+<p data-start="1554" data-end="1615" class="">Freezes request queue while scanning to prevent starvation.</p>
+</li>
+<li data-start="1616" data-end="1679" class="" style="">
+<p data-start="1618" data-end="1679" class=""><strong data-start="1618" data-end="1627">Pros:</strong> Prevents newer requests from starving older ones.</p>
+</li>
+</ul>
+<h3 data-start="1681" data-end="1703" class=""><strong data-start="1685" data-end="1701">Best Choice?</strong></h3>
+<ul data-start="1704" data-end="1872">
+<li data-start="1704" data-end="1730" class="" style="">
+<p data-start="1706" data-end="1730" class=""><strong data-start="1706" data-end="1723">For fairness:</strong> FCFS</p>
+</li>
+<li data-start="1731" data-end="1768" class="" style="">
+<p data-start="1733" data-end="1768" class=""><strong data-start="1733" data-end="1753">For performance:</strong> SSTF or SCAN</p>
+</li>
+<li data-start="1769" data-end="1820" class="" style="">
+<p data-start="1771" data-end="1820" class=""><strong data-start="1771" data-end="1801">For uniform response time:</strong> C-SCAN or C-LOOK</p>
+</li>
+<li data-start="1821" data-end="1872" class="" style="">
+<p data-start="1823" data-end="1872" class=""><strong data-start="1823" data-end="1848">For batch processing:</strong> N-Step SCAN or F-SCAN</p>
+</li>
+</ul>
+<p data-start="1874" data-end="1930" class="">Would you like an example problem on disk scheduling? 🚀</p></div>
