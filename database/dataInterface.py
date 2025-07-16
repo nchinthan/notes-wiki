@@ -4,6 +4,17 @@ import json
 from .config import HTML_PATH
 from .content.notes_io import read_file,write_chunk,create_file,CHUNK_SIZE
 import math 
+import hashlib
+
+def sha256_string(text):
+    # Create a SHA-256 hash object
+    sha256_hash = hashlib.sha256()
+    
+    # Update the hash with the encoded string (UTF-8)
+    sha256_hash.update(text.encode('utf-8'))
+    
+    # Get the hexadecimal digest
+    return sha256_hash.hexdigest()
 
 db = DataBase()
 queryRet = Retreiver()
@@ -83,10 +94,17 @@ class Page:
         # create the file with title
         create_file(filename)
         
+        hashInsertSql = 'INSERT INTO pageChunkHash(page_id,chunk_index,chunk_hash) VALUES'
         # write each chunk
         for chunk_index in range(math.ceil(len(content)/CHUNK_SIZE)):
-            write_chunk(filename,content[chunk_index*CHUNK_SIZE:(chunk_index+1)*CHUNK_SIZE],chunk_index)
+            chunk = content[chunk_index*CHUNK_SIZE:(chunk_index+1)*CHUNK_SIZE]
+            write_chunk(filename,chunk,chunk_index)
             # add hash of each file to table 
+            chunk_hash = sha256_string(chunk)
+            hashInsertSql += f'({pageId},{chunk_index},{chunk_hash})'
+        
+        # insert hashes 
+        db.run(hashInsertSql)    
 
         keywords.extend(title.split())
         Page.addKeywords(pageId,keywords)
@@ -94,6 +112,41 @@ class Page:
     
     @staticmethod
     def update(pageId,content):
+        filename = str(pageId)
+        all_prev_chunks = db.run(f'select chunk_index,chunk_hash from pageChunkHash where page_id = {pageId} order by chunk_index')
+        prev_content_chunks = len(all_prev_chunks)
+        new_content_chunks = math.ceil(len(content)/CHUNK_SIZE)
+        
+        updation_sql = 'INSERT INTO pageChunkHash(page_id,chunk_index,chunk_hash) VALUES'
+        chunk_cnt = 0
+        
+        modified = False
+        for chunk_index in range(new_content_chunks):
+            chunk = content[chunk_index*CHUNK_SIZE:(chunk_index+1)*CHUNK_SIZE]
+            chunk_hash = sha256_string(chunk)
+            if chunk_index < prev_content_chunks and not modified:
+                if chunk_hash == all_prev_chunks[chunk_index][1]:
+                    chunk_cnt += 1 
+                    continue 
+                # hash change in chunk
+                else:
+                    modified = True 
+            # new chunks added 
+            else:
+                modified = True
+            
+            # write new modified chunks
+            if modified:
+                updation_sql += f'({pageId},{chunk_index},{chunk_hash})'
+                write_chunk(filename,chunk,chunk_index)
+        
+        db.run(updation_sql)
+             
+        # delete extra ones chunks if present in prev version
+        if prev_content_chunks < new_content_chunks:
+            range(prev_content_chunks,new_content_chunks)
+            del_sql = f'DELETE FROM pageChunkHash where page_id = {pageId} and chunk_index in ({','.join(map(str,range(prev_content_chunks,new_content_chunks)))})'
+            db.run(del_sql)
         """
         get all chunk_index,chunk_hash from table 
         modified = false

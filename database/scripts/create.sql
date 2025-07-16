@@ -7,6 +7,14 @@ CREATE TABLE page (
 );
 CREATE INDEX idx_page_refcnt ON page(ref_cnt DESC);
 
+CREATE TABLE pageChunkHash (
+    page_id INT NOT NULL,
+    chunk_index INT NOT NULL,
+    chunk_hash CHAR(64) NOT NULL,
+    FOREIGN KEY (page_id) REFERENCES page(id) ON DELETE CASCADE,
+    PRIMARY KEY (page_id, chunk_index)
+);
+
 -- 2. Create `keyword` table with full-VARCHAR(255) index
 CREATE TABLE keyword (
     id INT AUTO_INCREMENT PRIMARY KEY,
