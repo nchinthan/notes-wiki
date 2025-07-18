@@ -152,7 +152,7 @@ class ModalManager {
     const ids = Array.from(searchManager.selectedPageIds);
     if (!ids.length) return;
     const current = this.history.getCurrent();
-
+    console.log(ids)
     ids.forEach(pid => {
       fetch(`/map/${current.id}/child`, {
         method: "POST",
