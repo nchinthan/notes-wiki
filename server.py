@@ -35,7 +35,7 @@ def add_map_child(map_id):
     if child_id is None or type_ not in [0, 1]:
         return jsonify({"error": "child_id and valid type are required"}), 400
 
-    Map.add_child(map_id, child_id, Type(type_))
+    Map.add_child(map_id, child_id, type_)
     return jsonify({"status": "child added"})
 
 @app.route("/map/<int:map_id>/child", methods=["DELETE"])
@@ -47,7 +47,7 @@ def remove_map_child(map_id):
     if child_id is None or type_ not in [0, 1]:
         return jsonify({"error": "child_id and valid type are required"}), 400
 
-    Map.rem_child(map_id, child_id, Type(type_))
+    Map.rem_child(map_id, child_id, type_)
     return jsonify({"status": "child removed"})
 
 @app.route("/page", methods=["POST"])
