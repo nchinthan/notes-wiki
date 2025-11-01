@@ -23,6 +23,6 @@ def write_chunk(filename, chunk_content:str, chunk_index):
     
     with open(f"{filename}.notes", "r+b") as f:  # Read+write binary mode
         # Seek to chunk position
-        f.seek( chunk_index * CHUNK_SIZE, os.SEEK_CUR)
+        f.seek(chunk_index * CHUNK_SIZE, os.SEEK_SET)
         # Write chunk 
         f.write(chunk_content.encode("utf-8",errors='ignore'))
