@@ -1,8 +1,0 @@
-<div _ngcontent-ng-c2621204161="" class="markdown markdown-main-panel stronger enable-updated-hr-color" id="model-response-message-contentr_494a73add052b926" dir="ltr" style="--animation-duration: 400ms; --fade-animation-function: linear;"><hr data-sourcepos="1:1-1:3"><h2 data-sourcepos="2:1-2:40">Understanding Decoder Language Models</h2><p data-sourcepos="4:1-4:98">A <strong>decoder language model (LM)</strong> can be thought of as a powerful evolution of a <strong>Markov chain</strong>.</p><p data-sourcepos="6:1-6:19">Here's a breakdown:</p><ul data-sourcepos="8:1-11:0">
-<li data-sourcepos="8:1-9:0">
-<p data-sourcepos="8:3-8:166"><strong>Markov Chain:</strong> In a simple Markov chain, the prediction of the next word relies solely on the <strong>current word</strong>. It has a very limited "memory" of previous words.</p>
-</li>
-<li data-sourcepos="10:1-11:0">
-<p data-sourcepos="10:3-10:211"><strong>Decoder LM:</strong> In contrast, a decoder LM predicts the next word based on <strong>all the preceding words within its context</strong>. This allows it to understand and generate more coherent and contextually relevant text.</p>
-</li>
-</ul><p data-sourcepos="12:1-12:163">The key component that gives a decoder LM this enhanced capability is the <strong>attention mechanism</strong>. Therefore, you can conceptually see a decoder language model as:</p><p data-sourcepos="14:1-14:63"><strong>Markov Chain + Attention Mechanism = Decoder Language Model</strong></p><p data-sourcepos="16:1-16:124">Or, as we like to say, a Markov chain on <strong>steroids</strong>! Because who needs just one word when you can lift the entire context?</p></div>
