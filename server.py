@@ -1,6 +1,18 @@
 from flask import Flask, request, jsonify,render_template
 from enum import IntEnum
 from database.dataInterface import Map,Page
+import json
+import os
+from scraping.main import routine_update , close_browser , init_browser
+import threading
+
+def routine():
+    init_browser()
+    routine_update()
+    close_browser()
+
+# Run routine_update in a separate thread so it doesn't block server startup
+threading.Thread(target=routine, daemon=True).start()
 
 app = Flask(__name__)
 
@@ -69,6 +81,29 @@ def get_page(page_id):
     html = Page.getPage(page_id)
     return jsonify({"page_id": page_id, "content": html})
 
+@app.route("/page/<int:page_id>/update", methods=["PUT"])
+def update_page(page_id):
+    data = request.json
+    content = data.get("content")
+
+    if not content:
+        return jsonify({"error": "content is required"}), 400
+
+    Page.update(page_id, content)
+    return jsonify({"status": "page updated", "page_id": page_id})
+
+@app.route("/page/popular", methods=["GET"])
+def popular_pages():
+    limit = request.args.get("limit", default=5, type=int)
+    pages = Page.popular_pages(limit)
+    return jsonify(pages)
+
+@app.route("/page/discover", methods=["GET"])
+def discover_pages():
+    limit = request.args.get("limit", default=5, type=int)
+    pages = Page.discover_pages(limit)
+    return jsonify(pages)
+
 @app.route("/page/search", methods=["GET"])
 def search_pages():
     query = request.args.get("q", "")
@@ -89,8 +124,13 @@ def add_keywords(page_id):
     Page.addKeywords(page_id, keywords)
     return jsonify({"status": "keywords added", "page_id": page_id})
 
+json_path = os.path.join(os.path.dirname(__file__), "scraping", "websites.json")
+@app.route("/page/fromWeb", methods=["GET"])
+def from_web():
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    return jsonify(data)
 
-# Optional: Health check or root
 @app.route("/")
 def home():
     return render_template("index.html")

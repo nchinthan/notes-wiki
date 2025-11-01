@@ -1,2 +1,0 @@
-1. in page creation get hash of each chunk and save it in a sql table 
-2. create a sql table to store sha256 hash of chunk of page  

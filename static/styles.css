@@ -1,0 +1,281 @@
+
+:root {
+    --neon-blue: #00f7ff;
+    --neon-pink: #ff00f7;
+    --cyber-yellow: #ffd300;
+    --matrix-green: #00ff41;
+    --dark-bg: #0a0a12;
+    --darker-bg: #050508;
+    --panel-bg: #111122;
+    --panel-border: #acacbc;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: #e0e0e0;
+    font-family: 'Roboto Mono', monospace;
+    background-image: 
+    radial-gradient(circle at 10% 20%, rgba(0, 247, 255, 0.03) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(255, 0, 247, 0.03) 0%, transparent 20%);
+    min-height: 100vh;
+}
+
+.cyber-font {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.navbar, .modal-content, .dropdown-menu {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.1);
+}
+
+.navbar-brand, .modal-title, .modal-body, .modal-header {
+    color: var(--neon-blue) !important;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    text-shadow: 0 0 5px var(--neon-blue);
+    letter-spacing: 2px;
+}
+
+.btn {
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    border-width: 2px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.btn:hover::before {
+    opacity: 0.3;
+}
+
+.btn-primary {
+    background-color: transparent;
+    border-color: var(--neon-blue);
+    color: var(--neon-blue);
+}
+
+.btn-primary::before {
+    background: var(--neon-blue);
+}
+
+.btn-primary:hover {
+    background-color: rgba(0, 247, 255, 0.1);
+    color: var(--neon-blue);
+}
+
+.btn-outline-primary {
+    border-color: var(--neon-blue);
+    color: var(--neon-blue);
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: rgba(0, 247, 255, 0.2);
+    color: var(--neon-blue);
+}
+
+.btn-warning {
+    background-color: transparent;
+    border-color: var(--cyber-yellow);
+    color: var(--cyber-yellow);
+}
+
+.btn-warning::before {
+    background: var(--cyber-yellow);
+}
+
+.btn-warning:hover {
+    background-color: rgba(255, 211, 0, 0.1);
+    color: var(--cyber-yellow);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border-color: #555577;
+    color: #aaaacc;
+}
+
+#content-container {
+    min-height: 400px;
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    padding: 20px;
+    margin-top: 10px;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+#content-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+.modal-content {
+    color: #fff;
+    border-radius: 0;
+    border: 1px solid var(--panel-border);
+}
+
+input.form-control, textarea.form-control {
+    background-color: rgba(134, 163, 226, 0.756);
+    border: 1px solid var(--neon-blue);
+    border-radius: 0;
+    font-family: 'Roboto Mono', monospace;
+    padding: 10px 15px;
+}
+
+input.form-control:focus, textarea.form-control:focus {
+    background-color: rgba(174, 174, 182, 0.9);
+    box-shadow: 0 0 10px var(--neon-blue);
+    border: 1px solid var(--neon-blue);
+}
+
+footer {
+    color: #555577;
+    font-size: 0.8rem;
+    margin-top: 30px;
+    padding: 10px;
+    border-top: 1px solid #2a2a55;
+}
+
+a.dropdown-item {
+    background-color: var(--panel-bg);
+    color: var(--neon-blue);
+    font-family: 'Roboto Mono', monospace;
+}
+
+a.dropdown-item:hover {
+    background-color: var(--neon-blue);
+    color: #000;
+}
+
+/* Glow effects */
+.btn:hover {
+    box-shadow: 0 0 10px currentColor;
+    text-shadow: 0 0 5px currentColor;
+}
+
+/* Status bar effect */
+.status-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+    position: relative;
+    overflow: hidden;
+}
+
+.status-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.8), 
+    transparent);
+    animation: scanline 3s linear infinite;
+}
+
+@keyframes scanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Terminal-like cursor effect */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.cursor {
+    display: inline-block;
+    width: 10px;
+    height: 15px;
+    background-color: var(--neon-blue);
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+}
+
+/* Cyberpunk input labels */
+.input-label {
+    display: block;
+    color: var(--neon-blue);
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Grid lines overlay */
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+    linear-gradient(rgba(0, 247, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 247, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Modal headers */
+.modal-header {
+    border-bottom: 1px solid var(--neon-blue);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--neon-blue);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+    font-size: 1.2rem;
+    }
+    #search-bar {
+    width: 100% !important;
+    }
+}
+
+.list-group-item:hover {
+  background-color: #495057 !important; /* A slightly lighter dark for highlight */
+  cursor: pointer; /* Indicate it's clickable */
+}
+
+.list-group-item:hover .link-warning {
+  color: #9ae5c2 !important; /* Ensure the link color remains visible or changes slightly */
+}

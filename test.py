@@ -1,31 +1,16 @@
 import os,json 
-from database.dataInterface import Map,Page,queryRet
+from database.dataInterface import Map,Page,queryRet,db 
+#from scraping.main import browser,add_website,process_website,routine_update
 
-path = r"D:\projects\notes\json"
-fil = ["optimization problems","machineLearning","maths","OS"]
+#print(Map.get_children(5))
 
-map_id = Map.create("3rd sem",1)
+# add_website("https://towardsdatascience.com/tag/editors-pick/",
+#             [
+#                 {
+#                     "JsPath":"#wp--skip-link--target > div.wp-block-group.alignwide.has-global-padding.is-layout-constrained.wp-container-core-group-is-layout-cf4b01cc.wp-block-group-is-layout-constrained > div > ul",
+#                     "tag":"a",
+#                     "attribute":"href"
+#                 }
+#             ]
+# )
 
-def create_page(file,pid):
-    with open(file,'r') as fp:
-        d = json.load(fp)
-        title = d["content"]["heading"]
-        html =  d["content"]["text"]
-        Page.create(title,html,pid,[])
-
-def create_map(tit,path,pid):
-    map_id = Map.create(tit,pid)
-    path = os.path.join(path,tit)
-    for i in os.listdir(path):
-        fil,ext = os.path.splitext(i)
-        if ext == "":
-            create_map(i,path,map_id)
-        else:
-            create_page(os.path.join(path,i),map_id)
-
-for i in os.listdir(path):
-    t = i in fil
-    mid = 1*(t) + map_id*(not t)
-    create_map(i,path,mid)
-
-queryRet.save()

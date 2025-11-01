@@ -7,282 +7,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
-  <style>
-    :root {
-      --neon-blue: #00f7ff;
-      --neon-pink: #ff00f7;
-      --cyber-yellow: #ffd300;
-      --matrix-green: #00ff41;
-      --dark-bg: #0a0a12;
-      --darker-bg: #050508;
-      --panel-bg: #111122;
-      --panel-border: #2a2a55;
-    }
-    
-    body {
-      background-color: var(--dark-bg);
-      color: #e0e0e0;
-      font-family: 'Roboto Mono', monospace;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(0, 247, 255, 0.03) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(255, 0, 247, 0.03) 0%, transparent 20%);
-      min-height: 100vh;
-    }
-
-    .cyber-font {
-      font-family: 'Orbitron', sans-serif;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .navbar, .modal-content, .dropdown-menu {
-      background-color: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      box-shadow: 0 0 15px rgba(0, 247, 255, 0.1);
-    }
-
-    .navbar-brand, .form-control, .modal-title, .modal-body, .modal-header {
-      color: var(--neon-blue) !important;
-    }
-
-    .navbar-brand {
-      font-size: 1.5rem;
-      text-shadow: 0 0 5px var(--neon-blue);
-      letter-spacing: 2px;
-    }
-
-    .btn {
-      font-weight: bold;
-      font-family: 'Orbitron', sans-serif;
-      letter-spacing: 1px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s;
-      border-width: 2px;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .btn:hover::before {
-      opacity: 0.3;
-    }
-
-    .btn-primary {
-      background-color: transparent;
-      border-color: var(--neon-blue);
-      color: var(--neon-blue);
-    }
-
-    .btn-primary::before {
-      background: var(--neon-blue);
-    }
-
-    .btn-primary:hover {
-      background-color: rgba(0, 247, 255, 0.1);
-      color: var(--neon-blue);
-    }
-
-    .btn-outline-primary {
-      border-color: var(--neon-blue);
-      color: var(--neon-blue);
-      background-color: transparent;
-    }
-
-    .btn-outline-primary:hover {
-      background-color: rgba(0, 247, 255, 0.2);
-      color: var(--neon-blue);
-    }
-
-    .btn-warning {
-      background-color: transparent;
-      border-color: var(--cyber-yellow);
-      color: var(--cyber-yellow);
-    }
-
-    .btn-warning::before {
-      background: var(--cyber-yellow);
-    }
-
-    .btn-warning:hover {
-      background-color: rgba(255, 211, 0, 0.1);
-      color: var(--cyber-yellow);
-    }
-
-    .btn-secondary {
-      background-color: transparent;
-      border-color: #555577;
-      color: #aaaacc;
-    }
-
-    #content-container {
-      min-height: 400px;
-      background-color: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      padding: 20px;
-      margin-top: 10px;
-      color: #fff;
-      border-radius: 5px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      position: relative;
-      overflow: hidden;
-    }
-
-    #content-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-      box-shadow: 0 0 10px var(--neon-blue);
-    }
-
-    .modal-content {
-      color: #fff;
-      border-radius: 0;
-      border: 1px solid var(--panel-border);
-    }
-
-    input.form-control, textarea.form-control {
-      background-color: rgba(10, 10, 20, 0.7);
-      color: var(--neon-blue);
-      border: 1px solid var(--neon-blue);
-      border-radius: 0;
-      font-family: 'Roboto Mono', monospace;
-      padding: 10px 15px;
-    }
-
-    input.form-control:focus, textarea.form-control:focus {
-      background-color: rgba(15, 15, 30, 0.9);
-      color: var(--neon-blue);
-      box-shadow: 0 0 10px var(--neon-blue);
-      border: 1px solid var(--neon-blue);
-    }
-
-    footer {
-      color: #555577;
-      font-size: 0.8rem;
-      margin-top: 30px;
-      padding: 10px;
-      border-top: 1px solid #2a2a55;
-    }
-
-    a.dropdown-item {
-      background-color: var(--panel-bg);
-      color: var(--neon-blue);
-      font-family: 'Roboto Mono', monospace;
-    }
-
-    a.dropdown-item:hover {
-      background-color: var(--neon-blue);
-      color: #000;
-    }
-
-    /* Glow effects */
-    .btn:hover {
-      box-shadow: 0 0 10px currentColor;
-      text-shadow: 0 0 5px currentColor;
-    }
-
-    /* Status bar effect */
-    .status-bar {
-      height: 3px;
-      background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-      position: relative;
-      overflow: hidden;
-    }
-
-    .status-bar::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.8), 
-        transparent);
-      animation: scanline 3s linear infinite;
-    }
-
-    @keyframes scanline {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    /* Terminal-like cursor effect */
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 15px;
-      background-color: var(--neon-blue);
-      animation: blink 1s step-end infinite;
-      vertical-align: middle;
-      margin-left: 2px;
-    }
-
-    /* Cyberpunk input labels */
-    .input-label {
-      display: block;
-      color: var(--neon-blue);
-      font-size: 0.8rem;
-      margin-bottom: 5px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* Grid lines overlay */
-    .grid-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: 
-        linear-gradient(rgba(0, 247, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 247, 255, 0.05) 1px, transparent 1px);
-      background-size: 20px 20px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Modal headers */
-    .modal-header {
-      border-bottom: 1px solid var(--neon-blue);
-    }
-
-    .modal-footer {
-      border-top: 1px solid var(--neon-blue);
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .navbar-brand {
-        font-size: 1.2rem;
-      }
-      #search-bar {
-        width: 100% !important;
-      }
-    }
-  </style>
 </head>
 <body>
 <div class="status-bar"></div>
@@ -293,6 +19,14 @@
       <a class="navbar-brand cyber-font" href="#" id="home-link">
         <i class="bi bi-cpu-fill me-2"></i>KNOWLEDGE-MAP EXPLORER v3.14
       </a>
+      <div class="d-flex ms-3">
+        <button class="btn btn-outline-primary cyber-font me-2" id="discover-btn">
+          <i class="bi bi-compass me-1"></i> DISCOVER
+        </button>
+        <button class="btn btn-outline-primary cyber-font" id="popular-btn">
+          <i class="bi bi-star-fill me-1"></i> POPULAR
+        </button>
+      </div>
       <div class="mx-auto w-50">
         <div class="input-group">
           <span class="input-group-text bg-dark border-neon text-neon-blue">
@@ -316,7 +50,252 @@
       <button class="btn btn-outline-primary cyber-font" id="forward-btn">
         <i class="bi bi-arrow-right-circle-fill me-1"></i> FWD
       </button>
+      <button class="btn btn-outline-primary cyber-font" id="workflow-btn">
+        <i class="bi bi-lightbulb-fill me-1"></i> SUGGESTION
+      </button>
     </div>
+
+    <!-- Workflow Overlay -->
+    <div id="workflow-overlay" style="display:none; position:fixed; inset:0; z-index:2000; align-items:center; justify-content:center; background:rgba(0,0,0,0.6);">
+      <div id="workflow-modal" style="position:relative; width:100%; max-width:900px; margin:16px; background:#0b0b0b; color:#fff; border:1px solid rgba(0,200,255,0.25); border-radius:8px; padding:20px; box-shadow:0 8px 30px rgba(0,0,0,0.6); transform-origin:center center; transform:scale(0.85); opacity:0; transition:transform 180ms ease, opacity 180ms ease;">
+        <button id="workflow-close" aria-label="Close" style="position:absolute; top:10px; right:10px; background:blue; border:none; color:#fff; font-size:2.25rem; cursor:pointer;">&times;</button>
+
+        <!-- Inner HTML region (place dynamic content here) -->
+        <div id="workflow-content" style="min-height:120px; max-height:70vh; overflow-y:auto; padding-right:8px; box-sizing:border-box;">
+          <div class="container-fluid p-0" style="background: linear-gradient(135deg, #0a1929 0%, #1a365d 100%); min-height: 100vh; color: #e2e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            <div class="container py-5">
+              
+              <!-- Header Section -->
+              <header class="text-center mb-5" style="border-bottom: 1px solid #2d3748; padding-bottom: 2rem;">
+                <h1 class="display-4 fw-bold mb-3" style="color: #63b3ed; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                  📝 Markdown to HTML Workflow
+                </h1>
+                <p class="lead" style="color: #a0aec0;">
+                  Convert your AI-generated markdown into beautiful HTML articles
+                </p>
+              </header>
+
+              <!-- Workflow Steps -->
+              <div class="row justify-content-center">
+                <div class="col-lg-10">
+                  
+                  <!-- Step 1 -->
+                  <div class="workflow-step mb-5 p-4 rounded" style="background-color: rgba(26, 32, 44, 0.7); border-left: 4px solid #4299e1;">
+                    <div class="step-header d-flex align-items-center mb-3">
+                      <span class="step-number me-3 d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background: #4299e1; color: white; font-weight: bold;">
+                        1
+                      </span>
+                      <h3 class="mb-0" style="color: #90cdf4;">Get Markdown from AI</h3>
+                    </div>
+                    <p class="mb-3" style="color: #cbd5e0;">
+                      Obtain markdown content from ChatGPT, DeepSeek, Gemini, or any other AI assistant
+                    </p>
+                    <div class="step-content">
+                      <div class="bg-dark p-3 rounded" style="border: 1px solid #2d3748;">
+                        <h6 class="mb-2" style="color: #63b3ed;">Example Markdown:</h6>
+                        <code style="color: #68d391; display: block; white-space: pre-wrap;">
+          # Article Title
+
+          ## Introduction
+          This is a sample markdown content...
+
+          - Point 1
+          - Point 2
+          - Point 3
+
+          **Bold text** and *italic text*
+                        </code>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Step 2 -->
+                  <div class="workflow-step mb-5 p-4 rounded" style="background-color: rgba(26, 32, 44, 0.7); border-left: 4px solid #48bb78;">
+                    <div class="step-header d-flex align-items-center mb-3">
+                      <span class="step-number me-3 d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background: #48bb78; color: white; font-weight: bold;">
+                        2
+                      </span>
+                      <h3 class="mb-0" style="color: #90cdf4;">Convert to HTML using DeepSeek</h3>
+                    </div>
+                    <p class="mb-3" style="color: #cbd5e0;">
+                      Use DeepSeek or similar AI to convert your markdown into clean HTML code
+                    </p>
+                    <div class="step-content">
+                      <div class="row">
+                        <div class="col-md-6 mb-3">
+                          <h6 class="mb-2" style="color: #63b3ed;">Input to DeepSeek:</h6>
+                          <div class="bg-dark p-3 rounded" style="border: 1px solid #2d3748; min-height: 120px;">
+                            <code style="color: #68d391;">
+          Convert this markdown to HTML with proper styling:
+
+          [Your markdown content here...]
+                            </code>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <h6 class="mb-2" style="color: #63b3ed;">Expected Output:</h6>
+                          <div class="bg-dark p-3 rounded" style="border: 1px solid #2d3748; min-height: 120px;">
+                            <code style="color: #68d391;">
+          &lt;div class="article"&gt;
+            &lt;h1&gt;Article Title&lt;/h1&gt;
+            &lt;h2&gt;Introduction&lt;/h2&gt;
+            &lt;p&gt;This is a sample HTML content...&lt;/p&gt;
+          &lt;/div&gt;
+                            </code>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Step 3 -->
+                  <div class="workflow-step mb-5 p-4 rounded" style="background-color: rgba(26, 32, 44, 0.7); border-left: 4px solid #ed8936;">
+                    <div class="step-header d-flex align-items-center mb-3">
+                      <span class="step-number me-3 d-flex align-items-center justify-content-center rounded-circle" style="width: 40px; height: 40px; background: #ed8936; color: white; font-weight: bold;">
+                        3
+                      </span>
+                      <h3 class="mb-0" style="color: #90cdf4;">Paste HTML Here</h3>
+                    </div>
+                    <p class="mb-3" style="color: #cbd5e0;">
+                      Insert the converted HTML into your website with the dark blueish theme
+                    </p>
+                    <div class="step-content">
+                      <div class="bg-dark p-3 rounded" style="border: 1px solid #2d3748;">
+                        <h6 class="mb-2" style="color: #63b3ed;">Final HTML Integration:</h6>
+                        <code style="color: #68d391; display: block; white-space: pre-wrap;">
+          // Wrap your HTML content with this dark theme container
+          &lt;div class="container-fluid p-0" style="background: linear-gradient(135deg, #0a1929 0%, #1a365d 100%);"&gt;
+            &lt;div class="container py-5"&gt;
+              [Your converted HTML content here...]
+            &lt;/div&gt;
+          &lt;/div&gt;
+                        </code>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Quick Tips Section -->
+                  <div class="mt-5 p-4 rounded" style="background-color: rgba(26, 32, 44, 0.7); border: 1px solid #2d3748;">
+                    <h4 class="mb-3" style="color: #63b3ed;">💡 Quick Tips</h4>
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-start">
+                          <span class="me-3" style="color: #48bb78;">✓</span>
+                          <div>
+                            <h6 style="color: #90cdf4;">Keep Markdown Clean</h6>
+                            <p class="small mb-0" style="color: #a0aec0;">
+                              Ensure your markdown is well-structured with proper headings and formatting
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-start">
+                          <span class="me-3" style="color: #48bb78;">✓</span>
+                          <div>
+                            <h6 style="color: #90cdf4;">Specify Styling</h6>
+                            <p class="small mb-0" style="color: #a0aec0;">
+                              Ask the AI to include inline styles for the dark blueish theme
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-start">
+                          <span class="me-3" style="color: #48bb78;">✓</span>
+                          <div>
+                            <h6 style="color: #90cdf4;">Test Responsiveness</h6>
+                            <p class="small mb-0" style="color: #a0aec0;">
+                              Verify the HTML works well on different screen sizes
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-start">
+                          <span class="me-3" style="color: #48bb78;">✓</span>
+                          <div>
+                            <h6 style="color: #90cdf4;">Optimize Content</h6>
+                            <p class="small mb-0" style="color: #a0aec0;">
+                              Remove unnecessary elements and keep the focus on content
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Sample Output Preview -->
+                  <div class="mt-5 p-4 rounded" style="background-color: rgba(26, 32, 44, 0.7); border: 1px solid #2d3748;">
+                    <h4 class="mb-3" style="color: #63b3ed;">🎯 Sample Output Preview</h4>
+                    <div class="bg-dark p-4 rounded" style="border: 1px solid #2d3748;">
+                      <h5 style="color: #63b3ed;">Converted Article Preview</h5>
+                      <p style="color: #cbd5e0;">
+                        This is how your converted markdown will look with the dark blueish theme...
+                      </p>
+                      <div class="mt-3 p-3 rounded" style="background-color: #2d3748;">
+                        <h6 style="color: #90cdf4;">Sample Heading</h6>
+                        <p class="mb-2" style="color: #a0aec0;">
+                          This is a sample paragraph showing the color scheme and typography.
+                        </p>
+                        <ul style="color: #a0aec0;">
+                          <li>List item with proper contrast</li>
+                          <li>Readable text on dark background</li>
+                          <li>Professional appearance</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        var btn = document.getElementById('workflow-btn');
+        var overlay = document.getElementById('workflow-overlay');
+        var modal = document.getElementById('workflow-modal');
+        var close = document.getElementById('workflow-close');
+
+        // Inline-style event listener attached to the workflow button
+        btn.onclick = function () {
+          if (overlay.style.display === 'flex') {
+            // hide
+            modal.style.transform = 'scale(0.85)';
+            modal.style.opacity = '0';
+            setTimeout(function(){ overlay.style.display = 'none'; }, 200);
+          } else {
+            // show (centered, expands from center)
+            overlay.style.display = 'flex';
+            // allow layout then animate
+            setTimeout(function(){
+              modal.style.transform = 'scale(1)';
+              modal.style.opacity = '1';
+            }, 10);
+          }
+        };
+
+        close.onclick = function () {
+          modal.style.transform = 'scale(0.85)';
+          modal.style.opacity = '0';
+          setTimeout(function(){ overlay.style.display = 'none'; }, 200);
+        };
+
+        // click on backdrop closes overlay
+        overlay.addEventListener('click', function(e){
+          if (e.target === overlay) {
+            modal.style.transform = 'scale(0.85)';
+            modal.style.opacity = '0';
+            setTimeout(function(){ overlay.style.display = 'none'; }, 200);
+          }
+        });
+      })();
+    </script>
 
     <div id="map-options" class="d-none">
       <div class="btn-group me-2">
@@ -337,8 +316,26 @@
       </button>
     </div>
     <div id="page-options" class="d-none">
+      <div class="btn-group me-2">
+        <button id="stateSelectDropdown"
+                class="btn btn-primary dropdown-toggle cyber-font"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+          Select an Option
+        </button>
+        <!-- Menu Placeholder (will be filled dynamically) -->
+        <ul class="dropdown-menu" aria-labelledby="stateSelectDropdown"></ul>
+      </div>
+
+      <button id="page-edit-btn" class="btn btn-primary cyber-font me-2">
+        <i class="bi bi-pencil-square me-1"></i> EDIT
+      </button>
       <button class="btn btn-warning cyber-font" data-bs-toggle="modal" data-bs-target="#addKeywordModal">
         <i class="bi bi-tags-fill me-1"></i> ADD TAGS
+      </button>
+      <button class="btn btn-info cyber-font" id="latex-cleaner-btn">
+        <i class="bi bi-eraser-fill me-1"></i> LATEX CLEANER
       </button>
     </div>
   </div>
@@ -460,6 +457,7 @@
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ url_for('static', filename='CRUD_utils.js') }}"></script>
+<script src="{{ url_for('static', filename='editor.js') }}"></script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 <script>

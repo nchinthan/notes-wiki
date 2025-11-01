@@ -74,8 +74,15 @@ class Map:
         
     @staticmethod
     def add_child(map_id,child_id,type:Type):
+        print(map_id,child_id)
         col = ["child_page_id","child_map_id"][type]
-        l = db.run(f"insert into childMap(parent_map_id,{col}) values({map_id},{child_id})")
+        st = f"""INSERT INTO childMap (parent_map_id, {col})
+            select {map_id},{child_id} from dual 
+            where not exists
+            ( select parent_map_id,child_page_id 
+            from childMap 
+            where parent_map_id = {map_id} and child_page_id = {child_id});"""
+        l = db.run(st)
         return l!=-1
         
     @staticmethod
@@ -113,7 +120,7 @@ class Page:
     
     @staticmethod
     def update(pageId,content):
-        filename = str(pageId)
+        filename = os.path.join(HTML_PATH,str(pageId))
         all_prev_chunks = db.run(f'select chunk_index,chunk_hash from pageChunkHash where page_id = {pageId} order by chunk_index')
         prev_content_chunks = len(all_prev_chunks)
         new_content_chunks = math.ceil(len(content)/CHUNK_SIZE)
@@ -164,6 +171,8 @@ class Page:
     def getPage(page_id):
         # Get page title and keywords from SQL
         res = db.run(f"SELECT title FROM page WHERE id = {page_id}")
+        # Update last_accessed to current timestamp
+        db.run(f"UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = {page_id} ")
         if not res:
             return None
         title = res[0][0]
@@ -188,5 +197,17 @@ class Page:
         for keyword in keywords:
             queryRet.add(keyword,page_id,RetreiverType.PAGE)
 
+    @staticmethod
+    def popular_pages(limit=5):
+        res1 = db.run(f"SELECT id, title FROM page ORDER BY view DESC LIMIT {int(limit/2)}")
+        res2 = db.run(f"SELECT id, title FROM page ORDER BY ref_cnt DESC LIMIT {int(limit/2)}")
+
+        return [{"id": row[0], "title": row[1]} for row in res1 + res2]
+
+    @staticmethod
+    def discover_pages(limit=5):
+        res = db.run(f"SELECT id, title FROM page ORDER BY last_accessed DESC LIMIT {limit}")
+        return [{"id": row[0], "title": row[1]} for row in res]
+    
 if __name__ == "__main__":
     print(Map.get_children(1))

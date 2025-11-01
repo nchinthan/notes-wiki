@@ -1,0 +1,111 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <div id = "editable-region">
+            <div>a</div>
+            <div>b</div>
+            <div>c</div>
+            <div>d</div>
+            <div>e</div>
+        </div>
+        <div id="customContextMenu" style="
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            border: 1px solid #d3d3d3;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1000;
+            padding: 8px;
+            min-width: 120px;
+        ">
+            <div style="padding: 4px; cursor: pointer;" onmouseover="this.style.backgroundColor='#ddd';" onmouseout="this.style.backgroundColor='#f9f9f9';" >Add link</div>
+            <div style="padding: 4px; cursor: pointer;" onmouseover="this.style.backgroundColor='#ddd';" onmouseout="this.style.backgroundColor='#f9f9f9';" >Add heading</div>
+            <div style="padding: 4px; cursor: pointer;" onmouseover="this.style.backgroundColor='#ddd';" onmouseout="this.style.backgroundColor='#f9f9f9';" > red color </div>
+        </div>
+
+        <script>
+            const parentContainer = document.getElementById("editable-region");
+function getCssPath(element) {
+    if (!element) return '';
+    
+    if (element.id) {
+        return `#${element.id}`;
+    }
+    
+    const path = [];
+    let current = element;
+    
+    while (current && current.nodeType === Node.ELEMENT_NODE) {
+        let selector = current.nodeName.toLowerCase();
+        
+        if (current.id) {
+            path.unshift(`#${current.id}`);
+            break;
+        } else {
+            let sibling = current;
+            let nth = 1;
+            
+            while (sibling.previousElementSibling) {
+                sibling = sibling.previousElementSibling;
+                if (sibling.nodeName.toLowerCase() === selector) {
+                    nth++;
+                }
+            }
+            
+            if (nth !== 1) {
+                selector += `:nth-child(${nth})`;
+            }
+        }
+        
+        path.unshift(selector);
+        current = current.parentNode;
+    }
+    
+    return path.join(' > ');
+}
+
+function showContextMenu(event){
+// 2. Get information about the click
+            const clickX = event.clientX; // X coordinate relative to the viewport
+            const clickY = event.clientY; // Y coordinate relative to the viewport
+            const targetElement = event.target; // The element that was right-clicked
+
+
+
+            // 3. You can now display your custom context menu
+            // (e.g., create a div, position it at clickX, clickY, and show it)
+            // For example, a simple floating div:
+            const customMenu = document.getElementById('customContextMenu');
+            customMenu.dataset.target = getCssPath(targetElement);
+            if (customMenu) {
+                customMenu.style.display = 'block';
+                customMenu.style.left = `${clickX}px`;
+                customMenu.style.top = `${clickY}px`;
+                // Optional: Add menu items and their click handlers here
+            }
+
+            
+            setTimeout(() => {
+                document.addEventListener('click', hideCustomMenu, { once: true });
+            }, 0);
+    
+}
+
+            parentContainer.addEventListener('contextmenu', (event) => {
+                // 1. Prevent the default browser context menu from appearing
+                event.preventDefault();
+                showContextMenu(event);
+            })
+
+    // Function to hide the custom context menu
+    function hideCustomMenu() {
+        const customMenu = document.getElementById('customContextMenu');
+        if (customMenu) {
+            customMenu.style.display = 'none';
+        }
+    }
+        </script>
+    </body>
+</html>

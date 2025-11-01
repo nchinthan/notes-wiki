@@ -1,1 +1,67 @@
 SELECT id FROM map WHERE id = 1 AND title = "root"
+running procedure : getMapChildren
+running procedure : getMapChildren
+running procedure : getMapChildren
+insert into map (title) values("networkLayer")
+INSERT INTO childMap (parent_map_id, child_map_id)
+            select 46,54 from dual 
+            where not exists
+            ( select parent_map_id,child_page_id 
+            from childMap 
+            where parent_map_id = 46 and child_page_id = 54);
+running procedure : getMapChildren
+running procedure : getMapChildren
+running procedure : getMapChildren
+INSERT INTO pageChunkHash(page_id,chunk_index,chunk_hash) VALUES(193,0,'8fa13587155bd32da4315dad40e7beef0ad9b0377261d39edc4277e4c021973f'),(193,1,'66eebbd0f926935df95b6fbd80dbfc602c585ce94a0c6eb2546fc95ccf8fa2d7'),(193,2,'5ce1ac8de370689439ccfe13673bbbc98240e1d26e28e736c9addcd5656f974a'),(193,3,'345e01794221e34b34ba76182749d48d1c99a698dbde7ee40c84342207a0bd58'),(193,4,'629142c1777b48388c1599899fd50dbd7229fa02fd24b5d788e4b67b5ecd8d99'),(193,5,'cb49ee5522480d26dda229f9e3bca010877f71d76a1446c545a6a6aa325bad76'),(193,6,'a1f4a513c4fa667774187f1b6d6322f1f1befecaf676f4d04f70ba239d83260e'),(193,7,'6546a968c1562472e991302d8c8e40baf216072d3fd97f7ceadb3f53c9f959be'),(193,8,'a5bb2ff35193863fee2ffaff82c7805a6a791c500d023b9b5965e93cd2d2cf54'),(193,9,'2f377780b3edc1c6b3672ad0b654adc630d43381766402f46b937e1c8d0acc70'),(193,10,'ee48af6eaa2de7683ce6319c9e9315deeb159fbeb0cdf6719fae2f513dd76699'),(193,11,'8642ed577c7367d6ed3d722ef30286215c49d8185097c637f3ec43b3695b4776'),(193,12,'c0060d3cedc4d5adfd61e314df7dd11d1a0934c4816264bac4316ad25f047c89'),(193,13,'a00585dd75168830933969f0a506a4e3e44403297d929cc20cb35ce5bc0a5ac1'),(193,14,'31b43892a39e45f64a47fefc472cfd7cb3134bb5326023047c1991382519ea80'),(193,15,'55bca5c3604958dc7d2cc671b2567c5da1d6aa4e6a8483fe4cb2b7f5f0046208'),(193,16,'85beddfc37659c388661274e0976c8719c708524064cba482187f3635bd4e799'),(193,17,'de7eb92e9f4ebc5759d5b01624ce29ba773e048d5fc08e952045ced45c5bd3d4')
+running procedure : getMapChildren
+SELECT title FROM page WHERE id = 193
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 193 
+SELECT title FROM page WHERE id = 193
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 193 
+running procedure : getMapChildren
+INSERT INTO pageChunkHash(page_id,chunk_index,chunk_hash) VALUES(194,0,'bbfc582cbb7cd4a43d7a292f6b658587086b7bad04aa92037701b43f17f60fb3'),(194,1,'a6073f7ae037f300484d087887c874572def918e3adfc8648076e0b92183f2a1'),(194,2,'faeee216f801fb70cc87e92296dfc262984bfb87065d8c6d4fb8b8de525ce5e1'),(194,3,'e4209f96bf93daf3dc77ac65ad573336f5538cc9a6946534b1a3487d447e29f0'),(194,4,'2d2de4a59e01737a0723d881c93d163446db0bad819a92659c356c39f467b3b7'),(194,5,'476ee445f2bb117f99e657d6cbfe79fce85a06103eb7438f81f3c035737c55ed'),(194,6,'448bbdc352d10d35651ba55ca8789fdc3a140213927dae966a2befdf1d7f08c9'),(194,7,'8ebd301aef8a7d8b10aeab9a2157b3554d2c599178d437c951163c0afacec39c'),(194,8,'6ea3ee7c7c38e20df5a88d700a1533f20b5c1e3967d8a6816b368b1da339290c'),(194,9,'46436c29da9ba84e6f5b1bde95312b8829d02bc9052f66a348493258a94ba8c4'),(194,10,'58d0e83d57cebc42c0a588a8c927188d4a171927d9692ae1fca96779053f9145'),(194,11,'70ed6a1f10709393f441bbc151d42f8020751fc0fe31bcb735130dbf2eb2be79'),(194,12,'28472f58a6ab0488077b598614831b75d59da90638f82dba0f23dfd08881ee6b'),(194,13,'dbe77c99851293278a038460d0adfebcfb248b56080010865f741cd2e75cd11e'),(194,14,'ebcdd157356eae1ef20c9751a9bb2e7bdc4b863bd37c1b1e9fa0728f774b83fc'),(194,15,'27b3cff0aca48025d19e7e8ed986c0a03dff07b53f01b75ea1cae4759084e47e'),(194,16,'4217f9b640cd7d4e2dfda481e54fef217a479acd91ae19ff7db705083efc4d3d'),(194,17,'234e8baf89fb1f534868a888b90e556c0350b4259ccd72323619b2aa819edd0e')
+running procedure : getMapChildren
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+running procedure : getMapChildren
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+select chunk_index,chunk_hash from pageChunkHash where page_id = 194 order by chunk_index
+Error executing script(INSERT INTO pageChunkHash(page_id,chunk_index,chunk_hash) VALUES(194,0,4a0c0486a7f92e5620439817fb8e59be3a22c574a05e7cf8d88deb16b3b54be9)(194,1,456377044b88c1cbd0e5873ecc20cc7ce1e0842b27e8871de1a6204439bd85f0)(194,2,be8486b4f4f5d86a70461cb01e958c8a4e46b9b84f600759901bb53ed8a3eca5)(194,3,d9b0a9e8ab68bb260308dd25553c0c5102a2f4cb3828246f1b58f79c48c89360)(194,4,f0dee6d9f454746364fbf1ae4ea280ff14730d7a4b9c5a882b9aef9dc6846f8f)(194,5,cf1e2f5e6d5bb267ce653c3a90c524c8bc63ca5dfe7ef602b3d3b85c5c5f1c1d)(194,6,72d72c6fd4d170159f34dd6016fe123d02f7333ed14352982a291dd2dbe8c620)(194,7,541dff794044cb79107997883ceb211efa001cd729ea4a804eb69a9405518afd)(194,8,b2c8495000137a110a1a761cac824de809894e65805847131be043745afdb2d7)(194,9,3206f3e503f7576f887b13b489bb91ad0f5601df8f66c8db047c0a75b045c031)(194,10,933245b197101227f935eb9a3d4f602c39baa8d28b356e5d9aaa0df1c7b779c1)(194,11,4ef1d0820fc835e3899dbb11adc9d98a7340b436fabf10069c995ce9c5e1df4c)(194,12,9a86dae39df6e2efd710557a1ef5605aa476e061f7ede95b7d308c09580900db)(194,13,cd915f4610893395552c4972c9c2bbd71e0539db72dd70b0d870439977c35028)(194,14,837f4063014cd225d68d9fd2b50c19c726e8b11f72c97af13672561dc1003a35)(194,15,c6b3f0980dcddde2552f85c7856de6a61e242c0d6e44e93c58c537b84fe3ad60)(194,16,c7791d417af0027fce1b3903d639d825315d252bea722b51b2bf1311a6f39a6f)(194,17,18ccbd288b270baa9efea68a4618c29a0a351adf8a7e1218dd80d2a3f0fb70aa)): 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(194,1,456377044b88c1cbd0e5873ecc20cc7ce1e0842b27e8871de1a6204439bd85f0)(194,2,b' at line 1
+running procedure : getMapChildren
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+select chunk_index,chunk_hash from pageChunkHash where page_id = 194 order by chunk_index
+Error executing script(INSERT INTO pageChunkHash(page_id,chunk_index,chunk_hash) VALUES): 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+running procedure : getMapChildren
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+select chunk_index,chunk_hash from pageChunkHash where page_id = 194 order by chunk_index
+Error executing script(INSERT INTO pageChunkHash(page_id,chunk_index,chunk_hash) VALUES): 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+running procedure : getMapChildren
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+running procedure : getMapChildren
+running procedure : getMapChildren
+running procedure : getMapChildren
+running procedure : getMapChildren
+running procedure : getMapChildren
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+running procedure : getMapChildren
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 
+SELECT title FROM page WHERE id = 194
+UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = 194 

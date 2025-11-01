@@ -3,26 +3,437 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Text Highlight & Link</title>
+    <title>Custom Context Menu Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Custom Context Menu Styles */
+        .custom-context-menu {
+            position: fixed;
+            z-index: 1000;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 0.25rem 0;
+            display: none; /* Initially hidden */
+            min-width: 150px;
+            list-style: none;
+        }
+
+        .menu-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #374151;
+            transition: background-color 0.15s ease, color 0.15s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-item:hover {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .menu-item-separator {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 0.25rem 0;
+        }
+
+        .menu-icon {
+            margin-right: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .target-box:hover {
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5), 0 2px 4px -1px rgba(59, 130, 246, 0.25);
+        }
+    </style>
 </head>
 <body>
-
-    <h1>Highlight Text and Add Link</h1>
-
-    <div id="editableContent" >
-        <p>This is some example text. You can select any part of this text and right-click to add a link.</p>
-        <p>Try selecting a word like "example" or a whole sentence. Then, right-click to bring up the custom menu.</p>
-        <p>You can also type or paste text here since it's `contenteditable`.</p>
+    <div id="testdiv1">
+        sdf dfbf sdfhsdf
+        <p>sdf sfsdfdsf</p>
+        <div>sdffds</div>
     </div>
 
-    <div id="customContextMenu" class="context-menu">
-        <div class="menu-item">
-            <label for="urlInput">Enter URL:</label>
-            <input type="text" id="urlInput" placeholder="e.g., https://www.google.com">
-        </div>
-        <div class="menu-item">
-            <button id="addLinkBtn">Add Link</button>
-        </div>
+    <div id = "testdiv2" class="flex flex-row" id="parentContainer">
+        sdf dfbf sdfhsdf
+        <p>sdf sfsdfdsf</p>
+        <div>sdffds</div>
     </div>
+
+    <main class="w-full max-w-2xl p-6 bg-white rounded-xl shadow-lg">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Custom Context Menu Demo</h1>
+
+        <div id="targetBox" class="target-box bg-blue-100 border-2 border-blue-400 p-10 h-40 flex items-center justify-center rounded-lg cursor-pointer transition duration-300">
+            <p class="text-blue-800 font-semibold">
+                Right-click this box to open the custom context menu.
+            </p>
+        </div>
+
+        <div id="messageBox" class="mt-6 p-4 text-sm font-medium rounded-lg bg-yellow-50 text-yellow-800 border border-yellow-200 hidden" role="alert">
+            <!-- Action messages will appear here -->
+        </div>
+
+    </main>
+
+    <!-- The Custom Context Menu Element -->
+    <ul id="contextMenu" class="custom-context-menu" data-menu-for="targetBox">
+        <!-- Menu items will be generated here by JavaScript -->
+    </ul>
+
+    <script type="module">
+        // --- Core Application Logic ---
+
+        // 1. Configuration (Abstraction)
+        // Define the menu structure and their associated functions in a simple array.
+        const menuConfig = [
+            {
+                label: 'View Details',
+                icon: '&#128269;', // Magnifying Glass Emoji
+                action: (targetElement) => {
+                    showMessage(`Action: Viewing details for element ID: ${targetElement.id}`, 'blue');
+                }
+            },
+            {
+                label: 'Edit Item',
+                icon: '&#9999;&#65039;', // Pencil Emoji
+                action: (targetElement) => {
+                    showMessage(`Action: Editing content inside: ${targetElement.querySelector('p').textContent.substring(0, 30)}...`, 'green');
+                }
+            },
+            {
+                label: '---SEPARATOR---' // Use a unique label to denote a separator
+            },
+            {
+                label: 'Delete',
+                icon: '&#128465;&#65039;', // Wastebasket Emoji
+                action: (targetElement) => {
+                    showMessage(`Action: Delete request received for: ${targetElement.id}. (No actual deletion performed in this demo).`, 'red');
+                }
+            }
+        ];
+
+        // 2. DOM Elements
+        const targetElement = document.getElementById('targetBox');
+        const contextMenu = document.getElementById('contextMenu');
+        const messageBox = document.getElementById('messageBox');
+
+        let currentTarget = null; // Stores the element that was right-clicked
+
+        // Utility function to display messages
+        function showMessage(message, color) {
+            messageBox.textContent = message;
+            messageBox.className = `mt-6 p-4 text-sm font-medium rounded-lg border block`;
+            
+            let bgClass = '';
+            let textClass = '';
+            let borderClass = '';
+
+            switch(color) {
+                case 'blue':
+                    bgClass = 'bg-blue-50';
+                    textClass = 'text-blue-800';
+                    borderClass = 'border-blue-200';
+                    break;
+                case 'green':
+                    bgClass = 'bg-green-50';
+                    textClass = 'text-green-800';
+                    borderClass = 'border-green-200';
+                    break;
+                case 'red':
+                    bgClass = 'bg-red-50';
+                    textClass = 'text-red-800';
+                    borderClass = 'border-red-200';
+                    break;
+                default:
+                    bgClass = 'bg-yellow-50';
+                    textClass = 'text-yellow-800';
+                    borderClass = 'border-yellow-200';
+            }
+            messageBox.classList.add(bgClass, textClass, borderClass);
+
+            // Hide after 4 seconds
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 4000);
+        }
+
+        // 3. Core Context Menu Functions
+
+        // Hides the menu
+        function hideContextMenu() {
+            contextMenu.style.display = 'none';
+        }
+
+        // Positions and shows the menu
+        function showContextMenu(x, y) {
+            // Adjust position to keep menu within the viewport
+            const menuWidth = contextMenu.offsetWidth;
+            const menuHeight = contextMenu.offsetHeight;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            let finalX = x;
+            let finalY = y;
+
+            if (x + menuWidth > viewportWidth) {
+                finalX = viewportWidth - menuWidth - 10; // 10px buffer
+            }
+
+            if (y + menuHeight > viewportHeight) {
+                finalY = viewportHeight - menuHeight - 10; // 10px buffer
+                if (finalY < 0) finalY = 0; // Prevent scrolling up too far
+            }
+
+            contextMenu.style.left = `${finalX}px`;
+            contextMenu.style.top = `${finalY}px`;
+            contextMenu.style.display = 'block';
+        }
+
+        // 4. Initialization and Event Binding
+
+        // Function to create the DOM structure from the configuration array
+        function buildMenu(config) {
+            contextMenu.innerHTML = ''; // Clear existing menu
+
+            config.forEach(item => {
+                if (item.label === '---SEPARATOR---') {
+                    const separator = document.createElement('li');
+                    separator.className = 'menu-item-separator';
+                    contextMenu.appendChild(separator);
+                    return;
+                }
+
+                const menuItem = document.createElement('li');
+                menuItem.className = 'menu-item';
+                menuItem.innerHTML = `<span class="menu-icon">${item.icon || ''}</span>${item.label}`;
+
+                // The abstraction for event handling!
+                // Attach the action function defined in the config object
+                menuItem.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent menu from closing immediately if bound to body
+                    hideContextMenu();
+                    // Pass the element that was right-clicked (currentTarget) to the action function
+                    if (item.action && currentTarget) {
+                        item.action(currentTarget);
+                    }
+                });
+
+                contextMenu.appendChild(menuItem);
+            });
+        }
+
+        // Event listener for the right-click event on the target box
+        targetElement.addEventListener('contextmenu', (e) => {
+            e.preventDefault(); // CRITICAL: Prevents the browser's default context menu
+            currentTarget = e.currentTarget; // Store the element that triggered the menu
+
+            // Build the menu dynamically on every right-click if needed (optional step, but good practice)
+            buildMenu(menuConfig);
+
+            // Show the menu at the cursor position
+            showContextMenu(e.pageX, e.pageY);
+        });
+
+        // Event listener to hide the menu when clicking anywhere else
+        document.addEventListener('click', hideContextMenu);
+        document.addEventListener('contextmenu', (e) => {
+             // If the click happened outside the menu AND outside the target element, hide it.
+             if (e.target !== contextMenu && !contextMenu.contains(e.target) && e.target !== targetElement && !targetElement.contains(e.target)) {
+                 hideContextMenu();
+             }
+        });
+
+        // Initial build of the menu structure (in case you don't rebuild it on every click)
+        buildMenu(menuConfig);
+
+    </script>
+    <script>
+
+/**
+ * Modular DOM structure manager (Bootstrap compatible)
+ * Supports switching between horizontal/vertical layouts dynamically.
+ * Groups existing elements intelligently into subcontainers.
+ * 
+ * @param {HTMLElement} parentDom
+ * @param {HTMLElement|null} childDom
+ * @param {'horizontal'|'vertical'} direction
+ */
+function addChild(parentDom, childDom = null, direction = 'horizontal') {
+  if (!parentDom) return;
+
+  // Placeholder if no childDom passed
+  if (childDom === null | typeof childDom !== 'Node') {
+    console.log('No childDom provided, creating placeholder div.');
+    childDom = document.createElement('div');
+    childDom.classList.add('border', 'border-secondary', 'p-3', 'text-center', 'bg-light');
+    childDom.textContent = 'Placeholder';
+  }
+
+  // Detect structure
+  const children = Array.from(parentDom.children);
+  const childHtml = parentDom.innerHTML;
+
+  let compStyle = getComputedStyle(parentDom);
+  const horizontalAlignment = ( compStyle['display'] === 'flex' && compStyle['flex-direction'] === 'row')  | parentDom.classList.contains('container-fluid');
+
+  // 📌 Case 1: No children → initialize structure
+  if (children.length === 0) {
+    parentDom.appendChild(childDom);
+    return;
+  }
+
+  // Case 2 : single child 
+  if (children.length === 1){
+    if(direction === 'horizontal'){
+        parentDom.classList.add('flex', 'flex-row', 'gap-2');
+    }
+    parentDom.appendChild(childDom);
+    return;
+  }
+
+  if((horizontalAlignment && direction === 'vertical') | (!horizontalAlignment && direction === 'horizontal')){
+    // Wrap existing children into rows/cols as needed
+    parentDom.innerHTML = ''; // Clear parent
+
+    const newContainer = document.createElement('div');
+    if(horizontalAlignment){
+        // make the child vertical
+        newContainer.classList.add('flex', 'flex-row', 'gap-2');
+
+        // remove horizontal classes from parent if new direction is vertical
+        if(direction === 'vertical'){
+            parentDom.classList.remove('flex', 'flex-row', 'gap-2');
+        }
+    }else{
+        // making the parent horizontal aligned
+        parentDom.classList.add('flex', 'flex-row', 'gap-2');
+    }
+    parentDom.innerHTML = '';
+    newContainer.innerHTML = childHtml;
+    parentDom.appendChild(newContainer);
+  }
+
+  parentDom.appendChild(childDom);
+  return;
+}
+/*
+  // Helper to create a .row > .col wrapper
+  const makeRowWithCol = (elem) => {
+    const row = document.createElement('div');
+    row.classList.add('row', 'g-2');
+    const col = document.createElement('div');
+    col.classList.add('col');
+    col.appendChild(elem);
+    row.appendChild(col);
+    return row;
+  };
+
+  // Detect existing orientation
+  const firstChild = children[0];
+  const isVerticalLayout = hasRows && children.length > 1; // multiple rows stacked
+  const isHorizontalLayout = hasRows && children.length === 1 && firstChild.querySelectorAll(':scope > .col').length > 1;
+
+  // 🧭 CASE A: Current layout is HORIZONTAL and adding VERTICAL
+  if (isHorizontalLayout && direction === 'vertical') {
+    // Create wrapper for existing horizontal structure
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('row', 'g-2');
+    wrapper.appendChild(firstChild); // move existing horizontal row inside wrapper
+
+    // Clear parent and reassemble as vertical layout
+    parentDom.innerHTML = '';
+    const verticalContainer = document.createElement('div');
+    verticalContainer.classList.add('container-fluid', 'p-0');
+
+    // Add old horizontal structure as top
+    const topRow = document.createElement('div');
+    topRow.classList.add('row');
+    const topCol = document.createElement('div');
+    topCol.classList.add('col');
+    topCol.appendChild(wrapper);
+    topRow.appendChild(topCol);
+    verticalContainer.appendChild(topRow);
+
+    // Add new vertical child as second row
+    const newRow = makeRowWithCol(childDom);
+    verticalContainer.appendChild(newRow);
+
+    parentDom.appendChild(verticalContainer);
+    return;
+  }
+
+  // 🧭 CASE B: Current layout is VERTICAL and adding HORIZONTAL
+  if (isVerticalLayout && direction === 'horizontal') {
+    // Wrap existing rows into one horizontal row
+    const newHorizontalRow = document.createElement('div');
+    newHorizontalRow.classList.add('row', 'g-2');
+
+    // Move existing rows into columns of new row
+    children.forEach(row => {
+      const col = document.createElement('div');
+      col.classList.add('col');
+      col.appendChild(row);
+      newHorizontalRow.appendChild(col);
+    });
+
+    // Add new horizontal child as new column
+    const newCol = document.createElement('div');
+    newCol.classList.add('col');
+    newCol.appendChild(childDom);
+    newHorizontalRow.appendChild(newCol);
+
+    // Replace old structure with horizontal layout
+    parentDom.innerHTML = '';
+    parentDom.appendChild(newHorizontalRow);
+    return;
+  }
+
+  // 🧭 CASE C: Consistent horizontal addition
+  if (direction === 'horizontal') {
+    const firstRow = parentDom.querySelector(':scope > .row') || makeRowWithCol(document.createElement('div'));
+    const col = document.createElement('div');
+    col.classList.add('col');
+    col.appendChild(childDom);
+    firstRow.appendChild(col);
+    parentDom.appendChild(firstRow);
+    return;
+  }
+
+  // 🧭 CASE D: Consistent vertical addition
+  if (direction === 'vertical') {
+    const newRow = makeRowWithCol(childDom);
+    parentDom.appendChild(newRow);
+    return;
+  }
+} 
+*/
+    </script>
+
+
+    <script>
+        let r = 1;
+        if(r){
+        addChild(document.getElementById("testdiv1"), null, 'horizontal');
+        addChild(document.getElementById("testdiv1"), null, 'horizontal');
+
+        addChild(document.getElementById("testdiv1"), null, 'vertical');
+        addChild(document.getElementById("testdiv1"), null, 'horizontal');
+
+        }
+    </script>
 </body>
 </html>

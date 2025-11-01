@@ -3,8 +3,11 @@ CREATE TABLE page (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     view INT DEFAULT 0,
-    ref_cnt INT DEFAULT 0
+    ref_cnt INT DEFAULT 0,
+    last_accessed TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+
 CREATE INDEX idx_page_refcnt ON page(ref_cnt DESC);
 
 CREATE TABLE pageChunkHash (
@@ -52,6 +55,16 @@ CREATE TABLE childMap (
         (child_map_id IS NOT NULL AND child_page_id IS NULL) OR
         (child_map_id IS NULL AND child_page_id IS NOT NULL)
     )
+);
+
+CREATE TABLE Summaries (
+    page_id INT,
+
+    summary TEXT,
+
+    PRIMARY KEY (page_id),
+
+    FOREIGN KEY (page_id) REFERENCES page(id) ON DELETE CASCADE
 );
 
 -- Index for fast parent → children traversal

@@ -62,13 +62,78 @@ class History {
     }
   }
 }
+
+function capitalize(str) {
+  // Check if the input is a string and not empty
+  if (typeof str !== 'string' || str.length === 0) {
+    return ''; // Return an empty string for invalid or empty input
+  }
+
+  // Split the string into an array of words
+  const words = str.split(' ');
+
+  // Map over the words, capitalizing the first letter of each word
+  const capitalizedWords = words.map(word => {
+    if (word.length === 0) {
+      return ''; // Handle multiple spaces by returning an empty string for empty words
+    }
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+
+  // Join the capitalized words back into a single string
+  return capitalizedWords.join(' ');
+}
+
+function latexCleaning(body){
+	let l = body.querySelectorAll('.katex');
+	l.forEach((e)=>{
+    	// 1. Select the element to remove
+    	let elementToRemove = e.querySelector('.katex-html');
+
+    	// 2. Check if the element exists and has a parent
+    	if (elementToRemove && elementToRemove.parentNode) {
+        	// 3. Call removeChild on the *actual* parent node
+        	elementToRemove.parentNode.removeChild(elementToRemove);
+    	}
+	elementToRemove = e.querySelector(".base");
+	if (elementToRemove && elementToRemove.parentNode) {
+        	// 3. Call removeChild on the *actual* parent node
+        	elementToRemove.parentNode.removeChild(elementToRemove);
+    	}});
+}
+
 class PageManager {
   constructor(history) {
     this.history = history;
+    this.contentContainer = document.getElementById("content-container");
   }
 
   loadByType(id, type) {
     type === 'map' ? this.loadMap(id) : this.loadPage(id);
+  }
+
+  toggleContentEditable() {
+    const container = document.getElementById("page-content");
+    if (container.contentEditable === "inherit") {
+      container.contentEditable = "false";
+    }
+    container.contentEditable = container.contentEditable === "true" ? "false" : "true";
+    document.getElementById("page-edit-btn").innerHTML = container.contentEditable === "true" 
+      ? '<i class="bi bi-check2-square"></i> SAVE' 
+      : '<i class="bi bi-pencil-square"></i> EDIT';
+    if (container.contentEditable === "false") {
+      const content = container.innerHTML;
+      const id = this.history.getCurrent().id;
+      const token = get_CSRF();
+      fetch(`/page/${id}/update`, {
+      method: "PUT",
+      headers: { 
+        "Content-Type": "application/json",
+        ...(token ? { "X-CSRF-Token": token } : {})
+      },
+      body: JSON.stringify({ content })
+      });
+    }
   }
 
   loadMap(id) {
@@ -84,7 +149,7 @@ class PageManager {
             <ul class="list-group shadow">
               ${data.maps.map(m => `
                 <li class='list-group-item bg-dark text-light border-secondary'>
-                  <a class='link-warning' href='#' onclick='app.pageManager.loadMap(${m.id})'>🗺️ ${m.title}</a>
+                  <a style="text-decoration: none;cursor:pointer;" class='link-warning' onclick='app.pageManager.loadMap(${m.id})'>🗺️ ${capitalize(m.title)}</a>
                 </li>`).join('')}
             </ul>
           </div>
@@ -93,7 +158,7 @@ class PageManager {
             <ul class="list-group shadow">
               ${data.pages.map(p => `
                 <li class='list-group-item bg-dark text-light border-secondary'>
-                  <a class='link-info' href='#' onclick='app.pageManager.loadPage(${p.id})'>📄 ${p.title}</a>
+                  <a style="text-decoration: none;cursor:pointer;" class='link-info'  onclick='app.pageManager.loadPage(${p.id})'>📄 ${capitalize(p.title)}</a>
                 </li>`).join('')}
             </ul>
           </div>`;
@@ -105,13 +170,13 @@ class PageManager {
       .then(res => res.json())
       .then(data => {
         this.history.push(id, 'page');
-        const container = document.getElementById("content-container");
+        const container = this.contentContainer;
 
         container.innerHTML = `
           <div class="mb-4 border-bottom border-info pb-2">
-            <h2 class="fw-bold text-info"><i class="bi bi-journal-richtext"></i> ${data.content.title}</h2>
+            <h2 class="fw-bold text-info"><i class="bi bi-journal-richtext"></i> ${capitalize(data.content.title)}</h2>
           </div>
-          <div class="text-light bg-dark p-3 rounded shadow">
+          <div id="page-content" class="text-light bg-dark p-3 rounded shadow">
             ${data.content.html}
           </div>`;
       });
@@ -160,7 +225,6 @@ class ModalManager {
         body: JSON.stringify({ child_id: pid, type: 0 })
       });
     });
-
     searchManager.selectedPageIds.clear();
     bootstrap.Modal.getInstance(document.getElementById("addExistingPageModal")).hide();
     this.pageManager.loadMap(current.id);
@@ -209,6 +273,72 @@ class SearchManager {
   constructor(history) {
     this.history = history;
     this.selectedPageIds = new Set();
+  }
+
+  getPopularPages(limit = 15) {
+    const container = document.getElementById("content-container");
+    return fetch(`/page/fromWeb`)
+        .then(res => res.json())
+        .then(data => {
+            container.innerHTML = `<div class="mb-3"> 
+  <h4 class="text-warning"><i class="bi bi-star-fill"></i> Popular Pages</h4>
+  <ul class="list-group shadow">
+    ${Object.keys(data).map((src) => {
+      const value = data[src];
+      const siteName = src.replace(/^https?:\/\//, '').replace(/\.com|\.org|\.net|\.in/g, '').replace(/\/$/, '');
+
+      return `
+        <li class="list-group-item bg-dark text-light border-secondary">
+          <strong class="text-info">🌐 ${siteName}</strong>
+          <ul class="list-group list-group-flush mt-2">
+            ${value.flatMap(e => e.content.map(item => `
+              <li class="list-group-item bg-dark text-light border-secondary ps-4">
+                <a class="link-info" href="${item.href}" target="_blank">📄 ${item.text}</a>
+              </li>
+            `)).join('')}
+          </ul>
+        </li>
+      `;
+    }).join('')}
+  </ul>
+</div>`;
+
+        }).then(() => {
+
+            fetch(`/page/popular?limit=${limit}`)
+                .then(res => res.json())
+                .then(results => {
+
+                    container.innerHTML += `
+          <div class="mb-3">
+            <h4 class="text-warning"><i class="bi bi-star-fill"></i> Popular Pages</h4>
+            <ul class='list-group shadow'>
+              ${results.map(p => `
+                <li class='list-group-item bg-dark text-light border-secondary'>
+                  <a class='link-info' href='#' onclick='app.pageManager.loadPage(${p.id})'>📄 ${p.title}</a>
+                </li>`).join('')}
+            </ul>
+          </div>`;
+                })
+        })
+  }
+
+  getDiscoverPages(limit = 15) {
+    return fetch(`/page/discover?limit=${limit}`)
+      .then(res => res.json())
+      .then(results => {
+        const container = document.getElementById("content-container");
+        container.innerHTML = `
+          <div class="mb-3">
+            <h4 class="text-primary"><i class="bi bi-compass"></i> Discover Pages</h4>
+            <ul class='list-group shadow'>
+              ${results.map(p => `
+                <li class='list-group-item bg-dark text-light border-secondary'>
+                  <a class='link-info' href='#' onclick='app.pageManager.loadPage(${p.id})'>📄 ${p.title}</a>
+                </li>`).join('')}
+            </ul>
+          </div>`;
+      });
   }
 
   searchQuery(query) {
@@ -275,10 +405,17 @@ class AppController {
 
     document.getElementById("back-btn").onclick = () => this.history.back();
     document.getElementById("forward-btn").onclick = () => this.history.forward();
+    document.getElementById("discover-btn").onclick = () => this.searchManager.getDiscoverPages();
+    document.getElementById("popular-btn").onclick = () => this.searchManager.getPopularPages();
 
     document.getElementById("existing-page-search").addEventListener("input", (e) => {
       this.searchManager.searchPages(e.target.value);
     });
+
+    document.getElementById("page-edit-btn").onclick = () => this.pageManager.toggleContentEditable();
+    document.getElementById("latex-cleaner-btn").onclick = () => {
+      latexCleaning(document.getElementById("page-content"));
+    }
 
     this.history.setStateChangeCallback((state) => {
       this.pageManager.loadByType(state.id, state.type);
@@ -287,6 +424,7 @@ class AppController {
     });
 
     this.pageManager.loadMap(1);
+    this.updateOptions();
   }
 
   updateNavButtons() {
