@@ -122,7 +122,6 @@ class History {
   }
 }
 
-
 class PageManager {
   constructor(history) {
     this.history = history;
@@ -157,6 +156,69 @@ class PageManager {
     }
   }
 
+  
+  // --- NEW HELPER: make element draggable ---
+  makeDraggable(el, data) {
+    el.setAttribute("draggable", "true");
+    el.addEventListener("dragstart", (e) => {
+      e.dataTransfer.setData("application/json", JSON.stringify(data));
+      e.dataTransfer.effectAllowed = "move";
+    });
+  }
+
+  // --- NEW HELPER: make element a valid drop target ---
+  makeDropTarget(el, targetMapId, parentMapId) {
+    el.addEventListener("dragover", (e) => e.preventDefault());
+    el.addEventListener("drop", async (e) => {
+      e.preventDefault();
+      const dropped = JSON.parse(e.dataTransfer.getData("application/json"));
+      const { id: childId, type } = dropped;
+
+      // Prevent dropping on itself
+      if (type === "map" && childId === targetMapId) return;
+
+      const token = get_CSRF();
+
+      try {
+        // 1. Add to new target map
+        await fetch(`/map/${targetMapId}/child`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { "X-CSRF-Token": token } : {})
+          },
+          body: JSON.stringify({
+            child_id: childId,
+            type: type === "map" ? 1 : 0
+          })
+        });
+
+        // 2. Remove from old parent map
+        if (parentMapId && parentMapId !== targetMapId) {
+          await fetch(`/map/${parentMapId}/child/delete`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { "X-CSRF-Token": token } : {})
+            },
+            body: JSON.stringify({
+              child_id: childId,
+              type: type === "map" ? 1 : 0
+            })
+          });
+        }
+
+        // 3. Reload current map view
+        this.loadMap(parentMapId || targetMapId);
+      } catch (err) {
+        console.error("Drag-drop move failed:", err);
+      }
+    });
+  }
+
+  
+
+ // --- MODIFIED loadMap() ---
   loadMap(id) {
     fetch(`/map/${id}/children`)
       .then(res => res.json())
@@ -175,10 +237,12 @@ class PageManager {
           <div class="text-neon mb-4">
             <h3><i class="bi bi-diagram-3"></i> Sub Maps</h3>
             ${data.maps.length > 0 ? `
-              <ul class="list-group shadow">
+              <ul id="map-list" class="list-group shadow">
                 ${data.maps.map(m => `
-                  <li class='list-group-item bg-dark text-light border-secondary'>
-                    <a style="text-decoration: none;cursor:pointer;" class='link-warning' onclick='app.pageManager.loadMap(${m.id})'>🗺️ ${capitalize(m.title)}</a>
+                  <li class='list-group-item bg-dark text-light border-secondary map-item'
+                      data-id='${m.id}' data-type='map'>
+                    <a style="text-decoration: none;cursor:pointer;" class='link-warning' 
+                       onclick='app.pageManager.loadMap(${m.id})'>🗺️ ${capitalize(m.title)}</a>
                   </li>`).join('')}
               </ul>
             ` : '<p class="text-muted">No sub maps available</p>'}
@@ -186,14 +250,38 @@ class PageManager {
           <div class="text-neon">
             <h3><i class="bi bi-file-earmark-text"></i> Pages</h3>
             ${data.pages.length > 0 ? `
-              <ul class="list-group shadow">
+              <ul id="page-list" class="list-group shadow">
                 ${data.pages.map(p => `
-                  <li class='list-group-item bg-dark text-light border-secondary'>
-                    <a style="text-decoration: none;cursor:pointer;" class='link-info' onclick='app.pageManager.loadPage(${p.id})'>📄 ${capitalize(p.title)}</a>
+                  <li class='list-group-item bg-dark text-light border-secondary page-item'
+                      data-id='${p.id}' data-type='page'>
+                    <a style="text-decoration: none;cursor:pointer;" class='link-info' 
+                       onclick='app.pageManager.loadPage(${p.id})'>📄 ${capitalize(p.title)}</a>
                   </li>`).join('')}
               </ul>
             ` : '<p class="text-muted">No pages available</p>'}
           </div>`;
+
+        // --- Add drag/drop behavior after DOM render ---
+        const mapItems = container.querySelectorAll(".map-item");
+        const pageItems = container.querySelectorAll(".page-item");
+
+        // make all items draggable
+        mapItems.forEach(li => this.makeDraggable(li, { id: parseInt(li.dataset.id), type: "map" }));
+        pageItems.forEach(li => this.makeDraggable(li, { id: parseInt(li.dataset.id), type: "page" }));
+
+        // make all maps droppable targets
+        mapItems.forEach(li => {
+          const targetMapId = parseInt(li.dataset.id);
+          this.makeDropTarget(li, targetMapId, id);
+        });
+
+        // also make "Back to Parent Map" button a drop target (to move up)
+        if (data.parent_id) {
+          const parentButton = container.querySelector("button.btn-outline-warning");
+          if (parentButton) {
+            this.makeDropTarget(parentButton, data.parent_id, id);
+          }
+        }
       });
   }
 
@@ -512,4 +600,7 @@ class AppController {
 
 // Declare globally so HTML inline handlers can access
 const app = new AppController();
+
+
+
 

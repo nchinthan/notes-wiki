@@ -41,6 +41,7 @@ def get_map_children(map_id):
 @app.route("/map/<int:map_id>/child", methods=["POST"])
 def add_map_child(map_id):
     data = request.json
+    print(data)
     child_id = data.get("child_id")
     type_ = data.get("type")  # 0 for page, 1 for map
 
@@ -50,7 +51,7 @@ def add_map_child(map_id):
     Map.add_child(map_id, child_id, type_)
     return jsonify({"status": "child added"})
 
-@app.route("/map/<int:map_id>/child", methods=["DELETE"])
+@app.route("/map/<int:map_id>/child/delete", methods=["DELETE"])
 def remove_map_child(map_id):
     data = request.json
     child_id = data.get("child_id")
