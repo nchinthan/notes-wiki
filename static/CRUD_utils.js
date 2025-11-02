@@ -105,7 +105,7 @@ function get_cookie(name) {
     return cookieValue;
 }
 
-function RequestDelete(url, callback) {
+function RequestDelete(url, onSuccess,onFail) {
     fetch(
         url,
         {
@@ -119,8 +119,10 @@ function RequestDelete(url, callback) {
     .then(data => {
         if(data["success"] == 1){
             SuccessAlert(data["message"]);
+            onSuccess(data["message"]);
         }else{
             FailAlert(data["message"]);
+            onFail(data["message"]);
         }
     });
 }

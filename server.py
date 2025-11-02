@@ -81,6 +81,15 @@ def get_page(page_id):
     html = Page.getPage(page_id)
     return jsonify({"page_id": page_id, "content": html})
 
+@app.route("/page/<int:page_id>/delete",methods=["DELETE"])
+def delete_page(page_id):
+    success,message = Page.delete(page_id)
+    out = {
+        "success": int(success),
+        "message":message
+    }
+    return jsonify(out)
+
 @app.route("/page/<int:page_id>/update", methods=["PUT"])
 def update_page(page_id):
     data = request.json

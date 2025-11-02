@@ -1,111 +1,279 @@
-<html>
-    <head>
+this is my js script related to dom creation of page link and map link , i want you to add 
+this functionalities :
+drag and drop of map/page to other map ( even parentMap(analogous to moving to .. in filesystems))
+when a map of page is dropped om 
+```
+class History {
+  constructor(initialState) {
+    this.backStack = [];
+    this.forwardStack = [];
+    this.current = initialState;
+    this.maxSize = 50;
+    this.onStateChange = null; // Callback for state changes
+  }
 
-    </head>
-    <body>
-        <div id = "editable-region">
-            <div>a</div>
-            <div>b</div>
-            <div>c</div>
-            <div>d</div>
-            <div>e</div>
-        </div>
-        <div id="customContextMenu" style="
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            border: 1px solid #d3d3d3;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1000;
-            padding: 8px;
-            min-width: 120px;
-        ">
-            <div style="padding: 4px; cursor: pointer;" onmouseover="this.style.backgroundColor='#ddd';" onmouseout="this.style.backgroundColor='#f9f9f9';" >Add link</div>
-            <div style="padding: 4px; cursor: pointer;" onmouseover="this.style.backgroundColor='#ddd';" onmouseout="this.style.backgroundColor='#f9f9f9';" >Add heading</div>
-            <div style="padding: 4px; cursor: pointer;" onmouseover="this.style.backgroundColor='#ddd';" onmouseout="this.style.backgroundColor='#f9f9f9';" > red color </div>
-        </div>
+  push(id, type) {
+    if (this.current.id !== id || this.current.type !== type) {
+      this.backStack.push(this.current);
+      this.forwardStack = [];
+      
+      if (this.backStack.length > this.maxSize) {
+        this.backStack.shift();
+      }
+      
+      this.current = { id, type };
+      this.notifyStateChange();
+    }
+    return this.current;
+  }
 
-        <script>
-            const parentContainer = document.getElementById("editable-region");
-function getCssPath(element) {
-    if (!element) return '';
+  back() {
+    if (this.backStack.length === 0) return null;
     
-    if (element.id) {
-        return `#${element.id}`;
+    this.forwardStack.push(this.current);
+    this.current = this.backStack.pop();
+    this.notifyStateChange();
+    return this.current;
+  }
+
+  forward() {
+    if (this.forwardStack.length === 0) return null;
+    
+    this.backStack.push(this.current);
+    this.current = this.forwardStack.pop();
+    this.notifyStateChange();
+    return this.current;
+  }
+
+  remove(id, type) {
+    const match = (item) => item.id === id && item.type === type;
+
+    // Filter both stacks to remove all matching entries
+    this.backStack = this.backStack.filter(item => !match(item));
+    this.forwardStack = this.forwardStack.filter(item => !match(item));
+
+    // If the current matches, reset it to a safe fallback
+    if (match(this.current)) {
+      this.current = this.backStack.length > 0 
+        ? this.backStack[this.backStack.length - 1]   // last in back
+        : this.forwardStack.length > 0 
+          ? this.forwardStack[this.forwardStack.length - 1] 
+          : { id: null, type: null }; // empty fallback
     }
-    
-    const path = [];
-    let current = element;
-    
-    while (current && current.nodeType === Node.ELEMENT_NODE) {
-        let selector = current.nodeName.toLowerCase();
-        
-        if (current.id) {
-            path.unshift(`#${current.id}`);
-            break;
-        } else {
-            let sibling = current;
-            let nth = 1;
-            
-            while (sibling.previousElementSibling) {
-                sibling = sibling.previousElementSibling;
-                if (sibling.nodeName.toLowerCase() === selector) {
-                    nth++;
-                }
-            }
-            
-            if (nth !== 1) {
-                selector += `:nth-child(${nth})`;
-            }
-        }
-        
-        path.unshift(selector);
-        current = current.parentNode;
+
+    this.notifyStateChange();
+  }
+
+
+  getCurrent() {
+    return this.current;
+  }
+
+  canGoBack() {
+    return this.backStack.length > 0;
+  }
+
+  canGoForward() {
+    return this.forwardStack.length > 0;
+  }
+
+  setStateChangeCallback(callback) {
+    this.onStateChange = callback;
+  }
+
+  notifyStateChange() {
+    if (this.onStateChange) {
+      this.onStateChange(this.current);
     }
-    
-    return path.join(' > ');
+  }
 }
 
-function showContextMenu(event){
-// 2. Get information about the click
-            const clickX = event.clientX; // X coordinate relative to the viewport
-            const clickY = event.clientY; // Y coordinate relative to the viewport
-            const targetElement = event.target; // The element that was right-clicked
 
+class PageManager {
+  constructor(history) {
+    this.history = history;
+    this.contentContainer = document.getElementById("content-container");
+  }
 
+  loadByType(id, type) {
+    type === 'map' ? this.loadMap(id) : this.loadPage(id);
+  }
 
-            // 3. You can now display your custom context menu
-            // (e.g., create a div, position it at clickX, clickY, and show it)
-            // For example, a simple floating div:
-            const customMenu = document.getElementById('customContextMenu');
-            customMenu.dataset.target = getCssPath(targetElement);
-            if (customMenu) {
-                customMenu.style.display = 'block';
-                customMenu.style.left = `${clickX}px`;
-                customMenu.style.top = `${clickY}px`;
-                // Optional: Add menu items and their click handlers here
-            }
+  toggleContentEditable() {
+    const container = document.getElementById("page-content");
+    if (container.contentEditable === "inherit") {
+      container.contentEditable = "false";
+    }
+    container.contentEditable = container.contentEditable === "true" ? "false" : "true";
+    document.getElementById("page-edit-btn").innerHTML = container.contentEditable === "true" 
+      ? '<i class="bi bi-check2-square"></i> SAVE' 
+      : '<i class="bi bi-pencil-square"></i> EDIT';
+    if (container.contentEditable === "false") {
+      const content = container.innerHTML;
+      const id = this.history.getCurrent().id;
+      const token = get_CSRF();
+      fetch(`/page/${id}/update`, {
+      method: "PUT",
+      headers: { 
+        "Content-Type": "application/json",
+        ...(token ? { "X-CSRF-Token": token } : {})
+      },
+      body: JSON.stringify({ content })
+      });
+    }
+  }
 
-            
-            setTimeout(() => {
-                document.addEventListener('click', hideCustomMenu, { once: true });
-            }, 0);
-    
+  loadMap(id) {
+    fetch(`/map/${id}/children`)
+      .then(res => res.json())
+      .then(data => {
+        this.history.push(id, 'map');
+        const container = document.getElementById("content-container");
+
+        container.innerHTML = `
+          ${data.parent_id ? `
+            <div class="text-neon mb-3">
+              <button class="btn btn-outline-warning btn-sm" onclick="app.pageManager.loadMap(${data.parent_id})">
+                <i class="bi bi-arrow-up"></i> Back to Parent Map
+              </button>
+            </div>
+          ` : ''}
+          <div class="text-neon mb-4">
+            <h3><i class="bi bi-diagram-3"></i> Sub Maps</h3>
+            ${data.maps.length > 0 ? `
+              <ul class="list-group shadow">
+                ${data.maps.map(m => `
+                  <li class='list-group-item bg-dark text-light border-secondary'>
+                    <a style="text-decoration: none;cursor:pointer;" class='link-warning' onclick='app.pageManager.loadMap(${m.id})'>🗺️ ${capitalize(m.title)}</a>
+                  </li>`).join('')}
+              </ul>
+            ` : '<p class="text-muted">No sub maps available</p>'}
+          </div>
+          <div class="text-neon">
+            <h3><i class="bi bi-file-earmark-text"></i> Pages</h3>
+            ${data.pages.length > 0 ? `
+              <ul class="list-group shadow">
+                ${data.pages.map(p => `
+                  <li class='list-group-item bg-dark text-light border-secondary'>
+                    <a style="text-decoration: none;cursor:pointer;" class='link-info' onclick='app.pageManager.loadPage(${p.id})'>📄 ${capitalize(p.title)}</a>
+                  </li>`).join('')}
+              </ul>
+            ` : '<p class="text-muted">No pages available</p>'}
+          </div>`;
+      });
+  }
+
+  loadPage(id) {
+    fetch(`/page/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        this.history.push(id, 'page');
+        const container = this.contentContainer;
+
+        container.innerHTML = `
+          <div class="mb-4 border-bottom border-info pb-2">
+            <h2 class="fw-bold text-info"><i class="bi bi-journal-richtext"></i> ${capitalize(data.content.title)}</h2>
+          </div>
+          <div id="page-content" class="text-light bg-dark p-3 rounded shadow">
+            ${data.content.html}
+          </div>`;
+      });
+  }
 }
 
-            parentContainer.addEventListener('contextmenu', (event) => {
-                // 1. Prevent the default browser context menu from appearing
-                event.preventDefault();
-                showContextMenu(event);
-            })
+class AppController {
+  constructor() {
+    this.history = new History({ id: 1, type: 'map' });
+    this.pageManager = new PageManager(this.history);
+    this.searchManager = new SearchManager(this.history);
+    this.modalManager = new ModalManager(this.history, this.pageManager);
 
-    // Function to hide the custom context menu
-    function hideCustomMenu() {
-        const customMenu = document.getElementById('customContextMenu');
-        if (customMenu) {
-            customMenu.style.display = 'none';
-        }
+    window.onload = () => this.initialize();
+  }
+
+  initialize() {
+    document.getElementById("home-link").onclick = () => this.pageManager.loadMap(1);
+
+    document.getElementById("search-bar").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") this.searchManager.searchQuery(e.target.value);
+    });
+
+    document.getElementById("discover-btn").onclick = () => this.searchManager.getDiscoverPages();
+    document.getElementById("popular-btn").onclick = () => this.searchManager.getPopularPages();
+
+    document.getElementById("existing-page-search").addEventListener("input", (e) => {
+      this.searchManager.searchPages(e.target.value);
+    });
+
+    this.initializePageButtons();
+
+    this.initializeHistoryFunctionalities();
+
+    this.pageManager.loadMap(1);
+    this.updateOptions();
+  }
+
+  initializeHistoryFunctionalities(){
+    document.getElementById("back-btn").onclick = () => this.history.back();
+    document.getElementById("forward-btn").onclick = () => this.history.forward();
+    this.history.setStateChangeCallback((state) => {
+      this.pageManager.loadByType(state.id, state.type);
+      this.updateNavButtons();
+      this.updateOptions();
+    });
+  }
+
+  initializePageButtons() {
+    document.getElementById("page-edit-btn").onclick = () => {
+      this.pageManager.toggleContentEditable();
     }
-        </script>
-    </body>
-</html>
+    document.getElementById("latex-cleaner-btn").onclick = () => {
+      latexCleaning(document.getElementById("page-content"));
+    };
+
+    const deleteBtn = document.getElementById("page-delete-btn");
+    const confirmModalEl = document.getElementById("confirmDeleteModal");
+    const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+
+    // Bootstrap modal instance
+    const confirmModal = new bootstrap.Modal(confirmModalEl);
+
+    deleteBtn.onclick = () => {
+      // Show confirmation modal first
+      confirmModal.show();
+
+      // Set up confirm delete click handler (bound to this instance)
+      confirmDeleteBtn.onclick = () => {
+        let id = this.history.getCurrent().id;
+        let url = `/page/${id}/delete`;
+
+        let onSuccess = (d) => {
+          this.history.back();
+          this.history.remove(id, "page");
+          confirmModal.hide();
+        };
+
+        RequestDelete(url, onSuccess, (d) => {
+          confirmModal.hide();
+        });
+      };
+    };
+}
+
+
+  updateNavButtons() {
+    document.getElementById("back-btn").disabled = !this.history.canGoBack();
+    document.getElementById("forward-btn").disabled = !this.history.canGoForward();
+  }
+
+  updateOptions() {
+    const current = this.history.getCurrent();
+    document.getElementById("map-options").classList.toggle("d-none", current.type !== 'map');
+    document.getElementById("page-options").classList.toggle("d-none", current.type !== 'page');
+  }
+}
+
+// Declare globally so HTML inline handlers can access
+const app = new AppController();
+
+```

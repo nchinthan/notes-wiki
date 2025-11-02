@@ -26,3 +26,10 @@ def write_chunk(filename, chunk_content:str, chunk_index):
         f.seek(chunk_index * CHUNK_SIZE, os.SEEK_SET)
         # Write chunk 
         f.write(chunk_content.encode("utf-8",errors='ignore'))
+
+def delete_file(filename):
+    filename = os.path.join(os.getcwd(),filename) + ".notes"
+    if not os.path.exists(filename):
+        return False 
+    os.remove(filename)
+    return True

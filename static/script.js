@@ -1,3 +1,42 @@
+function capitalize(str) {
+  // Check if the input is a string and not empty
+  if (typeof str !== 'string' || str.length === 0) {
+    return ''; // Return an empty string for invalid or empty input
+  }
+
+  // Split the string into an array of words
+  const words = str.split(' ');
+
+  // Map over the words, capitalizing the first letter of each word
+  const capitalizedWords = words.map(word => {
+    if (word.length === 0) {
+      return ''; // Handle multiple spaces by returning an empty string for empty words
+    }
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+
+  // Join the capitalized words back into a single string
+  return capitalizedWords.join(' ');
+}
+
+function latexCleaning(body){
+	let l = body.querySelectorAll('.katex');
+	l.forEach((e)=>{
+    	// 1. Select the element to remove
+    	let elementToRemove = e.querySelector('.katex-html');
+
+    	// 2. Check if the element exists and has a parent
+    	if (elementToRemove && elementToRemove.parentNode) {
+        	// 3. Call removeChild on the *actual* parent node
+        	elementToRemove.parentNode.removeChild(elementToRemove);
+    	}
+	elementToRemove = e.querySelector(".base");
+	if (elementToRemove && elementToRemove.parentNode) {
+        	// 3. Call removeChild on the *actual* parent node
+        	elementToRemove.parentNode.removeChild(elementToRemove);
+    	}});
+}
+
 class History {
   constructor(initialState) {
     this.backStack = [];
@@ -40,6 +79,26 @@ class History {
     return this.current;
   }
 
+  remove(id, type) {
+    const match = (item) => item.id === id && item.type === type;
+
+    // Filter both stacks to remove all matching entries
+    this.backStack = this.backStack.filter(item => !match(item));
+    this.forwardStack = this.forwardStack.filter(item => !match(item));
+
+    // If the current matches, reset it to a safe fallback
+    if (match(this.current)) {
+      this.current = this.backStack.length > 0 
+        ? this.backStack[this.backStack.length - 1]   // last in back
+        : this.forwardStack.length > 0 
+          ? this.forwardStack[this.forwardStack.length - 1] 
+          : { id: null, type: null }; // empty fallback
+    }
+
+    this.notifyStateChange();
+  }
+
+
   getCurrent() {
     return this.current;
   }
@@ -63,44 +122,6 @@ class History {
   }
 }
 
-function capitalize(str) {
-  // Check if the input is a string and not empty
-  if (typeof str !== 'string' || str.length === 0) {
-    return ''; // Return an empty string for invalid or empty input
-  }
-
-  // Split the string into an array of words
-  const words = str.split(' ');
-
-  // Map over the words, capitalizing the first letter of each word
-  const capitalizedWords = words.map(word => {
-    if (word.length === 0) {
-      return ''; // Handle multiple spaces by returning an empty string for empty words
-    }
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  });
-
-  // Join the capitalized words back into a single string
-  return capitalizedWords.join(' ');
-}
-
-function latexCleaning(body){
-	let l = body.querySelectorAll('.katex');
-	l.forEach((e)=>{
-    	// 1. Select the element to remove
-    	let elementToRemove = e.querySelector('.katex-html');
-
-    	// 2. Check if the element exists and has a parent
-    	if (elementToRemove && elementToRemove.parentNode) {
-        	// 3. Call removeChild on the *actual* parent node
-        	elementToRemove.parentNode.removeChild(elementToRemove);
-    	}
-	elementToRemove = e.querySelector(".base");
-	if (elementToRemove && elementToRemove.parentNode) {
-        	// 3. Call removeChild on the *actual* parent node
-        	elementToRemove.parentNode.removeChild(elementToRemove);
-    	}});
-}
 
 class PageManager {
   constructor(history) {
@@ -144,23 +165,34 @@ class PageManager {
         const container = document.getElementById("content-container");
 
         container.innerHTML = `
+          ${data.parent_id ? `
+            <div class="text-neon mb-3">
+              <button class="btn btn-outline-warning btn-sm" onclick="app.pageManager.loadMap(${data.parent_id})">
+                <i class="bi bi-arrow-up"></i> Back to Parent Map
+              </button>
+            </div>
+          ` : ''}
           <div class="text-neon mb-4">
             <h3><i class="bi bi-diagram-3"></i> Sub Maps</h3>
-            <ul class="list-group shadow">
-              ${data.maps.map(m => `
-                <li class='list-group-item bg-dark text-light border-secondary'>
-                  <a style="text-decoration: none;cursor:pointer;" class='link-warning' onclick='app.pageManager.loadMap(${m.id})'>🗺️ ${capitalize(m.title)}</a>
-                </li>`).join('')}
-            </ul>
+            ${data.maps.length > 0 ? `
+              <ul class="list-group shadow">
+                ${data.maps.map(m => `
+                  <li class='list-group-item bg-dark text-light border-secondary'>
+                    <a style="text-decoration: none;cursor:pointer;" class='link-warning' onclick='app.pageManager.loadMap(${m.id})'>🗺️ ${capitalize(m.title)}</a>
+                  </li>`).join('')}
+              </ul>
+            ` : '<p class="text-muted">No sub maps available</p>'}
           </div>
           <div class="text-neon">
             <h3><i class="bi bi-file-earmark-text"></i> Pages</h3>
-            <ul class="list-group shadow">
-              ${data.pages.map(p => `
-                <li class='list-group-item bg-dark text-light border-secondary'>
-                  <a style="text-decoration: none;cursor:pointer;" class='link-info'  onclick='app.pageManager.loadPage(${p.id})'>📄 ${capitalize(p.title)}</a>
-                </li>`).join('')}
-            </ul>
+            ${data.pages.length > 0 ? `
+              <ul class="list-group shadow">
+                ${data.pages.map(p => `
+                  <li class='list-group-item bg-dark text-light border-secondary'>
+                    <a style="text-decoration: none;cursor:pointer;" class='link-info' onclick='app.pageManager.loadPage(${p.id})'>📄 ${capitalize(p.title)}</a>
+                  </li>`).join('')}
+              </ul>
+            ` : '<p class="text-muted">No pages available</p>'}
           </div>`;
       });
   }
@@ -403,8 +435,6 @@ class AppController {
       if (e.key === "Enter") this.searchManager.searchQuery(e.target.value);
     });
 
-    document.getElementById("back-btn").onclick = () => this.history.back();
-    document.getElementById("forward-btn").onclick = () => this.history.forward();
     document.getElementById("discover-btn").onclick = () => this.searchManager.getDiscoverPages();
     document.getElementById("popular-btn").onclick = () => this.searchManager.getPopularPages();
 
@@ -412,20 +442,61 @@ class AppController {
       this.searchManager.searchPages(e.target.value);
     });
 
-    document.getElementById("page-edit-btn").onclick = () => this.pageManager.toggleContentEditable();
-    document.getElementById("latex-cleaner-btn").onclick = () => {
-      latexCleaning(document.getElementById("page-content"));
-    }
+    this.initializePageButtons();
 
+    this.initializeHistoryFunctionalities();
+
+    this.pageManager.loadMap(1);
+    this.updateOptions();
+  }
+
+  initializeHistoryFunctionalities(){
+    document.getElementById("back-btn").onclick = () => this.history.back();
+    document.getElementById("forward-btn").onclick = () => this.history.forward();
     this.history.setStateChangeCallback((state) => {
       this.pageManager.loadByType(state.id, state.type);
       this.updateNavButtons();
       this.updateOptions();
     });
-
-    this.pageManager.loadMap(1);
-    this.updateOptions();
   }
+
+  initializePageButtons() {
+    document.getElementById("page-edit-btn").onclick = () => {
+      this.pageManager.toggleContentEditable();
+    }
+    document.getElementById("latex-cleaner-btn").onclick = () => {
+      latexCleaning(document.getElementById("page-content"));
+    };
+
+    const deleteBtn = document.getElementById("page-delete-btn");
+    const confirmModalEl = document.getElementById("confirmDeleteModal");
+    const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+
+    // Bootstrap modal instance
+    const confirmModal = new bootstrap.Modal(confirmModalEl);
+
+    deleteBtn.onclick = () => {
+      // Show confirmation modal first
+      confirmModal.show();
+
+      // Set up confirm delete click handler (bound to this instance)
+      confirmDeleteBtn.onclick = () => {
+        let id = this.history.getCurrent().id;
+        let url = `/page/${id}/delete`;
+
+        let onSuccess = (d) => {
+          this.history.back();
+          this.history.remove(id, "page");
+          confirmModal.hide();
+        };
+
+        RequestDelete(url, onSuccess, (d) => {
+          confirmModal.hide();
+        });
+      };
+    };
+}
+
 
   updateNavButtons() {
     document.getElementById("back-btn").disabled = !this.history.canGoBack();

@@ -2,7 +2,7 @@ from .sqlInterface import DataBase
 from .queryRetreival import Retreiver,RetreiverType
 import json
 from .config import HTML_PATH
-from .content.notes_io import read_file,write_chunk,create_file,CHUNK_SIZE
+from .content.notes_io import read_file,write_chunk,create_file,CHUNK_SIZE,delete_file
 import math 
 import hashlib
 import os 
@@ -70,6 +70,9 @@ class Map:
             "pages": pages,
             "maps": maps
         }
+        parent_id = db.run(f"select parent_map_id from childMap where child_map_id = {map_id} limit 1 ;")
+        if parent_id != -1 and len(parent_id) > 0:
+            out["parent_id"] = parent_id[0][0]
         return out
         
     @staticmethod
@@ -165,6 +168,20 @@ class Page:
                 write_chunk(filename,chunk,chunk_index)
         """
         pass
+    
+    @staticmethod
+    def delete(pageId):
+        pass 
+        # unlink all parents is not required db will handle it 
+        # delete from database 
+        o = db.run(f"DELETE FROM page where id = {pageId}")
+        if o == -1:
+            return False ,"FAILED TO DELETE FROM DB"
+        # delete the file in folder  
+        filename = os.path.join(HTML_PATH,str(pageId))
+        if not delete_file(filename):
+            return False , "FAILED TO DELETE FILE"
+        return True , "SUCCESS "
     
     # getting the html of page
     @staticmethod
