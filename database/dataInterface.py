@@ -60,6 +60,14 @@ class Map:
         return map_id
     
     @staticmethod
+    def delete(child_id:int):
+        out = db.run(f"CALL delete_map({child_id});")
+        if out == -1 : 
+            # failure 
+            return False , "Failed to Delete"
+        return True,"SUCCESFULLY DELETED"
+    
+    @staticmethod
     def get_children(map_id:int):
         res = db.call_procedure("getMapChildren", [map_id])
         # Convert list of tuples to list of dicts for pages

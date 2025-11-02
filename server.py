@@ -33,6 +33,15 @@ def create_map():
     map_id = Map.create(title, parent_map_id)
     return jsonify({"map_id": map_id})
 
+@app.route("/map/<int:map_id>/delete", methods=["GET"])
+def delete_map(map_id):
+    success,message = Map.delete(map_id)
+    out = {
+        "success":int(success),
+        "message":message
+    }
+    return jsonify(out)
+
 @app.route("/map/<int:map_id>/children", methods=["GET"])
 def get_map_children(map_id):
     children = Map.get_children(map_id)

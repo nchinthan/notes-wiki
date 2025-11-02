@@ -215,9 +215,7 @@ class PageManager {
       }
     });
   }
-
   
-
  // --- MODIFIED loadMap() ---
   loadMap(id) {
     fetch(`/map/${id}/children`)
@@ -239,10 +237,15 @@ class PageManager {
             ${data.maps.length > 0 ? `
               <ul id="map-list" class="list-group shadow">
                 ${data.maps.map(m => `
-                  <li class='list-group-item bg-dark text-light border-secondary map-item'
+                  <li class='list-group-item bg-dark text-light border-secondary map-item d-flex justify-content-between align-items-center'
                       data-id='${m.id}' data-type='map'>
-                    <a style="text-decoration: none;cursor:pointer;" class='link-warning' 
-                       onclick='app.pageManager.loadMap(${m.id})'>🗺️ ${capitalize(m.title)}</a>
+                    <div>
+                      <a style="text-decoration: none;cursor:pointer;" class='link-warning' 
+                        onclick='app.pageManager.loadMap(${m.id})'>🗺️ ${capitalize(m.title)}</a>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger delete-map-btn" data-mapid="${m.id}">
+                      <i class="bi bi-trash"></i>
+                    </button>
                   </li>`).join('')}
               </ul>
             ` : '<p class="text-muted">No sub maps available</p>'}
@@ -255,7 +258,7 @@ class PageManager {
                   <li class='list-group-item bg-dark text-light border-secondary page-item'
                       data-id='${p.id}' data-type='page'>
                     <a style="text-decoration: none;cursor:pointer;" class='link-info' 
-                       onclick='app.pageManager.loadPage(${p.id})'>📄 ${capitalize(p.title)}</a>
+                      onclick='app.pageManager.loadPage(${p.id})'>📄 ${capitalize(p.title)}</a>
                   </li>`).join('')}
               </ul>
             ` : '<p class="text-muted">No pages available</p>'}
@@ -282,6 +285,30 @@ class PageManager {
             this.makeDropTarget(parentButton, data.parent_id, id);
           }
         }
+
+        // --- NEW: handle delete map buttons ---
+        container.querySelectorAll(".delete-map-btn").forEach(btn => {
+          btn.addEventListener("click", async (e) => {
+            e.stopPropagation(); // prevent triggering map click
+            const mapId = btn.getAttribute("data-mapid");
+            if (!confirm("Are you sure you want to delete this map?")) return;
+
+            try {
+              const res = await fetch(`/map/${mapId}/delete`, { method: "GET" });
+              const result = await res.json();
+
+              if (result.success) {
+                alert("Map deleted successfully!");
+                this.loadMap(id); // reload current parent map
+              } else {
+                alert("Failed to delete map: " + result.message);
+              }
+            } catch (err) {
+              console.error("Delete map failed:", err);
+              alert("An error occurred while deleting the map.");
+            }
+          });
+        });
       });
   }
 
