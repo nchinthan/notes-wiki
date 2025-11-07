@@ -7,12 +7,12 @@ import math
 import hashlib
 import os 
 
-def sha256_string(text):
+def sha256_string(text:bytes):
     # Create a SHA-256 hash object
     sha256_hash = hashlib.sha256()
     
     # Update the hash with the encoded string (UTF-8)
-    sha256_hash.update(text.encode('utf-8'))
+    sha256_hash.update(text)
     
     # Get the hexadecimal digest
     return sha256_hash.hexdigest()
@@ -60,6 +60,13 @@ class Map:
         return map_id
     
     @staticmethod
+    def rename(map_id,new_name):
+        out = db.run(f'update map set title = "{new_name}" where id = {map_id};')
+        if out == -1:
+            return False , "id doesnt exist"
+        return True , "Rename successful"
+    
+    @staticmethod
     def delete(child_id:int):
         out = db.run(f"CALL delete_map({child_id});")
         if out == -1 : 
@@ -85,7 +92,6 @@ class Map:
         
     @staticmethod
     def add_child(map_id,child_id,type:Type):
-        print(map_id,child_id)
         col = ["child_page_id","child_map_id"][type]
         st = f"""INSERT INTO childMap (parent_map_id, {col})
             select {map_id},{child_id} from dual 
@@ -105,6 +111,10 @@ class Map:
 class Page:
     @staticmethod
     def create(title,content,parentMapid,keywords=[]) -> int:
+        # ✅ Encode content to bytes once 
+        # reason being that python strings use unicode where each charactar has diff byte sizes which means 2 chars have diff bytes of data  which might have issue with our write chunk method
+        content = content.encode("utf-8", errors="ignore")
+    
         keyword_str = ",".join(keywords)
         pageId = db.call_procedure("createNote", [title, parentMapid, keyword_str, None], capture_out=True)[-1]
     
@@ -131,6 +141,7 @@ class Page:
     
     @staticmethod
     def update(pageId,content):
+        content = content.encode("utf-8", errors="ignore")
         filename = os.path.join(HTML_PATH,str(pageId))
         all_prev_chunks = db.run(f'select chunk_index,chunk_hash from pageChunkHash where page_id = {pageId} order by chunk_index')
         prev_content_chunks = len(all_prev_chunks)

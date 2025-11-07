@@ -1,5 +1,5 @@
-let root_url_45686254654 = window.location.href.split("/");
-const root_url = root_url_45686254654[0]+"//"+root_url_45686254654[2]+"/";
+let root_url_ = window.location.href.split("/");
+const root_url = root_url_[0]+"//"+root_url_[2]+"/";
 
 function SuccessAlert(text){
     AlertBox(text,bgcolor="#28a745")
@@ -83,6 +83,32 @@ function RequestPost(url, data, callback) {
     });
 }
 
+function RequestPut(url, data, callback) {
+    fetch(
+        url,
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': get_CSRF()
+            },
+            body: JSON.stringify(data)
+        }
+    )
+    .then(response => response.json())  // Parse the JSON response
+    .then(data => {
+        if (data["success"] == 1) {
+            SuccessAlert(data["message"]);
+            callback(data);
+        } else {
+            FailAlert(data["message"]);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        FailAlert('Request failed: ' + error.message);
+    });
+}
 
 
 function get_CSRF(){
