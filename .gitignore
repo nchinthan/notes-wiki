@@ -2,3 +2,10 @@ database/content/pages/
 database/content/__pycache__/
 database/__pycache__/
 DBlog.txt
+todo.txt 
+temp.html 
+DBlog.txt 
+clickTest.html 
+database/queryRet.json
+database/config.py
+scraping/__pycache__/
