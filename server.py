@@ -21,7 +21,7 @@ class Type(IntEnum):
     page = 0
     map = 1
 
-@app.route("/map", methods=["POST"])
+@app.route("/api/map", methods=["POST"])
 def create_map():
     data = request.json
     title = data.get("title")
@@ -33,7 +33,7 @@ def create_map():
     map_id = Map.create(title, parent_map_id)
     return jsonify({"map_id": map_id})
 
-@app.route("/map/<int:map_id>/rename",methods=['PUT'])
+@app.route("/api/map/<int:map_id>/rename",methods=['PUT'])
 def rename_map(map_id):
     data = request.json
     new_name = data.get("new_name","")
@@ -46,7 +46,7 @@ def rename_map(map_id):
     }
     return jsonify(data)
 
-@app.route("/map/<int:map_id>/delete", methods=["GET"])
+@app.route("/api/map/<int:map_id>/delete", methods=["GET"])
 def delete_map(map_id):
     success,message = Map.delete(map_id)
     out = {
@@ -55,12 +55,12 @@ def delete_map(map_id):
     }
     return jsonify(out)
 
-@app.route("/map/<int:map_id>/children", methods=["GET"])
+@app.route("/api/map/<int:map_id>/children", methods=["GET"])
 def get_map_children(map_id):
     children = Map.get_children(map_id)
     return jsonify(children)
 
-@app.route("/map/<int:map_id>/child", methods=["POST"])
+@app.route("/api/map/<int:map_id>/child", methods=["POST"])
 def add_map_child(map_id):
     data = request.json
     child_id = data.get("child_id")
@@ -72,7 +72,7 @@ def add_map_child(map_id):
     Map.add_child(map_id, child_id, type_)
     return jsonify({"status": "child added"})
 
-@app.route("/map/<int:map_id>/child/delete", methods=["DELETE"])
+@app.route("/api/map/<int:map_id>/child/delete", methods=["DELETE"])
 def remove_map_child(map_id):
     data = request.json
     child_id = data.get("child_id")
@@ -84,7 +84,7 @@ def remove_map_child(map_id):
     Map.rem_child(map_id, child_id, type_)
     return jsonify({"status": "child removed"})
 
-@app.route("/page", methods=["POST"])
+@app.route("/api/page", methods=["POST"])
 def create_page():
     data = request.json
     title = data.get("title")
@@ -98,7 +98,7 @@ def create_page():
     page_id = Page.create(title, content, parent_map_id, keywords)
     return jsonify({"page_id": page_id})
 
-@app.route("/page/<int:page_id>", methods=["GET"])
+@app.route("/api/page/<int:page_id>", methods=["GET"])
 def get_page(page_id):
     html = Page.getPage(page_id)
     if not html:
@@ -116,7 +116,7 @@ def get_page(page_id):
         }})
     return jsonify({"page_id": page_id, "content": html})
 
-@app.route("/page/<int:page_id>/delete",methods=["DELETE"])
+@app.route("/api/page/<int:page_id>/delete",methods=["DELETE"])
 def delete_page(page_id):
     success,message = Page.delete(page_id)
     out = {
@@ -125,7 +125,7 @@ def delete_page(page_id):
     }
     return jsonify(out)
 
-@app.route("/page/<int:page_id>/update", methods=["PUT"])
+@app.route("/api/page/<int:page_id>/update", methods=["PUT"])
 def update_page(page_id):
     data = request.json
     content = data.get("content")
@@ -136,19 +136,19 @@ def update_page(page_id):
     Page.update(page_id, content)
     return jsonify({"status": "page updated", "page_id": page_id})
 
-@app.route("/page/popular", methods=["GET"])
+@app.route("/api/page/popular", methods=["GET"])
 def popular_pages():
     limit = request.args.get("limit", default=5, type=int)
     pages = Page.popular_pages(limit)
     return jsonify(pages)
 
-@app.route("/page/discover", methods=["GET"])
+@app.route("/api/page/discover", methods=["GET"])
 def discover_pages():
     limit = request.args.get("limit", default=5, type=int)
     pages = Page.discover_pages(limit)
     return jsonify(pages)
 
-@app.route("/page/search", methods=["GET"])
+@app.route("/api/page/search", methods=["GET"])
 def search_pages():
     query = request.args.get("q", "")
     if not query:
@@ -157,7 +157,7 @@ def search_pages():
     results = Page.search(query)
     return jsonify(results)
 
-@app.route("/page/<int:page_id>/keywords", methods=["POST"])
+@app.route("/api/page/<int:page_id>/keywords", methods=["POST"])
 def add_keywords(page_id):
     data = request.json
     keywords = data.get("keywords", [])
@@ -169,7 +169,7 @@ def add_keywords(page_id):
     return jsonify({"status": "keywords added", "page_id": page_id})
 
 json_path = os.path.join(os.path.dirname(__file__), "scraping", "websites.json")
-@app.route("/page/fromWeb", methods=["GET"])
+@app.route("/api/page/fromWeb", methods=["GET"])
 def from_web():
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)

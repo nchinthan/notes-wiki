@@ -197,7 +197,7 @@ class MapManager {
     }
 
     try {
-      const res = await fetch(`/map/${mapId}/rename`, {
+      const res = await fetch(`/api/map/${mapId}/rename`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ new_name: newName })
@@ -266,7 +266,7 @@ class MapManager {
 
       try {
         // 1. Add to new target map
-        await fetch(`/map/${targetMapId}/child`, {
+        await fetch(`/api/map/${targetMapId}/child`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -280,7 +280,7 @@ class MapManager {
 
         // 2. Remove from old parent map
         if (parentMapId && parentMapId !== targetMapId) {
-          await fetch(`/map/${parentMapId}/child/delete`, {
+          await fetch(`/api/map/${parentMapId}/child/delete`, {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
@@ -318,7 +318,7 @@ class MapManager {
         if (!confirm("Are you sure you want to delete this map?")) return;
 
         try {
-          const res = await fetch(`/map/${mapId}/delete`, { method: "GET" });
+          const res = await fetch(`/api/map/${mapId}/delete`, { method: "GET" });
           const result = await res.json();
 
           if (result.success) {
@@ -446,7 +446,7 @@ class PageManager {
       const content = container.innerHTML;
       const id = this.history.getCurrent().id;
       const token = get_CSRF();
-      fetch(`/page/${id}/update`, {
+      fetch(`/api/page/${id}/update`, {
       method: "PUT",
       headers: { 
         "Content-Type": "application/json",
@@ -459,7 +459,7 @@ class PageManager {
 
  // --- MODIFIED loadMap() ---
   loadMap(id) {
-    fetch(`/map/${id}/children`)
+    fetch(`/api/map/${id}/children`)
       .then(res => res.json())
       .then(data => {
         this.history.push(id, 'map');
@@ -469,7 +469,7 @@ class PageManager {
   }
 
   loadPage(id) {
-    fetch(`/page/${id}`)
+    fetch(`/api/page/${id}`)
       .then(res => res.json())
       .then(data => {
         this.history.push(id, 'page');
@@ -505,7 +505,7 @@ class ModalManager {
     const current = this.history.getCurrent();
     if (!keywords.length) return;
 
-    fetch(`/page/${current.id}/keywords`, {
+    fetch(`/api/page/${current.id}/keywords`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ keywords })
@@ -522,7 +522,7 @@ class ModalManager {
     const current = this.history.getCurrent();
     console.log(ids)
     ids.forEach(pid => {
-      fetch(`/map/${current.id}/child`, {
+      fetch(`/api/map/${current.id}/child`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ child_id: pid, type: 0 })
@@ -539,7 +539,7 @@ class ModalManager {
     const current = this.history.getCurrent();
     if (!title || !content) return;
 
-    fetch(`/page`, {
+    fetch(`/api/page`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, content, parent_map_id: current.id, keywords: [] })
@@ -558,7 +558,7 @@ class ModalManager {
     if (!title) return;
     const current = this.history.getCurrent();
 
-    fetch(`/map`, {
+    fetch(`/api/map`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title, parent_map_id: current.id })
@@ -580,7 +580,7 @@ class SearchManager {
 
   getPopularPages(limit = 15) {
     const container = document.getElementById("content-container");
-    return fetch(`/page/fromWeb`)
+    return fetch(`/api/page/fromWeb`)
         .then(res => res.json())
         .then(data => {
             container.innerHTML = `<div class="mb-3"> 
@@ -608,7 +608,7 @@ class SearchManager {
 
         }).then(() => {
 
-            fetch(`/page/popular?limit=${limit}`)
+            fetch(`/api/page/popular?limit=${limit}`)
                 .then(res => res.json())
                 .then(results => {
 
@@ -627,7 +627,7 @@ class SearchManager {
   }
 
   getDiscoverPages(limit = 15) {
-    return fetch(`/page/discover?limit=${limit}`)
+    return fetch(`/api/page/discover?limit=${limit}`)
       .then(res => res.json())
       .then(results => {
         const container = document.getElementById("content-container");
@@ -645,7 +645,7 @@ class SearchManager {
   }
 
   searchQuery(query) {
-    fetch(`/page/search?q=${encodeURIComponent(query)}`)
+    fetch(`/api/page/search?q=${encodeURIComponent(query)}`)
       .then(res => res.json())
       .then(results => {
         const container = document.getElementById("content-container");
@@ -665,7 +665,7 @@ class SearchManager {
   searchPages(query) {
     if (!query) return;
 
-    fetch(`/page/search?q=${encodeURIComponent(query)}`)
+    fetch(`/api/page/search?q=${encodeURIComponent(query)}`)
       .then(res => res.json())
       .then(results => {
         const container = document.getElementById("existing-page-results");
@@ -753,7 +753,7 @@ class AppController {
       // Set up confirm delete click handler (bound to this instance)
       confirmDeleteBtn.onclick = () => {
         let id = this.history.getCurrent().id;
-        let url = `/page/${id}/delete`;
+        let url = `/api/page/${id}/delete`;
 
         let onSuccess = (d) => {
           this.history.back();
