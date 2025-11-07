@@ -33,6 +33,28 @@ def create_map():
     map_id = Map.create(title, parent_map_id)
     return jsonify({"map_id": map_id})
 
+@app.route("/map/<int:map_id>/rename",methods=['PUT'])
+def rename_map(map_id):
+    data = request.json
+    new_name = data.get("new_name","")
+    if new_name == "":
+        return jsonify({"error": "new_name feild required"}), 400
+    success,message = Map.rename(map_id,new_name)
+    data = {
+        "success":success,
+        "message":message
+    }
+    return jsonify(data)
+
+@app.route("/map/<int:map_id>/delete", methods=["GET"])
+def delete_map(map_id):
+    success,message = Map.delete(map_id)
+    out = {
+        "success":int(success),
+        "message":message
+    }
+    return jsonify(out)
+
 @app.route("/map/<int:map_id>/children", methods=["GET"])
 def get_map_children(map_id):
     children = Map.get_children(map_id)
@@ -50,7 +72,7 @@ def add_map_child(map_id):
     Map.add_child(map_id, child_id, type_)
     return jsonify({"status": "child added"})
 
-@app.route("/map/<int:map_id>/child", methods=["DELETE"])
+@app.route("/map/<int:map_id>/child/delete", methods=["DELETE"])
 def remove_map_child(map_id):
     data = request.json
     child_id = data.get("child_id")
@@ -79,7 +101,29 @@ def create_page():
 @app.route("/page/<int:page_id>", methods=["GET"])
 def get_page(page_id):
     html = Page.getPage(page_id)
+    if not html:
+        return jsonify({"page_id": page_id, "content": {
+            "id": -1,
+            "title": "PAGE DOESNT EXIST", 
+            "html": '''
+                <div class="text-center">
+                    <img src="/static/images/404.png" alt="Not Found" class="img-fluid" style="max-width: 50%; height: auto;">
+                    <h1>404 - Page Not Found</h1>
+                    <p>The page you are looking for does not exist.</p>
+                    <a href="/" class="btn btn-primary">Go Back Home</a>
+                </div>
+            '''
+        }})
     return jsonify({"page_id": page_id, "content": html})
+
+@app.route("/page/<int:page_id>/delete",methods=["DELETE"])
+def delete_page(page_id):
+    success,message = Page.delete(page_id)
+    out = {
+        "success": int(success),
+        "message":message
+    }
+    return jsonify(out)
 
 @app.route("/page/<int:page_id>/update", methods=["PUT"])
 def update_page(page_id):

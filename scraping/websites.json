@@ -6,42 +6,6 @@
             "attribute": "href",
             "content": [
                 {
-                    "href": "https://towardsdatascience.com/tds-newsletter-the-theory-and-practice-of-using-ai-effectively/",
-                    "text": "TDS Newsletter: The Theory and Practice of Using AI Effectively"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/the-variable/",
-                    "text": "THE VARIABLE"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/towardsdatascience/",
-                    "text": "TDS Editors"
-                },
-                {
-                    "href": "https://towardsdatascience.com/expected-value-analysis-in-ai-product-management/",
-                    "text": "Expected Value Analysis in AI Product Management"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
-                    "text": "ARTIFICIAL INTELLIGENCE"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/kcpub21/",
-                    "text": "Chinmay Kakatkar"
-                },
-                {
-                    "href": "https://towardsdatascience.com/the-handbook-of-reinforcement-learning-guide-to-the-foundational-questions/",
-                    "text": "The Reinforcement Learning Handbook: A Guide to Foundational Questions"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/reinforcement-learning/",
-                    "text": "REINFORCEMENT LEARNING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/neural-avb/",
-                    "text": "Avishek Biswas"
-                },
-                {
                     "href": "https://towardsdatascience.com/multi-agent-sql-assistant-part-2-building-a-rag-manager/",
                     "text": "Multi-Agent SQL Assistant, Part 2: Building a RAG Manager"
                 },
@@ -124,9 +88,45 @@
                 {
                     "href": "https://towardsdatascience.com/author/benjaminnweke/",
                     "text": "Benjamin Nweke"
+                },
+                {
+                    "href": "https://towardsdatascience.com/your-credit-risk-model-works-today-it-breaks-in-six-months/",
+                    "text": "What to Do When Your Credit Risk Model Works Today, but Breaks Six Months Later"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/javier-marin/",
+                    "text": "Javier Marin"
+                },
+                {
+                    "href": "https://towardsdatascience.com/train-humanoid-robots-with-ai-and-python/",
+                    "text": "Train a Humanoid Robot with AI and Python"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/robotics/",
+                    "text": "ROBOTICS"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/maurodp/",
+                    "text": "Mauro Di Pietro"
+                },
+                {
+                    "href": "https://towardsdatascience.com/it-doesnt-need-to-be-a-chatbot/",
+                    "text": "It Doesn\u2019t Need to Be a Chatbot"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
+                    "text": "ARTIFICIAL INTELLIGENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/janna-lipenkova_52659/",
+                    "text": "Dr. Janna Lipenkova"
                 }
             ],
-            "timestamp": 1762508278.0800295
+            "timestamp": 1762437083.9563587
         }
     ],
     "https://towardsdatascience.com/tag/editors-pick/": [
@@ -135,30 +135,6 @@
             "tag": "a",
             "attribute": "href",
             "content": [
-                {
-                    "href": "https://towardsdatascience.com/expected-value-analysis-in-ai-product-management/",
-                    "text": "Expected Value Analysis in AI Product Management"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
-                    "text": "ARTIFICIAL INTELLIGENCE"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/kcpub21/",
-                    "text": "Chinmay Kakatkar"
-                },
-                {
-                    "href": "https://towardsdatascience.com/the-handbook-of-reinforcement-learning-guide-to-the-foundational-questions/",
-                    "text": "The Reinforcement Learning Handbook: A Guide to Foundational Questions"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/reinforcement-learning/",
-                    "text": "REINFORCEMENT LEARNING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/neural-avb/",
-                    "text": "Avishek Biswas"
-                },
                 {
                     "href": "https://towardsdatascience.com/how-to-evaluate-retrieval-quality-in-rag-pipelines-part-2-mean-reciprocal-rank-mrr-and-average-precision-ap/",
                     "text": "How to Evaluate Retrieval Quality in RAG Pipelines (part 2): Mean Reciprocal Rank (MRR) and Average Precision (AP)"
@@ -254,9 +230,33 @@
                 {
                     "href": "https://towardsdatascience.com/author/m-mouschoutzi/",
                     "text": "Maria Mouschoutzi"
+                },
+                {
+                    "href": "https://towardsdatascience.com/the-machine-learning-lessons-ive-learned-this-month-2/",
+                    "text": "The Machine Learning Lessons I\u2019ve Learned This Month"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/machine-learning/",
+                    "text": "MACHINE LEARNING"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/pascaljanetzky/",
+                    "text": "Pascal Janetzky"
+                },
+                {
+                    "href": "https://towardsdatascience.com/data-visualization-explained-part-4-a-review-of-python-essentials/",
+                    "text": "Data Visualization Explained (Part 4): A Review of Python Essentials"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/murtaza5152-ali/",
+                    "text": "Murtaza Ali"
                 }
             ],
-            "timestamp": 1762508286.469386
+            "timestamp": 1762437102.433414
         }
     ],
     "https://towardsdatascience.com/tag/deep-dives/": [
@@ -386,7 +386,7 @@
                     "text": "Robert Constable"
                 }
             ],
-            "timestamp": 1762508300.9148366
+            "timestamp": 1762437121.2961829
         }
     ]
 }

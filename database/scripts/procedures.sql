@@ -98,4 +98,59 @@ BEGIN
     END WHILE;
 END $$
 
+CREATE PROCEDURE delete_map(IN in_map_id INT)
+BEGIN
+    DECLARE parentId INT DEFAULT NULL;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE childMapId INT;
+    DECLARE childPageId INT;
+
+    -- Cursor to iterate over children
+    DECLARE child_cursor CURSOR FOR 
+        SELECT child_map_id, child_page_id 
+        FROM childMap 
+        WHERE parent_map_id = in_map_id;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- 1️⃣ Get parent map id
+    SELECT parent_map_id INTO parentId
+    FROM childMap
+    WHERE child_map_id = in_map_id
+    LIMIT 1;
+
+    -- 2️⃣ Re-link children to parent (if parent exists)
+    IF parentId IS NOT NULL THEN
+        OPEN child_cursor;
+
+        read_loop: LOOP
+            FETCH child_cursor INTO childMapId, childPageId;
+            IF done THEN
+                LEAVE read_loop;
+            END IF;
+
+            -- Only insert valid child references
+            IF childMapId IS NOT NULL THEN
+                INSERT INTO childMap (parent_map_id, child_map_id, child_page_id)
+                VALUES (parentId, childMapId, NULL);
+            ELSEIF childPageId IS NOT NULL THEN
+                INSERT INTO childMap (parent_map_id, child_map_id, child_page_id)
+                VALUES (parentId, NULL, childPageId);
+            END IF;
+        END LOOP;
+
+        CLOSE child_cursor;
+    END IF;
+
+    -- 3️⃣ Unlink this map from its parent
+    DELETE FROM childMap WHERE child_map_id = in_map_id;
+
+    -- 4️⃣ Unlink and delete all child relations
+    DELETE FROM childMap WHERE parent_map_id = in_map_id;
+
+    -- 5️⃣ Delete map record itself
+    DELETE FROM map WHERE id = in_map_id;
+END $$
+
+
 DELIMITER ;

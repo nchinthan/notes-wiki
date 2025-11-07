@@ -1,0 +1,62 @@
+------------------
+1. drag and drop pages bt maps and 
+
+later : 
+map merger
+------------------
+
+
+# context menu add update 
+we handle in states . when a state is active all the context menu handlers will be based on that state 
+to switch states i will add 
+> add a html component : 
+    : add div : 
+        for a parent : 
+        if no children : add a thing directly 
+        i can add a div vertically or horizontally 
+        with equi spaced children when adding a new child horizontally , but vertcially it can expand 
+
+        example : 
+        case1 : div {
+            div a 
+            div b 
+            div c 
+        } add horizontall div d 
+        should lead to 
+        div {
+            div a  | div d complete
+            div b  | 
+            div c  | 
+        }
+         to kepp it modular we can implmemnt like converting div a , div b , div c into a new DIV abc which includes a,b,c in vertical placemt 
+        i.e div {
+            DIV abc | div d 
+        } 
+
+        case 2 : div {
+            div a  | div d 
+            div b  | div e 
+            div c  | 
+        } add horizontall div f lead to 
+         div {
+            div a  | div d  | div f 
+            div b  | div e  | 
+            div c  |        | 
+        }  here aswell we can think like : DIV abc | DIV de | DIV f 
+
+        case 3 : div {
+            diva | div b  | div c 
+        } add div d vertically should lead to 
+        div {
+            diva | div b  | div c 
+            -----------------------
+                 div d 
+        } implemented like 
+        DIV abc 
+        div d 
+
+    : add text:paragraph , img , link , list-point  : 
+        for a parent div : 
+            directly add it .
+> init movement state : 
+        : when turned on i can place objects , drag them up and down  , even side wards 
