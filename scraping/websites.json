@@ -6,68 +6,8 @@
             "attribute": "href",
             "content": [
                 {
-                    "href": "https://towardsdatascience.com/let-hypothesis-break-your-python-code-before-your-users-do/",
-                    "text": "Let Hypothesis Break Your Python Code Before Your Users\u00a0Do"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/programming/",
-                    "text": "PROGRAMMING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/thomas_reid/",
-                    "text": "Thomas Reid"
-                },
-                {
-                    "href": "https://towardsdatascience.com/the-machine-learning-projects-employers-want-to-see/",
-                    "text": "The Machine Learning Projects Employers Want to See"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/machine-learning/",
-                    "text": "MACHINE LEARNING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/egorhowell/",
-                    "text": "Egor Howell"
-                },
-                {
-                    "href": "https://towardsdatascience.com/rf-detr-under-the-hood-the-insights-of-a-real-time-transformer-detection/",
-                    "text": "RF-DETR Under the Hood: The Insights of a Real-Time Transformer Detection"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/deep-learning/",
-                    "text": "DEEP LEARNING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/davidnieto/",
-                    "text": "David Red\u00f3 Nieto"
-                },
-                {
-                    "href": "https://towardsdatascience.com/building-a-rules-engine-from-first-principles/",
-                    "text": "Building a Rules Engine from First Principles"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/algorithms/",
-                    "text": "ALGORITHMS"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/dmitry-lesnik/",
-                    "text": "Dmitry Lesnik"
-                },
-                {
-                    "href": "https://towardsdatascience.com/datapizza-the-ai-framework-made-in-italy/",
-                    "text": "Build LLM Agents Faster with Datapizza AI"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/agentic-ai/",
-                    "text": "AGENTIC AI"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/maurodp/",
-                    "text": "Mauro Di Pietro"
-                },
-                {
-                    "href": "https://towardsdatascience.com/tds-newsletter-october-must-reads-on-agents-python-context-engineering-and-more/",
-                    "text": "TDS Newsletter: October Must-Reads on Agents, Python, Context Engineering, and More"
+                    "href": "https://towardsdatascience.com/tds-newsletter-the-theory-and-practice-of-using-ai-effectively/",
+                    "text": "TDS Newsletter: The Theory and Practice of Using AI Effectively"
                 },
                 {
                     "href": "https://towardsdatascience.com/category/the-variable/",
@@ -78,44 +18,92 @@
                     "text": "TDS Editors"
                 },
                 {
-                    "href": "https://towardsdatascience.com/systems-thinking-helps-me-put-the-big-picture-front-and-center/",
-                    "text": "\u201cSystems thinking helps me put the big picture front and center\u201d"
+                    "href": "https://towardsdatascience.com/expected-value-analysis-in-ai-product-management/",
+                    "text": "Expected Value Analysis in AI Product Management"
                 },
                 {
-                    "href": "https://towardsdatascience.com/category/author-spotlights/",
-                    "text": "AUTHOR SPOTLIGHTS"
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
+                    "text": "ARTIFICIAL INTELLIGENCE"
                 },
                 {
-                    "href": "https://towardsdatascience.com/author/towardsdatascience/",
-                    "text": "TDS Editors"
+                    "href": "https://towardsdatascience.com/author/kcpub21/",
+                    "text": "Chinmay Kakatkar"
                 },
                 {
-                    "href": "https://towardsdatascience.com/4-techniques-to-optimize-your-llm-prompts-for-cost-latency-and-performance/",
-                    "text": "4 Techniques to Optimize Your LLM Prompts for Cost, Latency and Performance"
+                    "href": "https://towardsdatascience.com/the-handbook-of-reinforcement-learning-guide-to-the-foundational-questions/",
+                    "text": "The Reinforcement Learning Handbook: A Guide to Foundational Questions"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/reinforcement-learning/",
+                    "text": "REINFORCEMENT LEARNING"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/neural-avb/",
+                    "text": "Avishek Biswas"
+                },
+                {
+                    "href": "https://towardsdatascience.com/multi-agent-sql-assistant-part-2-building-a-rag-manager/",
+                    "text": "Multi-Agent SQL Assistant, Part 2: Building a RAG Manager"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/ai-applications/",
+                    "text": "AI APPLICATIONS"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/alle-sravani/",
+                    "text": "Alle Sravani"
+                },
+                {
+                    "href": "https://towardsdatascience.com/we-didnt-invent-attention-we-just-rediscovered-it/",
+                    "text": "We Didn\u2019t Invent Attention \u2014 We Just Rediscovered It"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/machine-learning/",
+                    "text": "MACHINE LEARNING"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/javier-marin/",
+                    "text": "Javier Marin"
+                },
+                {
+                    "href": "https://towardsdatascience.com/ai-papers-to-read-in-2025/",
+                    "text": "AI Papers to Read in\u00a02025"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
+                    "text": "ARTIFICIAL INTELLIGENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/ygorserpa/",
+                    "text": "Ygor Serpa"
+                },
+                {
+                    "href": "https://towardsdatascience.com/how-to-evaluate-retrieval-quality-in-rag-pipelines-part-2-mean-reciprocal-rank-mrr-and-average-precision-ap/",
+                    "text": "How to Evaluate Retrieval Quality in RAG Pipelines (part 2): Mean Reciprocal Rank (MRR) and Average Precision (AP)"
                 },
                 {
                     "href": "https://towardsdatascience.com/category/artificial-intelligence/large-language-models/",
                     "text": "LARGE LANGUAGE MODELS"
                 },
                 {
-                    "href": "https://towardsdatascience.com/author/oieivind/",
-                    "text": "Eivind Kjosbakken"
+                    "href": "https://towardsdatascience.com/author/m-mouschoutzi/",
+                    "text": "Maria Mouschoutzi"
                 },
                 {
-                    "href": "https://towardsdatascience.com/bringing-vision-language-intelligence-to-rag-with-colpali/",
-                    "text": "Bringing Vision-Language Intelligence to RAG with ColPali"
+                    "href": "https://towardsdatascience.com/why-nonparametric-models-deserve-a-second-look/",
+                    "text": "Why Nonparametric Models Deserve a Second Look"
                 },
                 {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/large-language-models/",
-                    "text": "LARGE LANGUAGE MODELS"
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/machine-learning/",
+                    "text": "MACHINE LEARNING"
                 },
                 {
-                    "href": "https://towardsdatascience.com/author/jyipkl/",
-                    "text": "Julian Yip"
+                    "href": "https://towardsdatascience.com/author/a-skabar_60534/",
+                    "text": "Andrew Skabar"
                 },
                 {
-                    "href": "https://towardsdatascience.com/using-numpy-to-analyze-my-daily-habits-sleep-screen-time-mood/",
-                    "text": "Using NumPy to Analyze My Daily Habits (Sleep, Screen Time &\u00a0Mood)"
+                    "href": "https://towardsdatascience.com/numpy-for-absolute-beginners-a-project-based-approach-to-data-analysis/",
+                    "text": "NumPy for Absolute Beginners: A Project-Based Approach to Data\u00a0Analysis"
                 },
                 {
                     "href": "https://towardsdatascience.com/category/data-science/",
@@ -124,9 +112,21 @@
                 {
                     "href": "https://towardsdatascience.com/author/ibrahim-salami/",
                     "text": "Ibrahim Salami"
+                },
+                {
+                    "href": "https://towardsdatascience.com/what-building-my-first-dashboard-taught-me-about-data-storytelling/",
+                    "text": "What Building My First Dashboard Taught Me About Data Storytelling"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/benjaminnweke/",
+                    "text": "Benjamin Nweke"
                 }
             ],
-            "timestamp": 1761984191.0432684
+            "timestamp": 1762508278.0800295
         }
     ],
     "https://towardsdatascience.com/tag/editors-pick/": [
@@ -135,6 +135,90 @@
             "tag": "a",
             "attribute": "href",
             "content": [
+                {
+                    "href": "https://towardsdatascience.com/expected-value-analysis-in-ai-product-management/",
+                    "text": "Expected Value Analysis in AI Product Management"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
+                    "text": "ARTIFICIAL INTELLIGENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/kcpub21/",
+                    "text": "Chinmay Kakatkar"
+                },
+                {
+                    "href": "https://towardsdatascience.com/the-handbook-of-reinforcement-learning-guide-to-the-foundational-questions/",
+                    "text": "The Reinforcement Learning Handbook: A Guide to Foundational Questions"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/reinforcement-learning/",
+                    "text": "REINFORCEMENT LEARNING"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/neural-avb/",
+                    "text": "Avishek Biswas"
+                },
+                {
+                    "href": "https://towardsdatascience.com/how-to-evaluate-retrieval-quality-in-rag-pipelines-part-2-mean-reciprocal-rank-mrr-and-average-precision-ap/",
+                    "text": "How to Evaluate Retrieval Quality in RAG Pipelines (part 2): Mean Reciprocal Rank (MRR) and Average Precision (AP)"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/large-language-models/",
+                    "text": "LARGE LANGUAGE MODELS"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/m-mouschoutzi/",
+                    "text": "Maria Mouschoutzi"
+                },
+                {
+                    "href": "https://towardsdatascience.com/what-building-my-first-dashboard-taught-me-about-data-storytelling/",
+                    "text": "What Building My First Dashboard Taught Me About Data Storytelling"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/benjaminnweke/",
+                    "text": "Benjamin Nweke"
+                },
+                {
+                    "href": "https://towardsdatascience.com/train-humanoid-robots-with-ai-and-python/",
+                    "text": "Train a Humanoid Robot with AI and Python"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/robotics/",
+                    "text": "ROBOTICS"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/maurodp/",
+                    "text": "Mauro Di Pietro"
+                },
+                {
+                    "href": "https://towardsdatascience.com/it-doesnt-need-to-be-a-chatbot/",
+                    "text": "It Doesn\u2019t Need to Be a Chatbot"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
+                    "text": "ARTIFICIAL INTELLIGENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/janna-lipenkova_52659/",
+                    "text": "Dr. Janna Lipenkova"
+                },
+                {
+                    "href": "https://towardsdatascience.com/from-classical-models-to-ai-forecasting-humidity-for-energy-and-water-efficiency-in-data-centers-2/",
+                    "text": "From Classical Models to AI: Forecasting Humidity for Energy and Water Efficiency in Data Centers"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/machine-learning/",
+                    "text": "MACHINE LEARNING"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/theomitsa/",
+                    "text": "Dr. Theophano Mitsa"
+                },
                 {
                     "href": "https://towardsdatascience.com/bringing-vision-language-intelligence-to-rag-with-colpali/",
                     "text": "Bringing Vision-Language Intelligence to RAG with ColPali"
@@ -170,93 +254,9 @@
                 {
                     "href": "https://towardsdatascience.com/author/m-mouschoutzi/",
                     "text": "Maria Mouschoutzi"
-                },
-                {
-                    "href": "https://towardsdatascience.com/the-machine-learning-lessons-ive-learned-this-month-2/",
-                    "text": "The Machine Learning Lessons I\u2019ve Learned This Month"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/machine-learning/",
-                    "text": "MACHINE LEARNING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/pascaljanetzky/",
-                    "text": "Pascal Janetzky"
-                },
-                {
-                    "href": "https://towardsdatascience.com/data-visualization-explained-part-4-a-review-of-python-essentials/",
-                    "text": "Data Visualization Explained (Part 4): A Review of Python Essentials"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/data-science/",
-                    "text": "DATA SCIENCE"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/murtaza5152-ali/",
-                    "text": "Murtaza Ali"
-                },
-                {
-                    "href": "https://towardsdatascience.com/agentic-ai-from-first-principles-reflection/",
-                    "text": "Agentic AI from First Principles: Reflection"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/agentic-ai/",
-                    "text": "AGENTIC AI"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/miptgirl/",
-                    "text": "Mariya Mansurova"
-                },
-                {
-                    "href": "https://towardsdatascience.com/beyond-rag/",
-                    "text": "Is RAG Dead? The Rise of Context Engineering and Semantic Layers for Agentic AI"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/large-language-models/",
-                    "text": "LARGE LANGUAGE MODELS"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/steve-hedden/",
-                    "text": "Steve Hedden"
-                },
-                {
-                    "href": "https://towardsdatascience.com/things-i-learnt-by-participating-in-genai-hackathons-over-the-past-6-months/",
-                    "text": "Things I Learned by Participating in GenAI Hackathons Over the Past 6\u00a0Months"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
-                    "text": "ARTIFICIAL INTELLIGENCE"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/pandeyparul/",
-                    "text": "Parul Pandey"
-                },
-                {
-                    "href": "https://towardsdatascience.com/can-we-save-the-ai-economy/",
-                    "text": "Can We Save the AI Economy?"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
-                    "text": "ARTIFICIAL INTELLIGENCE"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/s-kirmer/",
-                    "text": "Stephanie Kirmer"
-                },
-                {
-                    "href": "https://towardsdatascience.com/machine-learning-meets-panel-data-what-practitioners-need-to-know/",
-                    "text": "Machine Learning Meets Panel Data: What Practitioners Need to Know"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/machine-learning/",
-                    "text": "MACHINE LEARNING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/marco-letta/",
-                    "text": "Marco Letta"
                 }
             ],
-            "timestamp": 1761984196.7286098
+            "timestamp": 1762508286.469386
         }
     ],
     "https://towardsdatascience.com/tag/deep-dives/": [
@@ -265,6 +265,66 @@
             "tag": "a",
             "attribute": "href",
             "content": [
+                {
+                    "href": "https://towardsdatascience.com/multi-agent-sql-assistant-part-2-building-a-rag-manager/",
+                    "text": "Multi-Agent SQL Assistant, Part 2: Building a RAG Manager"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/ai-applications/",
+                    "text": "AI APPLICATIONS"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/alle-sravani/",
+                    "text": "Alle Sravani"
+                },
+                {
+                    "href": "https://towardsdatascience.com/ai-papers-to-read-in-2025/",
+                    "text": "AI Papers to Read in\u00a02025"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
+                    "text": "ARTIFICIAL INTELLIGENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/ygorserpa/",
+                    "text": "Ygor Serpa"
+                },
+                {
+                    "href": "https://towardsdatascience.com/numpy-for-absolute-beginners-a-project-based-approach-to-data-analysis/",
+                    "text": "NumPy for Absolute Beginners: A Project-Based Approach to Data\u00a0Analysis"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/ibrahim-salami/",
+                    "text": "Ibrahim Salami"
+                },
+                {
+                    "href": "https://towardsdatascience.com/does-ai-need-to-be-conscious-to-care/",
+                    "text": "Does AI Need to Be Conscious to Care?"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
+                    "text": "ARTIFICIAL INTELLIGENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/javier-marin/",
+                    "text": "Javier Marin"
+                },
+                {
+                    "href": "https://towardsdatascience.com/mobilenetv3-paper-walkthrough-the-tiny-giant-getting-even-smarter/",
+                    "text": "MobileNetV3 Paper Walkthrough: The Tiny Giant Getting Even\u00a0Smarter"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
+                    "text": "ARTIFICIAL INTELLIGENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/muhammad_ardi/",
+                    "text": "Muhammad Ardi"
+                },
                 {
                     "href": "https://towardsdatascience.com/let-hypothesis-break-your-python-code-before-your-users-do/",
                     "text": "Let Hypothesis Break Your Python Code Before Your Users\u00a0Do"
@@ -324,69 +384,9 @@
                 {
                     "href": "https://towardsdatascience.com/author/rjconstable1989/",
                     "text": "Robert Constable"
-                },
-                {
-                    "href": "https://towardsdatascience.com/how-to-control-a-robot-with-python/",
-                    "text": "How to Control a Robot with Python"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/robotics/",
-                    "text": "ROBOTICS"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/maurodp/",
-                    "text": "Mauro Di Pietro"
-                },
-                {
-                    "href": "https://towardsdatascience.com/why-should-we-bother-with-quantum-computing-in-ml/",
-                    "text": "Why Should We Bother with\u00a0Quantum Computing in ML?"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/quantum-computing/",
-                    "text": "QUANTUM COMPUTING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/erika-g-goncalves/",
-                    "text": "Erika G. Gon\u00e7alves"
-                },
-                {
-                    "href": "https://towardsdatascience.com/scaling-recommender-transformers-to-a-billion-parameters/",
-                    "text": "Scaling Recommender Transformers to a Billion Parameters"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/machine-learning/",
-                    "text": "MACHINE LEARNING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/kirill-hrylchenko/",
-                    "text": "Kirill \u041ahrylchenko"
-                },
-                {
-                    "href": "https://towardsdatascience.com/implementing-the-fourier-transform-numerically-in-python-a-step-by-step-guide/",
-                    "text": "Implementing the Fourier Transform Numerically in Python: A Step-by-Step Guide"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/math/",
-                    "text": "MATH"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/jumbongjunior1999/",
-                    "text": "JUNIOR JUMBONG"
-                },
-                {
-                    "href": "https://towardsdatascience.com/how-to-build-an-ai-agent-with-function-calling-and-gpt-5/",
-                    "text": "How to Build An AI Agent with Function Calling and GPT-5"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/agentic-ai/",
-                    "text": "AGENTIC AI"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/olafenwaayoola/",
-                    "text": "Ayoola Olafenwa"
                 }
             ],
-            "timestamp": 1761984204.0703702
+            "timestamp": 1762508300.9148366
         }
     ]
 }
