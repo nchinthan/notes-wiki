@@ -1,2 +1,0 @@
-SELECT id FROM map WHERE id = 1 AND title = "root"
-running procedure : getMapChildren
