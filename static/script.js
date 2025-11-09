@@ -312,77 +312,103 @@ class History {
     this.forwardStack = [];
     this.current = initialState;
     this.maxSize = 50;
-    this.onStateChange = null; // Callback for state changes
+    this.onStateChange = null;
+
+    // --- Integrate with browser history ---
+    // Push initial state to browser history
+    window.history.replaceState(this.current, '', this._makeUrl(this.current));
+
+    // Listen for browser navigation (Back/Forward)
+    window.addEventListener('popstate', (event) => {
+      const state = event.state;
+      if (!state) return;
+      this._syncFromBrowser(state);
+    });
+  }
+
+  // Create readable URL fragment like "#type-id" or "?type=page&id=123"
+  _makeUrl({ id, type }) {
+    if (id == null || type == null) return window.location.pathname;
+    return `${window.location.pathname}?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`;
+  }
+
+  _syncFromBrowser(state) {
+    // Called when browser back/forward is pressed
+    this.current = state;
+    this.notifyStateChange();
   }
 
   push(id, type) {
     if (this.current.id !== id || this.current.type !== type) {
       this.backStack.push(this.current);
       this.forwardStack = [];
-      
+
       if (this.backStack.length > this.maxSize) {
         this.backStack.shift();
       }
-      
+
       this.current = { id, type };
       this.notifyStateChange();
+
+      // --- Sync to browser history ---
+      window.history.pushState(this.current, '', this._makeUrl(this.current));
     }
     return this.current;
   }
 
   back() {
     if (this.backStack.length === 0) return null;
-    
+
     this.forwardStack.push(this.current);
     this.current = this.backStack.pop();
     this.notifyStateChange();
+
+    // --- Sync to browser ---
+    window.history.pushState(this.current, '', this._makeUrl(this.current));
+
     return this.current;
   }
 
   forward() {
     if (this.forwardStack.length === 0) return null;
-    
+
     this.backStack.push(this.current);
     this.current = this.forwardStack.pop();
     this.notifyStateChange();
+
+    // --- Sync to browser ---
+    window.history.pushState(this.current, '', this._makeUrl(this.current));
+
     return this.current;
   }
 
   remove(id, type) {
     const match = (item) => item.id === id && item.type === type;
 
-    // Filter both stacks to remove all matching entries
     this.backStack = this.backStack.filter(item => !match(item));
     this.forwardStack = this.forwardStack.filter(item => !match(item));
 
-    // If the current matches, reset it to a safe fallback
     if (match(this.current)) {
-      this.current = this.backStack.length > 0 
-        ? this.backStack[this.backStack.length - 1]   // last in back
-        : this.forwardStack.length > 0 
-          ? this.forwardStack[this.forwardStack.length - 1] 
-          : { id: null, type: null }; // empty fallback
+      this.current = this.backStack.length > 0
+        ? this.backStack[this.backStack.length - 1]
+        : this.forwardStack.length > 0
+          ? this.forwardStack[this.forwardStack.length - 1]
+          : { id: null, type: null };
+
+      // Sync removed state
+      window.history.replaceState(this.current, '', this._makeUrl(this.current));
     }
 
     this.notifyStateChange();
   }
 
+  getCurrent() { return this.current; }
 
-  getCurrent() {
-    return this.current;
-  }
+  canGoBack() { return this.backStack.length > 0; }
 
-  canGoBack() {
-    return this.backStack.length > 0;
-  }
+  canGoForward() { return this.forwardStack.length > 0; }
 
-  canGoForward() {
-    return this.forwardStack.length > 0;
-  }
-
-  setStateChangeCallback(callback) {
-    this.onStateChange = callback;
-  }
+  setStateChangeCallback(callback) { this.onStateChange = callback; }
 
   notifyStateChange() {
     if (this.onStateChange) {
@@ -390,6 +416,7 @@ class History {
     }
   }
 }
+
 
 class PageManager {
   constructor(history) {
