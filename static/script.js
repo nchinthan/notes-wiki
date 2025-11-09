@@ -37,8 +37,52 @@ function latexCleaning(body){
     	}});
 }
 
-class MapManager {
-  constructor(pageLoader) {
+
+class MapAPI {
+  async renameMap(mapId, newName) {
+    const res = await  fetch(`/api/map/${mapId}/rename`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ new_name: newName })
+    });
+    return res.json();
+  }
+
+  async deleteMap(mapId) {
+    const res = await  fetch(`/api/map/${mapId}/delete`, { method: "GET" });
+    return res.json();
+  }
+
+  async moveChild(targetMapId, parentMapId, childId, type) {
+    const token = get_CSRF?.();
+
+    // Add to new target
+    await  fetch(`/api/map/${targetMapId}/child`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { "X-CSRF-Token": token } : {})
+      },
+      body: JSON.stringify({ child_id: childId, type: type === "map" ? 1 : 0 })
+    });
+
+    // Remove from old parent
+    if (parentMapId && parentMapId !== targetMapId) {
+      await  fetch(`/api/map/${parentMapId}/child/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { "X-CSRF-Token": token } : {})
+        },
+        body: JSON.stringify({ child_id: childId, type: type === "map" ? 1 : 0 })
+      });
+    }
+  }
+}
+
+class MapUI {
+  constructor(api, pageLoader) {
+    this.api = api;
     this.pageLoader = pageLoader;
   }
 
@@ -110,232 +154,157 @@ class MapManager {
     const mapItems = container.querySelectorAll(".map-item");
     const pageItems = container.querySelectorAll(".page-item");
 
-    // Drag & Drop setup
-    mapItems.forEach(li => this.makeDraggable(li, { id: parseInt(li.dataset.id), type: "map" }));
-    pageItems.forEach(li => this.makeDraggable(li, { id: parseInt(li.dataset.id), type: "page" }));
+    mapItems.forEach(li => this._makeDraggable(li, { id: +li.dataset.id, type: "map" }));
+    pageItems.forEach(li => this._makeDraggable(li, { id: +li.dataset.id, type: "page" }));
+
     mapItems.forEach(li => {
-      const targetMapId = parseInt(li.dataset.id);
-      this.makeDropTarget(li, targetMapId, currentMapId);
+      const targetMapId = +li.dataset.id;
+      this._makeDropTarget(li, targetMapId, currentMapId);
     });
 
-    // Make "Back to Parent" droppable
     if (data.parent_id) {
       const parentButton = container.querySelector("button.btn-outline-warning");
       if (parentButton) {
-        this.makeDropTarget(parentButton, data.parent_id, currentMapId);
+        this._makeDropTarget(parentButton, data.parent_id, currentMapId);
       }
     }
 
-    // Setup map rename/delete features
     this._setupRenameHandlers(container);
     this._setupDeleteHandlers(container, currentMapId);
   }
 
+  // UI event wiring
   _setupRenameHandlers(container) {
-    container.querySelectorAll(".rename-map-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => this._startRename(e, btn));
-    });
-
-    container.querySelectorAll(".save-rename-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => this._saveRename(e, btn));
-    });
-
-    container.querySelectorAll(".cancel-rename-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => this._cancelRename(e, btn));
-    });
-
-    container.querySelectorAll('.editable-title').forEach(editableElement => {
-      editableElement.addEventListener('keydown', (e) => this._handleKeyPress(e, editableElement));
-    });
+    container.querySelectorAll(".rename-map-btn").forEach(btn =>
+      btn.addEventListener("click", e => this._startRename(e, btn))
+    );
+    container.querySelectorAll(".save-rename-btn").forEach(btn =>
+      btn.addEventListener("click", e => this._saveRename(e, btn))
+    );
+    container.querySelectorAll(".cancel-rename-btn").forEach(btn =>
+      btn.addEventListener("click", e => this._cancelRename(e, btn))
+    );
+    container.querySelectorAll(".editable-title").forEach(editable =>
+      editable.addEventListener("keydown", e => this._handleKeyPress(e, editable))
+    );
   }
 
   _startRename(e, btn) {
     e.stopPropagation();
-    const listItem = btn.closest('.map-item');
-    const anchorElement = listItem.querySelector('.map-title');
-    const editableElement = listItem.querySelector('.editable-title');
-    const saveBtn = listItem.querySelector('.save-rename-btn');
-    const cancelBtn = listItem.querySelector('.cancel-rename-btn');
-    const renameBtn = listItem.querySelector('.rename-map-btn');
-
-    anchorElement.style.display = 'none';
-    editableElement.style.display = 'inline';
-    editableElement.contentEditable = true;
-    saveBtn.style.display = 'inline-block';
-    cancelBtn.style.display = 'inline-block';
-    renameBtn.style.display = 'none';
-
-    editableElement.focus();
-    const range = document.createRange();
-    range.selectNodeContents(editableElement);
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
+    const li = btn.closest('.map-item');
+    const a = li.querySelector('.map-title');
+    const edit = li.querySelector('.editable-title');
+    const save = li.querySelector('.save-rename-btn');
+    const cancel = li.querySelector('.cancel-rename-btn');
+    const rename = li.querySelector('.rename-map-btn');
+    a.style.display = 'none';
+    edit.style.display = 'inline';
+    edit.contentEditable = true;
+    save.style.display = cancel.style.display = 'inline-block';
+    rename.style.display = 'none';
+    edit.focus();
   }
 
   async _saveRename(e, btn) {
     e.stopPropagation();
-    const listItem = btn.closest('.map-item');
-    const anchorElement = listItem.querySelector('.map-title');
-    const editableElement = listItem.querySelector('.editable-title');
-    const saveBtn = listItem.querySelector('.save-rename-btn');
-    const cancelBtn = listItem.querySelector('.cancel-rename-btn');
-    const renameBtn = listItem.querySelector('.rename-map-btn');
-    const mapId = editableElement.getAttribute('data-map-id');
-    const originalName = editableElement.getAttribute('data-original-name');
-    const newName = editableElement.textContent.trim();
+    const li = btn.closest('.map-item');
+    const a = li.querySelector('.map-title');
+    const edit = li.querySelector('.editable-title');
+    const save = li.querySelector('.save-rename-btn');
+    const cancel = li.querySelector('.cancel-rename-btn');
+    const rename = li.querySelector('.rename-map-btn');
+    const id = edit.dataset.mapId;
+    const oldName = edit.dataset.originalName;
+    const newName = edit.textContent.trim();
 
-    if (newName === originalName) {
-      this._exitEditMode(anchorElement, editableElement, saveBtn, cancelBtn, renameBtn);
-      return;
-    }
-    if (newName === "") {
-      alert("Map name cannot be empty!");
-      editableElement.textContent = originalName;
-      this._exitEditMode(anchorElement, editableElement, saveBtn, cancelBtn, renameBtn);
-      return;
-    }
+    if (!newName) return alert("Map name cannot be empty!");
 
     try {
-      const res = await fetch(`/api/map/${mapId}/rename`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ new_name: newName })
-      });
-      const result = await res.json();
-
-      if (result.success) {
-        anchorElement.textContent = newName;
-        editableElement.textContent = newName;
-        editableElement.setAttribute('data-original-name', newName);
+      const res = await this.api.renameMap(id, newName);
+      if (res.success) {
+        a.textContent = newName;
+        edit.textContent = newName;
+        edit.dataset.originalName = newName;
       } else {
-        alert("Failed to rename map: " + result.message);
-        editableElement.textContent = originalName;
+        alert(res.message);
       }
     } catch (err) {
-      console.error("Rename map failed:", err);
-      alert("An error occurred while renaming the map.");
-      editableElement.textContent = originalName;
+      console.error(err);
+      alert("Rename failed.");
     }
-    this._exitEditMode(anchorElement, editableElement, saveBtn, cancelBtn, renameBtn);
+    this._exitEditMode(a, edit, save, cancel, rename);
   }
 
   _cancelRename(e, btn) {
     e.stopPropagation();
-    const listItem = btn.closest('.map-item');
-    const anchorElement = listItem.querySelector('.map-title');
-    const editableElement = listItem.querySelector('.editable-title');
-    const saveBtn = listItem.querySelector('.save-rename-btn');
-    const cancelBtn = listItem.querySelector('.cancel-rename-btn');
-    const renameBtn = listItem.querySelector('.rename-map-btn');
-    const originalName = editableElement.getAttribute('data-original-name');
-    editableElement.textContent = originalName;
-    this._exitEditMode(anchorElement, editableElement, saveBtn, cancelBtn, renameBtn);
+    const li = btn.closest('.map-item');
+    const a = li.querySelector('.map-title');
+    const edit = li.querySelector('.editable-title');
+    const save = li.querySelector('.save-rename-btn');
+    const cancel = li.querySelector('.cancel-rename-btn');
+    const rename = li.querySelector('.rename-map-btn');
+    edit.textContent = edit.dataset.originalName;
+    this._exitEditMode(a, edit, save, cancel, rename);
   }
 
-  _exitEditMode(anchorElement, editableElement, saveBtn, cancelBtn, renameBtn) {
-    anchorElement.style.display = 'inline';
-    editableElement.style.display = 'none';
-    editableElement.contentEditable = false;
-    saveBtn.style.display = 'none';
-    cancelBtn.style.display = 'none';
-    renameBtn.style.display = 'inline-block';
+  _exitEditMode(a, edit, save, cancel, rename) {
+    a.style.display = 'inline';
+    edit.style.display = 'none';
+    edit.contentEditable = false;
+    save.style.display = cancel.style.display = 'none';
+    rename.style.display = 'inline-block';
   }
 
-  _handleKeyPress(e, editableElement) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      editableElement.closest('.map-item').querySelector('.save-rename-btn').click();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      editableElement.closest('.map-item').querySelector('.cancel-rename-btn').click();
-    }
+  _handleKeyPress(e, edit) {
+    if (e.key === 'Enter') e.preventDefault(), edit.closest('.map-item').querySelector('.save-rename-btn').click();
+    else if (e.key === 'Escape') e.preventDefault(), edit.closest('.map-item').querySelector('.cancel-rename-btn').click();
   }
-  // --- NEW HELPER: make element a valid drop target ---
-  makeDropTarget(el, targetMapId, parentMapId) {
-    el.addEventListener("dragover", (e) => e.preventDefault());
-    el.addEventListener("drop", async (e) => {
+
+  _makeDropTarget(el, targetMapId, parentMapId) {
+    el.addEventListener("dragover", e => e.preventDefault());
+    el.addEventListener("drop", async e => {
       e.preventDefault();
       const dropped = JSON.parse(e.dataTransfer.getData("application/json"));
-      const { id: childId, type } = dropped;
-
-      // Prevent dropping on itself
-      if (type === "map" && childId === targetMapId) return;
-
-      const token = get_CSRF();
-
-      try {
-        // 1. Add to new target map
-        await fetch(`/api/map/${targetMapId}/child`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { "X-CSRF-Token": token } : {})
-          },
-          body: JSON.stringify({
-            child_id: childId,
-            type: type === "map" ? 1 : 0
-          })
-        });
-
-        // 2. Remove from old parent map
-        if (parentMapId && parentMapId !== targetMapId) {
-          await fetch(`/api/map/${parentMapId}/child/delete`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              ...(token ? { "X-CSRF-Token": token } : {})
-            },
-            body: JSON.stringify({
-              child_id: childId,
-              type: type === "map" ? 1 : 0
-            })
-          });
-        }
-
-        // 3. Reload current map view
-        this.pageLoader.loadMap(parentMapId || targetMapId);
-      } catch (err) {
-        console.error("Drag-drop move failed:", err);
-      }
+      if (dropped.type === "map" && dropped.id === targetMapId) return;
+      await this.api.moveChild(targetMapId, parentMapId, dropped.id, dropped.type);
+      this.pageLoader.loadMap(parentMapId || targetMapId);
     });
   }
 
-  // --- NEW HELPER: make element draggable ---
-  makeDraggable(el, data) {
+  _makeDraggable(el, data) {
     el.setAttribute("draggable", "true");
-    el.addEventListener("dragstart", (e) => {
+    el.addEventListener("dragstart", e => {
       e.dataTransfer.setData("application/json", JSON.stringify(data));
       e.dataTransfer.effectAllowed = "move";
     });
   }
 
   _setupDeleteHandlers(container, parentMapId) {
-    container.querySelectorAll(".delete-map-btn").forEach(btn => {
-      btn.addEventListener("click", async (e) => {
+    container.querySelectorAll(".delete-map-btn").forEach(btn =>
+      btn.addEventListener("click", async e => {
         e.stopPropagation();
-        const mapId = btn.getAttribute("data-mapid");
+        const mapId = btn.dataset.mapid;
         if (!confirm("Are you sure you want to delete this map?")) return;
-
-        try {
-          const res = await fetch(`/api/map/${mapId}/delete`, { method: "GET" });
-          const result = await res.json();
-
-          if (result.success) {
-            alert("Map deleted successfully!");
-            this.pageLoader.loadMap(parentMapId);
-          } else {
-            alert("Failed to delete map: " + result.message);
-          }
-        } catch (err) {
-          console.error("Delete map failed:", err);
-          alert("An error occurred while deleting the map.");
-        }
-      });
-    });
+        const res = await this.api.deleteMap(mapId);
+        if (res.success) {
+          alert("Map deleted successfully!");
+          this.pageLoader.loadMap(parentMapId);
+        } else alert("Failed: " + res.message);
+      })
+    );
   }
 }
 
+class MapManager {
+  constructor(pageLoader) {
+    this.api = new MapAPI();
+    this.ui = new MapUI(this.api, pageLoader);
+  }
+
+  render(container, data, currentMapId) {
+    this.ui.render(container, data, currentMapId);
+  }
+}
 
 class History {
   constructor(initialState) {
@@ -487,88 +456,164 @@ class PageManager {
 }
 
 
+class ModalAPI {
+  async addKeywords(pageId, keywords) {
+    return  fetch(`/api/page/${pageId}/keywords`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ keywords })
+    });
+  }
+
+  async addExistingPage(parentMapId, pageId) {
+    return  fetch(`/api/map/${parentMapId}/child`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ child_id: pageId, type: 0 })
+    });
+  }
+
+  async createPage(title, content, parentMapId) {
+    const res = await  fetch(`/api/page`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, content, parent_map_id: parentMapId, keywords: [] })
+    });
+    return res.json();
+  }
+
+  async createMap(title, parentMapId) {
+    const res = await  fetch(`/api/map`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, parent_map_id: parentMapId })
+    });
+    return res.json();
+  }
+}
+
+class ModalUI {
+  constructor(api, pageManager, history) {
+    this.api = api;
+    this.pageManager = pageManager;
+    this.history = history;
+  }
+
+  getKeywords() {
+    const input = document.getElementById("keyword-input").value;
+    return input.split(",").map(k => k.trim()).filter(Boolean);
+  }
+
+  clearKeywordInput() {
+    document.getElementById("keyword-input").value = "";
+  }
+
+  hideModal(id) {
+    bootstrap.Modal.getInstance(document.getElementById(id)).hide();
+  }
+
+  getNewPageData() {
+    return {
+      title: document.getElementById("new-page-title").value.trim(),
+      content: document.getElementById("new-page-content").value
+    };
+  }
+
+  clearNewPageInputs() {
+    document.getElementById("new-page-title").value = "";
+    document.getElementById("new-page-content").value = "";
+  }
+
+  getNewMapTitle() {
+    return document.getElementById("new-map-title").value.trim();
+  }
+
+  clearNewMapInput() {
+    document.getElementById("new-map-title").value = "";
+  }
+
+  getSelectedExistingPages() {
+    const searchManager = app.searchManager;
+    const ids = Array.from(searchManager.selectedPageIds);
+    searchManager.selectedPageIds.clear();
+    return ids;
+  }
+
+  async handleKeywordSubmit() {
+    const keywords = this.getKeywords();
+    if (!keywords.length) return;
+
+    const current = this.history.getCurrent();
+    await this.api.addKeywords(current.id, keywords);
+    this.clearKeywordInput();
+    this.hideModal("addKeywordModal");
+  }
+
+  async handleExistingPagesSubmit() {
+    const ids = this.getSelectedExistingPages();
+    if (!ids.length) return;
+
+    const current = this.history.getCurrent();
+    for (const pid of ids) {
+      await this.api.addExistingPage(current.id, pid);
+    }
+    this.hideModal("addExistingPageModal");
+    this.pageManager.loadMap(current.id);
+  }
+
+  async handleNewPageSubmit() {
+    const { title, content } = this.getNewPageData();
+    if (!title || !content) return;
+
+    const current = this.history.getCurrent();
+    await this.api.createPage(title, content, current.id);
+
+    this.clearNewPageInputs();
+    this.hideModal("createPageModal");
+    this.pageManager.loadMap(current.id);
+  }
+
+  async handleNewMapSubmit() {
+    const title = this.getNewMapTitle();
+    if (!title) return;
+
+    const current = this.history.getCurrent();
+    await this.api.createMap(title, current.id);
+
+    this.clearNewMapInput();
+    this.hideModal("createMapModal");
+    this.pageManager.loadMap(current.id);
+  }
+}
+
 class ModalManager {
   constructor(history, pageManager) {
+    this.api = new ModalAPI();
+    this.ui = new ModalUI(this.api, pageManager, history);
     this.history = history;
     this.pageManager = pageManager;
 
-    // Attach to window for HTML event hooks if needed
+    // Keep global window hooks the same
     window.submitKeywords = this.submitKeywords.bind(this);
     window.submitExistingPages = this.submitExistingPages.bind(this);
     window.submitNewPage = this.submitNewPage.bind(this);
     window.submitNewMap = this.submitNewMap.bind(this);
   }
 
-  submitKeywords() {
-    const input = document.getElementById("keyword-input").value;
-    const keywords = input.split(",").map(k => k.trim()).filter(k => k);
-    const current = this.history.getCurrent();
-    if (!keywords.length) return;
-
-    fetch(`/api/page/${current.id}/keywords`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ keywords })
-    }).then(() => {
-      document.getElementById("keyword-input").value = "";
-      bootstrap.Modal.getInstance(document.getElementById("addKeywordModal")).hide();
-    });
+  async submitKeywords() {
+    await this.ui.handleKeywordSubmit();
   }
 
-  submitExistingPages() {
-    const searchManager = app.searchManager; // access selectedPageIds
-    const ids = Array.from(searchManager.selectedPageIds);
-    if (!ids.length) return;
-    const current = this.history.getCurrent();
-    console.log(ids)
-    ids.forEach(pid => {
-      fetch(`/api/map/${current.id}/child`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ child_id: pid, type: 0 })
-      });
-    });
-    searchManager.selectedPageIds.clear();
-    bootstrap.Modal.getInstance(document.getElementById("addExistingPageModal")).hide();
-    this.pageManager.loadMap(current.id);
+  async submitExistingPages() {
+    await this.ui.handleExistingPagesSubmit();
   }
 
-  submitNewPage() {
-    const title = document.getElementById("new-page-title").value.trim();
-    const content = document.getElementById("new-page-content").value;
-    const current = this.history.getCurrent();
-    if (!title || !content) return;
-
-    fetch(`/api/page`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, content, parent_map_id: current.id, keywords: [] })
-    })
-    .then(res => res.json())
-    .then(() => {
-      document.getElementById("new-page-title").value = "";
-      document.getElementById("new-page-content").value = "";
-      bootstrap.Modal.getInstance(document.getElementById("createPageModal")).hide();
-      this.pageManager.loadMap(current.id);
-    });
+  async submitNewPage() {
+    await this.ui.handleNewPageSubmit();
   }
 
-  submitNewMap() {
-    const title = document.getElementById("new-map-title").value.trim();
-    if (!title) return;
-    const current = this.history.getCurrent();
-
-    fetch(`/api/map`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, parent_map_id: current.id })
-    })
-    .then(res => res.json())
-    .then(() => {
-      document.getElementById("new-map-title").value = "";
-      bootstrap.Modal.getInstance(document.getElementById("createMapModal")).hide();
-      this.pageManager.loadMap(current.id);
-    });
+  async submitNewMap() {
+    await this.ui.handleNewMapSubmit();
   }
 }
 
@@ -689,6 +734,83 @@ class SearchManager {
   }
 }
 
+class AppEventBinder {
+  constructor(appController) {
+    this.app = appController;
+  }
+
+  bindAll() {
+    this.bindNavigation();
+    this.bindSearch();
+    this.bindDiscoverButtons();
+    this.bindExistingPageSearch();
+    this.bindPageButtons();
+    this.bindHistoryControls();
+  }
+
+  bindNavigation() {
+    document.getElementById("home-link").onclick = () => this.app.pageManager.loadMap(1);
+  }
+
+  bindSearch() {
+    document.getElementById("search-bar").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") this.app.searchManager.searchQuery(e.target.value);
+    });
+  }
+
+  bindDiscoverButtons() {
+    document.getElementById("discover-btn").onclick = () => this.app.searchManager.getDiscoverPages();
+    document.getElementById("popular-btn").onclick = () => this.app.searchManager.getPopularPages();
+  }
+
+  bindExistingPageSearch() {
+    document.getElementById("existing-page-search").addEventListener("input", (e) => {
+      this.app.searchManager.searchPages(e.target.value);
+    });
+  }
+
+  bindHistoryControls() {
+    const { history, pageManager } = this.app;
+
+    document.getElementById("back-btn").onclick = () => history.back();
+    document.getElementById("forward-btn").onclick = () => history.forward();
+
+    history.setStateChangeCallback((state) => {
+      pageManager.loadByType(state.id, state.type);
+      this.app.updateNavButtons();
+      this.app.updateOptions();
+    });
+  }
+
+  bindPageButtons() {
+    const { pageManager, history } = this.app;
+
+    document.getElementById("page-edit-btn").onclick = () => pageManager.toggleContentEditable();
+    document.getElementById("latex-cleaner-btn").onclick = () => latexCleaning(document.getElementById("page-content"));
+
+    const deleteBtn = document.getElementById("page-delete-btn");
+    const confirmModalEl = document.getElementById("confirmDeleteModal");
+    const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+    const confirmModal = new bootstrap.Modal(confirmModalEl);
+
+    deleteBtn.onclick = () => {
+      confirmModal.show();
+      confirmDeleteBtn.onclick = () => {
+        let id = history.getCurrent().id;
+        let url = `/page/${id}/delete`;
+
+        let onSuccess = () => {
+          history.back();
+          history.remove(id, "page");
+          confirmModal.hide();
+        };
+
+        RequestDelete(url, onSuccess, () => confirmModal.hide());
+      };
+    };
+  }
+}
+
 class AppController {
   constructor() {
     this.history = new History({ id: 1, type: 'map' });
@@ -696,78 +818,16 @@ class AppController {
     this.searchManager = new SearchManager(this.history);
     this.modalManager = new ModalManager(this.history, this.pageManager);
 
+    this.eventBinder = new AppEventBinder(this);
+
     window.onload = () => this.initialize();
   }
 
   initialize() {
-    document.getElementById("home-link").onclick = () => this.pageManager.loadMap(1);
-
-    document.getElementById("search-bar").addEventListener("keypress", (e) => {
-      if (e.key === "Enter") this.searchManager.searchQuery(e.target.value);
-    });
-
-    document.getElementById("discover-btn").onclick = () => this.searchManager.getDiscoverPages();
-    document.getElementById("popular-btn").onclick = () => this.searchManager.getPopularPages();
-
-    document.getElementById("existing-page-search").addEventListener("input", (e) => {
-      this.searchManager.searchPages(e.target.value);
-    });
-
-    this.initializePageButtons();
-
-    this.initializeHistoryFunctionalities();
-
+    this.eventBinder.bindAll();  // Delegate all DOM event setup
     this.pageManager.loadMap(1);
     this.updateOptions();
   }
-
-  initializeHistoryFunctionalities(){
-    document.getElementById("back-btn").onclick = () => this.history.back();
-    document.getElementById("forward-btn").onclick = () => this.history.forward();
-    this.history.setStateChangeCallback((state) => {
-      this.pageManager.loadByType(state.id, state.type);
-      this.updateNavButtons();
-      this.updateOptions();
-    });
-  }
-
-  initializePageButtons() {
-    document.getElementById("page-edit-btn").onclick = () => {
-      this.pageManager.toggleContentEditable();
-    }
-    document.getElementById("latex-cleaner-btn").onclick = () => {
-      latexCleaning(document.getElementById("page-content"));
-    };
-
-    const deleteBtn = document.getElementById("page-delete-btn");
-    const confirmModalEl = document.getElementById("confirmDeleteModal");
-    const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
-
-    // Bootstrap modal instance
-    const confirmModal = new bootstrap.Modal(confirmModalEl);
-
-    deleteBtn.onclick = () => {
-      // Show confirmation modal first
-      confirmModal.show();
-
-      // Set up confirm delete click handler (bound to this instance)
-      confirmDeleteBtn.onclick = () => {
-        let id = this.history.getCurrent().id;
-        let url = `/api/page/${id}/delete`;
-
-        let onSuccess = (d) => {
-          this.history.back();
-          this.history.remove(id, "page");
-          confirmModal.hide();
-        };
-
-        RequestDelete(url, onSuccess, (d) => {
-          confirmModal.hide();
-        });
-      };
-    };
-}
-
 
   updateNavButtons() {
     document.getElementById("back-btn").disabled = !this.history.canGoBack();
