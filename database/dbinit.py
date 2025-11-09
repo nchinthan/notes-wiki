@@ -14,7 +14,7 @@ DATABASE_NAME = "notes_db"
 
 CONFIG_PATH = "config.py"
 
-HTML_PATH = "Pages"
+HTML_PATH = r"content\pages"
 
 db_config = {"host": "localhost"}
 
