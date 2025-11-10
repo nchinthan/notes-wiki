@@ -5,6 +5,7 @@ import json
 import os
 from scraping.main import routine_update , close_browser , init_browser
 import threading
+import sys
 
 def routine():
     init_browser()
@@ -177,7 +178,22 @@ def from_web():
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    content_type = request.args.get("type")
+    content_id = request.args.get("id")
+    return render_template(
+        "index.html",
+        content_type=content_type,
+        content_id=content_id
+    )
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    ip = "127.0.0.1"
+    port = 5000
+
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+        if ':' in arg:
+            ip, port = arg.split(':')
+            port = int(port)
+
+    app.run(host=ip, port=port, debug=True)

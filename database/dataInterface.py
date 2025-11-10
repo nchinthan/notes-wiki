@@ -85,6 +85,9 @@ class Map:
             "pages": pages,
             "maps": maps
         }
+        parent_name = db.run(f"select title from map where id  = {map_id}")
+        if parent_name != -1 and len(parent_name)> 0:
+            out["name"] = parent_name[0][0]
         parent_id = db.run(f"select parent_map_id from childMap where child_map_id = {map_id} limit 1 ;")
         if parent_id != -1 and len(parent_id) > 0:
             out["parent_id"] = parent_id[0][0]

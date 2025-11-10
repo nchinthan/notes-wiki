@@ -96,7 +96,7 @@ class MapUI {
       ${data.parent_id ? `
         <div class="text-neon mb-3">
           <button class="btn btn-outline-warning btn-sm" onclick="app.pageManager.loadMap(${data.parent_id})">
-            <i class="bi bi-arrow-up"></i> Back to Parent Map
+            <i class="bi bi-arrow-up"></i> back to ${data.name}'s parent
           </button>
         </div>
       ` : ''}
@@ -306,7 +306,7 @@ class MapManager {
   }
 }
 
-class History {
+class HistoryManager {
   constructor(initialState) {
     this.backStack = [];
     this.forwardStack = [];
@@ -839,8 +839,8 @@ class AppEventBinder {
 }
 
 class AppController {
-  constructor() {
-    this.history = new History({ id: 1, type: 'map' });
+  constructor(initialState) {
+    this.history = new HistoryManager(initialState);
     this.pageManager = new PageManager(this.history);
     this.searchManager = new SearchManager(this.history);
     this.modalManager = new ModalManager(this.history, this.pageManager);
@@ -852,7 +852,7 @@ class AppController {
 
   initialize() {
     this.eventBinder.bindAll();  // Delegate all DOM event setup
-    this.pageManager.loadMap(1);
+    this.pageManager.loadByType(this.history.current.id,this.history.current.type);
     this.updateOptions();
   }
 
@@ -868,8 +868,6 @@ class AppController {
   }
 }
 
-// Declare globally so HTML inline handlers can access
-const app = new AppController();
 
 
 

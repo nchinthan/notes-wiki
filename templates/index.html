@@ -483,6 +483,21 @@
 <script src="{{ url_for('static', filename='CRUD_utils.js') }}"></script>
 <script src="{{ url_for('static', filename='editor.js') }}"></script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+  {% if content_type and content_id %}
+    // URL params found → use them
+    const app = new AppController({
+      id: {{ content_id|tojson }},
+      type: {{ content_type|tojson }}
+    });
+  {% else %}
+    // Default fallback
+    const app = new AppController({
+      id: 1,
+      type: 'map'
+    });
+  {% endif %}
+</script>
 
 <script>
   // Add terminal-like typing effect to search placeholder
