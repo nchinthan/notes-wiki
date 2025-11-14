@@ -1,8 +1,6 @@
 ------------------
-1. drag and drop pages bt maps and 
 
-later : 
-map merger
+
 ------------------
 
 

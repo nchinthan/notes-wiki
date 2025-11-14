@@ -441,15 +441,16 @@ class PageManager {
     if (container.contentEditable === "false") {
       const content = container.innerHTML;
       const id = this.history.getCurrent().id;
-      const token = get_CSRF();
-      fetch(`/api/page/${id}/update`, {
-      method: "PUT",
-      headers: { 
-        "Content-Type": "application/json",
-        ...(token ? { "X-CSRF-Token": token } : {})
-      },
-      body: JSON.stringify({ content })
-      });
+      RequestPut(`/api/page/${id}/update`,{content},(d)=>{})
+
+      // fetch(`/api/page/${id}/update`, {
+      // method: "PUT",
+      // headers: { 
+      //   "Content-Type": "application/json",
+      //   ...(token ? { "X-CSRF-Token":  get_CSRF(); } : {})
+      // },
+      // body: JSON.stringify({ content })
+      // });
     }
   }
 

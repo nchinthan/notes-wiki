@@ -143,53 +143,53 @@ class Page:
         return pageId
     
     @staticmethod
-    def update(pageId,content):
+    def update(pageId, content):
         content = content.encode("utf-8", errors="ignore")
-        filename = os.path.join(HTML_PATH,str(pageId))
+        filename = os.path.join(HTML_PATH, str(pageId))
         all_prev_chunks = db.run(f'select chunk_index,chunk_hash from pageChunkHash where page_id = {pageId} order by chunk_index')
         prev_content_chunks = len(all_prev_chunks)
-        new_content_chunks = math.ceil(len(content)/CHUNK_SIZE)
+        new_content_chunks = math.ceil(len(content) / CHUNK_SIZE)
         
-        updation_sql = 'INSERT INTO pageChunkHash(page_id,chunk_index,chunk_hash) VALUES'
-        
+        update_values = []
         modified = False
-        for chunk_index in range(new_content_chunks):
-            chunk = content[chunk_index*CHUNK_SIZE:(chunk_index+1)*CHUNK_SIZE]
-            chunk_hash = sha256_string(chunk)
-            if chunk_index < prev_content_chunks and not modified:
-                if chunk_hash == all_prev_chunks[chunk_index][1]:
-                    continue 
-                # hash change in chunk
-                else:
-                    modified = True 
-            # new chunks added 
-            else:
-                modified = True
-            
-            # write new modified chunks
-            if modified:
-                updation_sql += f'({pageId},{chunk_index},{chunk_hash})'
-                write_chunk(filename,chunk,chunk_index)
         
-        db.run(updation_sql)
-             
-        # delete extra ones chunks if present in prev version
-        if prev_content_chunks < new_content_chunks:
-            range(prev_content_chunks,new_content_chunks)
-            del_sql = f'DELETE FROM pageChunkHash where page_id = {pageId} and chunk_index in ({','.join(map(str,range(prev_content_chunks,new_content_chunks)))})'
-            db.run(del_sql)
-        """
-        get all chunk_index,chunk_hash from table 
-        modified = false
-        for chunk_index in range(math.ceil(len(content)/CHUNK_SIZE)):
-            chunk = content[chunk_index*CHUNK_SIZE:(chunk_index+1)*CHUNK_SIZE]
-            if (not modified) and (hash(chunk) == tables hash):
-                continue 
+        for chunk_index in range(new_content_chunks):
+            chunk = content[chunk_index * CHUNK_SIZE:(chunk_index + 1) * CHUNK_SIZE]
+            chunk_hash = sha256_string(chunk)
+            
+            if chunk_index < prev_content_chunks:
+                # Existing chunk - check if it changed
+                if chunk_hash != all_prev_chunks[chunk_index][1]:
+                    modified = True
+                    update_values.append((pageId, chunk_index, chunk_hash))
+                    write_chunk(filename, chunk, chunk_index)
+                else:
+                    # Hash is the same, no change needed
+                    continue
             else:
-                modified = true
-                write_chunk(filename,chunk,chunk_index)
-        """
-        pass
+                # New chunk - insert
+                modified = True
+                update_values.append((pageId, chunk_index, chunk_hash))
+                write_chunk(filename, chunk, chunk_index)
+        
+        if modified and update_values:
+            # Build the SQL query for upsert (update or insert)
+            updation_sql = '''
+                INSERT INTO pageChunkHash(page_id, chunk_index, chunk_hash) 
+                VALUES {}
+                ON DUPLICATE KEY UPDATE chunk_hash = VALUES(chunk_hash)
+            '''.format(','.join([f'({pageId}, {chunk_index}, "{chunk_hash}")' for pageId, chunk_index, chunk_hash in update_values]))
+
+            # Flatten the values list for parameter binding
+            db.run(updation_sql)
+        
+        # Delete extra chunks if present in previous version
+        if prev_content_chunks > new_content_chunks:
+            del_sql = f"DELETE FROM pageChunkHash WHERE page_id = {pageId} AND chunk_index >= {new_content_chunks}"
+            db.run(del_sql)
+            modified = True  # Mark as modified since we're deleting chunks
+        
+        return modified 
     
     @staticmethod
     def delete(pageId):

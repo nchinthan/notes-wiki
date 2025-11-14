@@ -1,4 +1,6 @@
-from flask import Flask, request, jsonify,render_template
+from flask import Flask, request, jsonify,render_template,redirect, url_for, session
+from functools import wraps
+import uuid
 from enum import IntEnum
 from database.dataInterface import Map,Page
 import json
@@ -6,6 +8,7 @@ import os
 from scraping.main import routine_update , close_browser , init_browser
 import threading
 import sys
+from database.authenticate import authenticate
 
 def routine():
     init_browser()
@@ -16,11 +19,86 @@ def routine():
 threading.Thread(target=routine, daemon=True).start()
 
 app = Flask(__name__)
+app.secret_key = "jisooForever"
 
 # Assuming Type is an IntEnum
 class Type(IntEnum):
     page = 0
     map = 1
+    
+
+authorized_users = set()
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user_id = session.get("user_id")
+        if not user_id or user_id not in authorized_users:
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# -------------------------------
+# Login Route (with UUID session)
+# -------------------------------
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        data = request.get_json()
+        if not data or not isinstance(data, dict):
+            return render_template("login.html", error="Invalid data format")
+
+        x = data.get("x", {})
+        y = data.get("y", {})
+
+        if not isinstance(x, dict) or not isinstance(y, dict):
+            return render_template("login.html", error="x and y must be dictionaries")
+
+        x_mean = float(x.get("mean"))
+        x_std = float(x.get("std"))
+        y_mean = float(y.get("mean"))
+        y_std = float(y.get("std"))
+        
+        
+
+        if None in [x_mean, x_std, y_mean, y_std]:
+            return render_template("login.html", error="Missing mean or std in x or y")
+
+        # -------------------------------
+        # Implicitly identify the user
+        # -------------------------------
+        if "user_id" not in session:
+            session["user_id"] = str(uuid.uuid4())  # assign new unique ID
+
+        if authenticate(x_mean,x_std,y_mean,y_std):
+            user_id = session["user_id"]
+            authorized_users.add(user_id)
+
+            print(f"[+] User {user_id} logged in with: x=({x_mean},{x_std}) y=({y_mean},{y_std})")
+
+            return jsonify({
+                "success": 1,
+                "redirect": url_for("home", _external=False)
+            })
+        else:
+            return jsonify({
+                "success": 0,
+                "message":"wrong credentials"
+            })
+
+    return render_template("login.html")
+
+@app.route("/")
+@login_required
+def home():
+    content_type = request.args.get("type")
+    content_id = request.args.get("id")
+    return render_template(
+        "index.html",
+        content_type=content_type,
+        content_id=content_id,
+        user_id=session.get("user_id")
+    )
 
 @app.route("/api/map", methods=["POST"])
 def create_map():
@@ -132,10 +210,15 @@ def update_page(page_id):
     content = data.get("content")
 
     if not content:
-        return jsonify({"error": "content is required"}), 400
+        return jsonify({"message": "content is required","success":0}), 400
 
-    Page.update(page_id, content)
-    return jsonify({"status": "page updated", "page_id": page_id})
+    modified = Page.update(page_id, content)
+    data = {
+        "message": "page updated" if modified else "No changes to update",
+        "success":1,
+        "page_id": page_id
+    }
+    return jsonify(data)
 
 @app.route("/api/page/popular", methods=["GET"])
 def popular_pages():
@@ -176,15 +259,7 @@ def from_web():
         data = json.load(f)
     return jsonify(data)
 
-@app.route("/")
-def home():
-    content_type = request.args.get("type")
-    content_id = request.args.get("id")
-    return render_template(
-        "index.html",
-        content_type=content_type,
-        content_id=content_id
-    )
+
 
 if __name__ == "__main__":
     ip = "127.0.0.1"

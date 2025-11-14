@@ -6,6 +6,54 @@
             "attribute": "href",
             "content": [
                 {
+                    "href": "https://towardsdatascience.com/make-python-up-to-150x-faster-with-c/",
+                    "text": "Make Python Up to 150\u00d7 Faster with C"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/programming/",
+                    "text": "PROGRAMMING"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/thomas_reid/",
+                    "text": "Thomas Reid"
+                },
+                {
+                    "href": "https://towardsdatascience.com/why-storytelling-with-data-matters-for-business-and-data-analysts/",
+                    "text": "Why Storytelling With Data Matters for Business and Data Analysts"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/rashidesai/",
+                    "text": "Rashi Desai"
+                },
+                {
+                    "href": "https://towardsdatascience.com/does-more-data-always-yield-better-performance/",
+                    "text": "Does More Data Always Yield Better Performance?"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/mohannad-elhamod/",
+                    "text": "Mohannad Elhamod"
+                },
+                {
+                    "href": "https://towardsdatascience.com/data-culture-is-the-symptom-not-the-solution/",
+                    "text": "Data Culture Is the Symptom, Not the\u00a0Solution"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/jens-linden/",
+                    "text": "Jens Linden"
+                },
+                {
                     "href": "https://towardsdatascience.com/llm-powered-time-series-analysis/",
                     "text": "LLM-Powered Time-Series Analysis"
                 },
@@ -76,57 +124,9 @@
                 {
                     "href": "https://towardsdatascience.com/author/oieivind/",
                     "text": "Eivind Kjosbakken"
-                },
-                {
-                    "href": "https://towardsdatascience.com/tds-newsletter-the-theory-and-practice-of-using-ai-effectively/",
-                    "text": "TDS Newsletter: The Theory and Practice of Using AI Effectively"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/the-variable/",
-                    "text": "THE VARIABLE"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/towardsdatascience/",
-                    "text": "TDS Editors"
-                },
-                {
-                    "href": "https://towardsdatascience.com/expected-value-analysis-in-ai-product-management/",
-                    "text": "Expected Value Analysis in AI Product Management"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/",
-                    "text": "ARTIFICIAL INTELLIGENCE"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/kcpub21/",
-                    "text": "Chinmay Kakatkar"
-                },
-                {
-                    "href": "https://towardsdatascience.com/the-handbook-of-reinforcement-learning-guide-to-the-foundational-questions/",
-                    "text": "The Reinforcement Learning Handbook: A Guide to Foundational Questions"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/reinforcement-learning/",
-                    "text": "REINFORCEMENT LEARNING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/neural-avb/",
-                    "text": "Avishek Biswas"
-                },
-                {
-                    "href": "https://towardsdatascience.com/multi-agent-sql-assistant-part-2-building-a-rag-manager/",
-                    "text": "Multi-Agent SQL Assistant, Part 2: Building a RAG Manager"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/ai-applications/",
-                    "text": "AI APPLICATIONS"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/alle-sravani/",
-                    "text": "Alle Sravani"
                 }
             ],
-            "timestamp": 1762747706.5128057
+            "timestamp": 1762835317.4342608
         }
     ],
     "https://towardsdatascience.com/tag/editors-pick/": [
@@ -135,6 +135,18 @@
             "tag": "a",
             "attribute": "href",
             "content": [
+                {
+                    "href": "https://towardsdatascience.com/why-storytelling-with-data-matters-for-business-and-data-analysts/",
+                    "text": "Why Storytelling With Data Matters for Business and Data Analysts"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/rashidesai/",
+                    "text": "Rashi Desai"
+                },
                 {
                     "href": "https://towardsdatascience.com/llm-powered-time-series-analysis/",
                     "text": "LLM-Powered Time-Series Analysis"
@@ -242,21 +254,9 @@
                 {
                     "href": "https://towardsdatascience.com/author/janna-lipenkova_52659/",
                     "text": "Dr. Janna Lipenkova"
-                },
-                {
-                    "href": "https://towardsdatascience.com/from-classical-models-to-ai-forecasting-humidity-for-energy-and-water-efficiency-in-data-centers-2/",
-                    "text": "From Classical Models to AI: Forecasting Humidity for Energy and Water Efficiency in Data Centers"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/artificial-intelligence/machine-learning/",
-                    "text": "MACHINE LEARNING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/theomitsa/",
-                    "text": "Dr. Theophano Mitsa"
                 }
             ],
-            "timestamp": 1762747735.9951255
+            "timestamp": 1762835324.8841476
         }
     ],
     "https://towardsdatascience.com/tag/deep-dives/": [
@@ -265,6 +265,30 @@
             "tag": "a",
             "attribute": "href",
             "content": [
+                {
+                    "href": "https://towardsdatascience.com/make-python-up-to-150x-faster-with-c/",
+                    "text": "Make Python Up to 150\u00d7 Faster with C"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/programming/",
+                    "text": "PROGRAMMING"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/thomas_reid/",
+                    "text": "Thomas Reid"
+                },
+                {
+                    "href": "https://towardsdatascience.com/data-culture-is-the-symptom-not-the-solution/",
+                    "text": "Data Culture Is the Symptom, Not the\u00a0Solution"
+                },
+                {
+                    "href": "https://towardsdatascience.com/category/data-science/",
+                    "text": "DATA SCIENCE"
+                },
+                {
+                    "href": "https://towardsdatascience.com/author/jens-linden/",
+                    "text": "Jens Linden"
+                },
                 {
                     "href": "https://towardsdatascience.com/multi-agent-sql-assistant-part-2-building-a-rag-manager/",
                     "text": "Multi-Agent SQL Assistant, Part 2: Building a RAG Manager"
@@ -360,33 +384,9 @@
                 {
                     "href": "https://towardsdatascience.com/author/miptgirl/",
                     "text": "Mariya Mansurova"
-                },
-                {
-                    "href": "https://towardsdatascience.com/the-power-of-framework-dimensions-what-data-scientists-should-know/",
-                    "text": "The Power of Framework Dimensions: What Data Scientists Should Know"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/data-science/",
-                    "text": "DATA SCIENCE"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/kcpub21/",
-                    "text": "Chinmay Kakatkar"
-                },
-                {
-                    "href": "https://towardsdatascience.com/building-a-geospatial-lakehouse-with-open-source-and-databricks-2/",
-                    "text": "Building a Geospatial Lakehouse with Open Source and Databricks"
-                },
-                {
-                    "href": "https://towardsdatascience.com/category/data-science/data-engineering/",
-                    "text": "DATA ENGINEERING"
-                },
-                {
-                    "href": "https://towardsdatascience.com/author/rjconstable1989/",
-                    "text": "Robert Constable"
                 }
             ],
-            "timestamp": 1762747754.876026
+            "timestamp": 1762835331.962066
         }
     ]
 }
