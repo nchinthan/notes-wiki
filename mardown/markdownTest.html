@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdown + Math Renderer</title>
+
+<!-- Markdown-it -->
+<script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+
+<!-- Markdown-it-KaTeX plugin -->
+<script src="https://cdn.jsdelivr.net/npm/markdown-it-katex@2.0.3/dist/markdown-it-katex.min.js"></script>
+
+<!-- KaTeX CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<!-- Highlight.js for syntax highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<style>
+    body {
+        background-color: #121212;
+        color: #f5f5f5;
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    textarea#markdownInput {
+        width: 90%;
+        max-width: 900px;
+        height: 180px;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border: none;
+        font-size: 1rem;
+        background-color: #1e1e1e;
+        color: #f5f5f5;
+        margin-bottom: 1rem;
+        resize: vertical;
+    }
+
+    .markdown-container {
+        width: 90%;
+        max-width: 900px;
+        background-color: #1e1e1e;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        line-height: 1.7;
+        font-size: 1.1rem;
+        overflow-wrap: break-word;
+    }
+
+    .markdown-container h1, 
+    .markdown-container h2, 
+    .markdown-container h3 {
+        color: #ffd580;
+        margin-top: 1.2em;
+        border-bottom: 1px solid #444;
+        padding-bottom: 0.3em;
+    }
+
+    .markdown-container pre {
+        background: #2a2a2a;
+        border-radius: 8px;
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    .markdown-container code {
+        background: #2a2a2a;
+        color: #00ffcc;
+        padding: 3px 6px;
+        border-radius: 5px;
+        font-family: "Consolas", monospace;
+    }
+
+    .markdown-container a {
+        color: #66ccff;
+        text-decoration: none;
+    }
+
+    .markdown-container a:hover {
+        text-decoration: underline;
+    }
+
+    .markdown-container blockquote {
+        border-left: 4px solid #66ccff;
+        padding-left: 1rem;
+        color: #cccccc;
+        margin: 1rem 0;
+        background-color: #202020;
+        border-radius: 4px;
+    }
+
+    .markdown-container ul, .markdown-container ol {
+        margin-left: 2rem;
+    }
+</style>
+</head>
+<body>
+
+<h2>Markdown + Math Renderer</h2>
+
+<textarea id="markdownInput" placeholder="Type markdown with LaTeX here..."># Example
+Inline math: $E = mc^2$
+
+Block math:
+$$
+\sum_{i,j} w_{ij}(x_i - x_j)^2
+$$
+
+Or:
+$$
+(d_i - \lambda)x_i = \sum_j w_{ij} x_j
+$$
+</textarea>
+
+<div id="markdownOutput" class="markdown-container"></div>
+
+<script>
+function setMarkdown(targetElement, markdown) {
+    const md = window.markdownit({
+        html: true,
+        linkify: true,
+        typographer: true,
+        highlight: function (str, lang) {
+            try { return hljs.highlightAuto(str).value; }
+            catch (__) { return ''; }
+        }
+    }).use(window.markdownitKatex);
+
+    targetElement.innerHTML = md.render(markdown);
+    hljs.highlightAll();
+}
+
+// Render automatically when user types
+const input = document.getElementById("markdownInput");
+const output = document.getElementById("markdownOutput");
+
+input.addEventListener("input", () => setMarkdown(output, input.value));
+
+// Initial render
+setMarkdown(output, input.value);
+</script>
+
+</body>
+</html>

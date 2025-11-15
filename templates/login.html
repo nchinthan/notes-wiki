@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Canvas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .canvas-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        #pixelCanvas {
+            display: grid;
+            gap: 2px;
+            background: #e0e0e0;
+            padding: 2px;
+            border-radius: 8px;
+            cursor: crosshair;
+            margin: 0 auto;
+            width: fit-content;
+        }
+        
+        .pixel {
+            transition: background-color 0.1s;
+            border: 1px solid #ddd;
+        }
+        
+        .pixel:hover {
+            opacity: 0.8;
+        }
+        
+        .pixel.black {
+            background: #2c3e50;
+        }
+        
+        .color-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .color-option {
+            width: 60px;
+            height: 60px;
+            border: 3px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.active {
+            border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+        }
+        
+        .color-option.white {
+            background: white;
+            border: 3px solid #ddd;
+        }
+        
+        .color-option.white.active {
+            border-color: #667eea;
+        }
+        
+        .color-option.black {
+            background: #2c3e50;
+        }
+        
+        .btn-custom {
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-clear {
+            background: #e74c3c;
+            color: white;
+            border: none;
+        }
+        
+        .btn-clear:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .btn-export {
+            background: #27ae60;
+            color: white;
+            border: none;
+        }
+        
+        .btn-export:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+        
+        #matrixOutput {
+            background: #2c3e50;
+            color: #2ecc71;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .dimension-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .dimension-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .dimension-input label {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .dimension-input input {
+            width: 100px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .btn-update {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-update:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 LOGIN INTERFACE </h1>
+        
+        <div class="canvas-container">
+            <div class="dimension-controls">
+                <div class="dimension-input">
+                    <label for="canvasWidth">Canvas Width</label>
+                    <input type="number" id="canvasWidth" min="1" max="50" value="10">
+                </div>
+                <div class="dimension-input">
+                    <label for="canvasHeight">Canvas Height</label>
+                    <input type="number" id="canvasHeight" min="1" max="50" value="10">
+                </div>
+                <div class="dimension-input">
+                    <label for="pixelSize">Pixel Size (px)</label>
+                    <input type="number" id="pixelSize" min="10" max="100" value="60">
+                </div>
+                <div class="dimension-input">
+                    <button id="updateBtn" class="btn-update">Update Canvas</button>
+                </div>
+            </div>
+            
+            <div class="color-selector">
+                <div class="color-option black active" data-color="1" title="Black (1)"></div>
+                <div class="color-option white" data-color="0" title="White (0)"></div>
+            </div>
+            
+            <div id="pixelCanvas"></div>
+            
+            <div class="controls">
+                <button id="clearBtn" class="btn btn-custom btn-clear">Clear Canvas</button>
+                <button id="exportBtn" class="btn btn-custom btn-export">SUBMIT</button>
+            </div>
+            
+            <div class="mt-4" id="outputContainer" style="display: none;">
+                <h5>Binary Matrix:</h5>
+                <div id="matrixOutput"></div>
+            </div>
+        </div>
+    </div>
+<script src="{{ url_for('static', filename='CRUD_utils.js') }}"></script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+class GraphDraw {
+    constructor(containerId) {
+        this.container = document.getElementById(containerId);
+    }
+
+    clear() {
+        Plotly.purge(this.container);
+        this.container.innerHTML = '';
+    }
+
+    gaussianPlotData(arr, label, color) {
+        const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+        const std = Math.sqrt(arr.map(x => (x - mean) ** 2).reduce((a, b) => a + b, 0) / arr.length);
+
+        // Gaussian curve
+        const min = Math.min(...arr);
+        const max = Math.max(...arr);
+        const xs = Array.from({ length: 100 }, (_, i) => min + i * (max - min) / 99);
+        const ys = xs.map(x => (1 / (std * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * ((x - mean) / std) ** 2));
+
+        return {
+            trace: {
+                x: xs,
+                y: ys,
+                mode: 'lines',
+                line: { color },
+                name: `${label} Gaussian`
+            },
+            mean, std
+        };
+    }
+
+    load(points) {
+        if (!points || points.length === 0) {
+            alert("No points found!");
+            return;
+        }
+
+        const xVals = points.map(p => p.x);
+        const yVals = points.map(p => p.y);
+
+        const xData = this.gaussianPlotData(xVals, 'X', 'blue');
+        const yData = this.gaussianPlotData(yVals, 'Y', 'red');
+
+        const layout = {
+            title: 'Gaussian Distribution of X and Y Coordinates',
+            xaxis: { title: 'Value' },
+            yaxis: { title: 'Density' },
+            legend: { x: 0.8, y: 1 },
+            paper_bgcolor: 'rgba(240,240,240,0.9)',
+            plot_bgcolor: 'rgba(255,255,255,1)'
+        };
+
+        Plotly.newPlot(this.container, [xData.trace, yData.trace], layout);
+        
+        const data = {
+            x:{
+                mean:xData.mean.toFixed(3),
+                std:xData.std.toFixed(3)
+            },
+            y:{
+                mean:yData.mean.toFixed(3),
+                std:yData.std.toFixed(3)
+            }
+        }
+        const statsText = `
+            <b>X Mean:</b> ${xData.mean.toFixed(3)}, <b>X Std:</b> ${xData.std.toFixed(3)}<br>
+            <b>Y Mean:</b> ${yData.mean.toFixed(3)}, <b>Y Std:</b> ${yData.std.toFixed(3)}
+        `;
+
+        const statsDiv = document.createElement('div');
+        statsDiv.innerHTML = statsText;
+        statsDiv.style.marginTop = '10px';
+        statsDiv.style.textAlign = 'center';
+        statsDiv.style.fontWeight = '600';
+        this.container.parentNode.insertBefore(statsDiv, this.container.nextSibling);
+        return data;
+    }
+}
+
+class PixelGrid {
+    constructor(width = 10, height = 10, pixelSize = 60) {
+        this.width = width;
+        this.height = height;
+        this.pixelSize = pixelSize;
+        this.grid = Array(height).fill().map(() => Array(width).fill(0));
+        this.currentColor = 1;
+        this.isDrawing = false;
+        this.canvas = document.getElementById('pixelCanvas');
+        this.init();
+    }
+
+    init() {
+        this.renderGrid();
+        this.setupEventListeners();
+    }
+
+    renderGrid() {
+        this.canvas.innerHTML = '';
+        this.canvas.style.gridTemplateColumns = `repeat(${this.width}, ${this.pixelSize}px)`;
+        this.canvas.style.gridTemplateRows = `repeat(${this.height}, ${this.pixelSize}px)`;
+
+        for (let i = 0; i < this.height; i++) {
+            for (let j = 0; j < this.width; j++) {
+                const pixel = document.createElement('div');
+                pixel.className = 'pixel';
+                pixel.dataset.row = i;
+                pixel.dataset.col = j;
+                pixel.style.width = `${this.pixelSize}px`;
+                pixel.style.height = `${this.pixelSize}px`;
+
+                if (this.grid[i][j] === 1) pixel.classList.add('black');
+                this.canvas.appendChild(pixel);
+            }
+        }
+    }
+
+    setupEventListeners() {
+        this.canvas.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('pixel')) {
+                this.isDrawing = true;
+                this.drawPixel(e.target);
+            }
+        });
+
+        this.canvas.addEventListener('mouseover', (e) => {
+            if (this.isDrawing && e.target.classList.contains('pixel')) {
+                this.drawPixel(e.target);
+            }
+        });
+
+        document.addEventListener('mouseup', () => this.isDrawing = false);
+
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+                e.target.classList.add('active');
+                this.currentColor = parseInt(e.target.dataset.color);
+            });
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            this.clear();
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const grid = this.exportMatrix();
+            const points = this.exportPoints();
+            console.log("Exported Points:", points);
+            graph.clear();
+            const minX = Math.min(...points.map(p => p.x));
+            const minY = Math.min(...points.map(p => p.y));
+            const maxX = Math.max(...points.map(p => p.x));
+            const maxY = Math.max(...points.map(p => p.y));
+            
+            const dX = (maxX-minX);
+            const dY = (maxY-minY);
+            
+            const relativePoints = points.map(p => ({ x: (p.x - minX)/dX, y: (p.y - minY)/dY }));
+            console.log("Relative Points:", relativePoints);
+            RequestPost(`\login`,graph.load(relativePoints),(data)=>{
+                if (data.success && data.redirect) {
+                    // navigate to home
+                    window.location.href = data.redirect;
+                }
+            });
+        });
+
+        document.getElementById('updateBtn').addEventListener('click', () => {
+            this.updateDimensions();
+        });
+    }
+
+    drawPixel(pixelElement) {
+        const row = parseInt(pixelElement.dataset.row);
+        const col = parseInt(pixelElement.dataset.col);
+        this.grid[row][col] = this.currentColor;
+        if (this.currentColor === 1) pixelElement.classList.add('black');
+        else pixelElement.classList.remove('black');
+    }
+
+    clear() {
+        this.grid = Array(this.height).fill().map(() => Array(this.width).fill(0));
+        this.renderGrid();
+        document.getElementById('outputContainer').style.display = 'none';
+    }
+
+    exportMatrix() {
+        const output = document.getElementById('matrixOutput');
+        const container = document.getElementById('outputContainer');
+        const formatted = JSON.stringify(this.grid, null, 2);
+        output.textContent = formatted;
+        container.style.display = 'block';
+        container.querySelector('h5').textContent = `Binary Matrix (${this.width}x${this.height}):`;
+        return this.grid;
+    }
+
+    exportPoints(threshold = 1) {
+        const points = [];
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                if (this.grid[y][x] >= threshold) points.push({ x, y });
+            }
+        }
+        return points;
+    }
+
+    updateDimensions() {
+        const newWidth = parseInt(document.getElementById('canvasWidth').value);
+        const newHeight = parseInt(document.getElementById('canvasHeight').value);
+        const newPixelSize = parseInt(document.getElementById('pixelSize').value);
+        if (newWidth < 1 || newWidth > 50 || newHeight < 1 || newHeight > 50 ||
+            newPixelSize < 10 || newPixelSize > 100) {
+            alert('Please enter valid dimensions: Width/Height (1-50), Pixel Size (10-100)');
+            return;
+        }
+        this.width = newWidth;
+        this.height = newHeight;
+        this.pixelSize = newPixelSize;
+        this.grid = Array(this.height).fill().map(() => Array(this.width).fill(0));
+        this.renderGrid();
+        document.getElementById('outputContainer').style.display = 'none';
+    }
+}
+
+// Initialize grid & graph
+const pixelGrid = new PixelGrid(30, 30, 10);
+const graphContainer = document.createElement('div');
+graphContainer.id = 'graphContainer';
+graphContainer.style.marginTop = '40px';
+graphContainer.style.background = 'white';
+graphContainer.style.borderRadius = '12px';
+graphContainer.style.padding = '20px';
+graphContainer.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+graphContainer.style.minHeight = '500px';
+graphContainer.style.height = 'auto';
+document.querySelector('.canvas-container').appendChild(graphContainer);
+
+const graph = new GraphDraw('graphContainer');
+</script>
+
+</body>
+</html>

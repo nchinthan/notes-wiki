@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Map/Page Explorer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #0f0f1b;
+      color: #e0e0e0;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .navbar, .modal-content {
+      background-color: #1c1c2b;
+      border: 1px solid #2a2a40;
+    }
+
+    .navbar-brand, .form-control, .modal-title, .modal-body, .modal-header {
+      color: #00f7ff !important;
+    }
+
+    .btn {
+      font-weight: bold;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .btn-primary {
+      background-color: #0df;
+      border-color: #0df;
+    }
+
+    .btn-outline-primary {
+      border-color: #0df;
+      color: #0df;
+    }
+
+    .btn-outline-primary:hover {
+      background-color: #0df;
+      color: #000;
+    }
+
+    .btn-warning {
+      background-color: #ffa600;
+      color: #000;
+    }
+
+    .btn-secondary {
+      background-color: #2b2b3c;
+      color: #fff;
+    }
+
+    #content-container {
+      min-height: 400px;
+      background-color: #1c1c2b;
+      border: 1px solid #2a2a40;
+      padding: 20px;
+      margin-top: 10px;
+      color: #fff;
+      border-radius: 10px;
+    }
+
+    .modal-content {
+      color: #fff;
+    }
+
+    input.form-control, textarea.form-control {
+      background-color: #121221;
+      color: #00f7ff;
+      border: 1px solid #0df;
+    }
+
+    footer {
+      color: #777;
+    }
+
+    a.dropdown-item {
+      background-color: #1c1c2b;
+      color: #00f7ff;
+    }
+
+    a.dropdown-item:hover {
+      background-color: #0df;
+      color: #000;
+    }
+
+    /* Glow buttons on hover */
+    .btn:hover {
+      box-shadow: 0 0 10px #0df, 0 0 20px #0df;
+      transition: box-shadow 0.2s ease-in-out;
+    }
+
+    /* Remove default Bootstrap focus ring */
+    .form-control:focus {
+      box-shadow: 0 0 5px #0df;
+    }
+  </style>
+</head>
+<body>
+<div class="container-fluid">
+  <!-- Top Heading -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" id="home-link">🏠 Map Explorer</a>
+      <div class="mx-auto w-50">
+        <input type="text" id="search-bar" class="form-control" placeholder="🔍 Search maps or pages...">
+      </div>
+    </div>
+  </nav>
+
+  <!-- Options Bar -->
+  <div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+      <button class="btn btn-outline-info me-2" id="back-btn">
+        <i class="bi bi-arrow-left-circle-fill"></i>
+      </button>
+      <button class="btn btn-outline-info" id="forward-btn">
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </button>
+    </div>
+
+    <div id="map-options" class="d-none">
+      <div class="btn-group">
+        <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">➕ Add Page</button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addExistingPageModal">Existing Page</a></li>
+          <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createPageModal">New Page</a></li>
+        </ul>
+      </div>
+      <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createMapModal">➕ Add Map</button>
+    </div>
+    <div id="page-options" class="d-none">
+      <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addKeywordModal">🏷️ Add Keyword</button>
+    </div>
+  </div>
+
+  <!-- Content Container -->
+  <div id="content-container" class="mt-3">
+    <!-- Dynamic content loaded here -->
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-4 text-center">
+    <small>&copy; 2025 MapPage Explorer - SciFi UI</small>
+  </footer>
+</div>
+
+<!-- All Modals Below -->
+
+<!-- Keyword Modal -->
+<div class="modal fade" id="addKeywordModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Add Keywords</h5></div>
+      <div class="modal-body">
+        <input type="text" id="keyword-input" class="form-control" placeholder="Enter keywords comma separated">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" onclick="submitKeywords()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Existing Page Modal -->
+<div class="modal fade" id="addExistingPageModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Add Existing Pages</h5></div>
+      <div class="modal-body">
+        <input type="text" id="existing-page-search" class="form-control" placeholder="Search pages...">
+        <div id="existing-page-results" class="mt-3"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" onclick="submitExistingPages()">Add Selected</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Page Modal -->
+<div class="modal fade" id="createPageModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Create New Page</h5></div>
+      <div class="modal-body">
+        <input type="text" id="new-page-title" class="form-control mb-2" placeholder="Page Title">
+        <textarea id="new-page-content" class="form-control" placeholder="Page Content" rows="6"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-success" onclick="submitNewPage()">Create Page</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Map Modal -->
+<div class="modal fade" id="createMapModal" tabindex="-1" aria-labelledby="createMapModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createMapModalLabel">Create New Map</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="new-map-title" class="form-control" placeholder="Enter map title">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" onclick="submitNewMap()">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='CRUD_utils.js') }}"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+/* === SPACE-THEMED SCI-FI DARK NAVY BLUE PALETTE === */
+:root {
+  --space-bg: #0a1128;           /* Deep space navy */
+  --panel-bg: #111a33;          /* Slightly lighter panel */
+  --card-bg: #16213e;           /* Card background */
+  --accent-blue: #00d4ff;        /* Neon sci-fi blue */
+  --accent-cyan: #00ffcc;        /* Secondary glow */
+  --text-primary: #e0f2ff;       /* Light readable text */
+  --text-secondary: #a0c4ff;     /* Muted text */
+  --border-glow: #00aaff;       /* Soft glow border */
+  --success-glow: #00ff88;
+  --warning-glow: #ffd700;
+  --danger-glow: #ff3366;
+  --grid-color: rgba(0, 212, 255, 0.08);
+}
+
+/* === GLOBAL STYLES === */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--space-bg);
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 255, 204, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(0, 170, 255, 0.04) 0%, transparent 70%);
+  color: var(--text-primary);
+  font-family: 'Roboto Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Animated starfield background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(2px 2px at 20% 30%, #fff, transparent 50%),
+    radial-gradient(1.5px 1.5px at 70% 70%, #fff, transparent 50%),
+    radial-gradient(1px 1px at 40% 90%, #00ffff, transparent 50%),
+    radial-gradient(2px 2px at 90% 40%, #00ffcc, transparent 50%);
+  background-size: 200px 200px, 300px 300px, 250px 250px, 350px 350px;
+  background-repeat: repeat;
+  opacity: 0.15;
+  animation: twinkle 8s infinite ease-in-out;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.25; }
+}
+
+/* === TYPOGRAPHY === */
+.cyber-font {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+}
+
+/* === NAVBAR & HEADER === */
+.navbar {
+  background: linear-gradient(135deg, var(--panel-bg) 0%, #0c1633 100%);
+  border-bottom: 1px solid var(--border-glow);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 212, 255, 0.1);
+  backdrop-filter: blur(8px);
+  padding: 0.75rem 1rem;
+}
+
+.navbar-brand {
+  color: var(--accent-blue) !important;
+  font-size: 1.4rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: var(--accent-cyan) !important;
+  text-shadow: 0 0 15px var(--accent-blue);
+}
+
+/* === BUTTONS === */
+.btn {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1.5px solid;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.6s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-outline-primary,
+.btn-primary {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  background: transparent;
+}
+
+.btn-outline-primary:hover,
+.btn-primary:hover {
+  background: rgba(0, 212, 255, 0.15);
+  color: white;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+  border-color: var(--accent-cyan);
+}
+
+.btn-warning {
+  border-color: var(--warning-glow);
+  color: var(--warning-glow);
+}
+
+.btn-warning:hover {
+  background: rgba(255, 215, 0, 0.15);
+  color: white;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.btn-danger {
+  border-color: var(--danger-glow);
+  color: var(--danger-glow);
+}
+
+.btn-danger:hover {
+  background: rgba(255, 51, 102, 0.15);
+  color: white;
+  box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
+}
+
+/* === INPUT & SEARCH BAR === */
+.input-group-text {
+  background: var(--card-bg);
+  border: 1px solid var(--border-glow);
+  color: var(--accent-blue);
+}
+
+.form-control {
+  background: var(--card-bg);
+  border: 1px solid var(--border-glow);
+  color: var(--text-primary);
+  font-family: 'Roboto Mono', monospace;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  background: #1a2a55;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 0.2rem rgba(0, 212, 255, 0.25);
+  color: white;
+}
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.2em;
+  background: var(--accent-blue);
+  animation: blink 1s step-end infinite;
+  margin-left: 4px;
+  vertical-align: middle;
+  box-shadow: 0 0 8px var(--accent-blue);
+}
+
+/* === CONTENT CONTAINER === */
+#content-container {
+  min-height: 500px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-glow);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(0, 212, 255, 0.1);
+  backdrop-filter: blur(6px);
+}
+
+#content-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), var(--accent-cyan), transparent);
+  box-shadow: 0 0 10px var(--accent-blue);
+  animation: pulse-line 4s infinite ease-in-out;
+}
+
+@keyframes pulse-line {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Grid overlay */
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+  animation: grid-drift 20s linear infinite;
+}
+
+@keyframes grid-drift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(30px, 30px); }
+}
+
+/* === STATUS BAR === */
+.status-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-blue));
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px var(--accent-blue);
+}
+
+.status-bar::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  animation: scan 2.5s linear infinite;
+}
+
+@keyframes scan {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* === MODALS === */
+.modal-content {
+  background: var(--panel-bg);
+  border: 1px solid var(--border-glow);
+  border-radius: 12px;
+  color: var(--text-primary);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 212, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.modal-header, .modal-footer {
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.modal-title {
+  color: var(--accent-blue);
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+
+/* === LIST GROUPS === */
+.list-group-item {
+  background: var(--card-bg);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.list-group-item:hover {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+}
+
+.link-info, .link-warning {
+  color: var(--accent-cyan) !important;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link-info:hover, .link-warning:hover {
+  color: white !important;
+  text-shadow: 0 0 8px var(--accent-cyan);
+}
+
+/* === WORKFLOW MODAL (Inner Content) === */
+#workflow-content {
+  scrollbar-color: var(--accent-blue) var(--card-bg);
+}
+
+#workflow-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+#workflow-content::-webkit-scrollbar-track {
+  background: var(--card-bg);
+  border-radius: 4px;
+}
+
+#workflow-content::-webkit-scrollbar-thumb {
+  background: var(--accent-blue);
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.5);
+}
+
+/* Workflow Steps */
+.workflow-step {
+  background: rgba(22, 33, 62, 0.7);
+  border-left: 4px solid;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.workflow-step:hover {
+  transform: translateX(4px);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.step-number {
+  background: var(--accent-blue);
+  color: #000;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* === FOOTER === */
+footer {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  padding: 1rem 0;
+  border-top: 1px dashed rgba(0, 212, 255, 0.3);
+  text-align: center;
+  animation: fadeIn 1s ease-out;
+}
+
+.text-success { color: var(--success-glow) !important; }
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .navbar-brand { font-size: 1.1rem; }
+  .btn { font-size: 0.75rem; padding: 0.4rem 0.8rem; }
+  #content-container { padding: 1rem; }
+}
+
+/* ---- Navbar scan-line (moving neon bar) ---- */
+.navbar-scan-line {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0,212,255,0.12),
+    rgba(0,255,204,0.12),
+    transparent);
+  animation: navbarScan 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes navbarScan {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ---- Button glow on hover ---- */
+.btn-glow:hover {
+  box-shadow: 0 0 20px rgba(0,212,255,0.5), 0 0 30px rgba(0,255,204,0.3);
+  transform: translateY(-1px);
+}
+
+/* ---- Input-group glow ---- */
+.input-group-glow {
+  filter: drop-shadow(0 0 8px rgba(0,212,255,0.2));
+}
+.input-group-glow .form-control:focus {
+  box-shadow: 0 0 0 .2rem rgba(0,212,255,.35);
+}
+
+/* ---- Brand icon pulse ---- */
+.animate-glow {
+  animation: iconPulse 2.5s ease-in-out infinite;
+}
+@keyframes iconPulse {
+  0%,100% { filter: brightness(1) drop-shadow(0 0 4px rgba(0,212,255,0)); }
+  50%     { filter: brightness(1.4) drop-shadow(0 0 12px rgba(0,212,255,.6)); }
+}
+
+/* ---- Responsive tweaks (optional) ---- */
+@media (max-width: 576px) {
+  .navbar-brand .d-none.d-sm-inline { display: none !important; }
+  .navbar-brand .d-inline.d-sm-none { display: inline !important; }
+}
