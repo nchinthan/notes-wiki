@@ -11,3 +11,4 @@ database/config.py
 scraping/__pycache__/
 test.py
 scraping\__pycache__
+scraping\websites.json
