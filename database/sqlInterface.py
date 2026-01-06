@@ -12,6 +12,7 @@ class DataBase:
             password=password,
             database=dbname
         )
+        self.MODE = "development"  # or "production"
         self.logfile = open("DBlog.txt", 'w', encoding="utf-8")
 
         # Shared queue and worker thread

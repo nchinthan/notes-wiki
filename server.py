@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify,render_template,redirect, url_for, ses
 from functools import wraps
 import uuid
 from enum import IntEnum
-from database.dataInterface import Map,Page
+from database.dataInterface import Map,Page, db
 import json
 import os
 from scraping.main import routine_update , close_browser , init_browser
@@ -28,6 +28,7 @@ class Type(IntEnum):
     
 
 authorized_users = set()
+high_level_users = set()
 
 def login_required(f):
     @wraps(f)
@@ -70,10 +71,12 @@ def login():
         if "user_id" not in session:
             session["user_id"] = str(uuid.uuid4())  # assign new unique ID
 
-        if authenticate(x_mean,x_std,y_mean,y_std):
+        authentication_info = authenticate(x_mean,x_std,y_mean,y_std)
+        if authentication_info["normal_access"] or authentication_info["high_level_access"]:
             user_id = session["user_id"]
             authorized_users.add(user_id)
-
+            if authentication_info["high_level_access"]:
+                high_level_users.add(user_id)
             print(f"[+] User {user_id} logged in with: x=({x_mean},{x_std}) y=({y_mean},{y_std})")
 
             return jsonify({
@@ -102,6 +105,9 @@ def home():
 
 @app.route("/api/map", methods=["POST"])
 def create_map():
+    user_id = session.get("user_id")
+    if db.MODE != "development" and user_id not in high_level_users: # bypass for high level users
+        return jsonify({"success":1,"message": "Map creation is only allowed in development mode"}), 403
     data = request.json
     title = data.get("title")
     parent_map_id = data.get("parent_map_id")
@@ -114,6 +120,9 @@ def create_map():
 
 @app.route("/api/map/<int:map_id>/rename",methods=['PUT'])
 def rename_map(map_id):
+    user_id = session.get("user_id")
+    if db.MODE != "development" and user_id not in high_level_users: # bypass for high level users
+        return jsonify({"success":0,"message": "Renaming maps is only allowed in development mode"}), 403
     data = request.json
     new_name = data.get("new_name","")
     if new_name == "":
@@ -141,6 +150,9 @@ def get_map_children(map_id):
 
 @app.route("/api/map/<int:map_id>/child", methods=["POST"])
 def add_map_child(map_id):
+    user_id = session.get("user_id")
+    if db.MODE != "development" and user_id not in high_level_users: # bypass for high level users
+        return jsonify({"error": "Adding map children is only allowed in development mode"}), 403
     data = request.json
     child_id = data.get("child_id")
     type_ = data.get("type")  # 0 for page, 1 for map
@@ -153,6 +165,9 @@ def add_map_child(map_id):
 
 @app.route("/api/map/<int:map_id>/child/delete", methods=["DELETE"])
 def remove_map_child(map_id):
+    user_id = session.get("user_id")
+    if db.MODE != "development" and user_id not in high_level_users: # bypass for high level users
+        return jsonify({"error": "Removing map children is only allowed in development mode"}), 403
     data = request.json
     child_id = data.get("child_id")
     type_ = data.get("type")
@@ -165,6 +180,9 @@ def remove_map_child(map_id):
 
 @app.route("/api/page", methods=["POST"])
 def create_page():
+    user_id = session.get("user_id")
+    if db.MODE != "development" and user_id not in high_level_users: # bypass for high level users
+        return jsonify({"error": "Page creation is only allowed in development mode"}), 403
     data = request.json
     title = data.get("title")
     content = data.get("content")
@@ -197,6 +215,9 @@ def get_page(page_id):
 
 @app.route("/api/page/<int:page_id>/delete",methods=["DELETE"])
 def delete_page(page_id):
+    user_id = session.get("user_id")
+    if db.MODE != "development" and user_id not in high_level_users: # bypass for high level users
+        return jsonify({"success":0,"message": "Page deletion is only allowed in development mode"}), 403
     success,message = Page.delete(page_id)
     out = {
         "success": int(success),
@@ -206,6 +227,9 @@ def delete_page(page_id):
 
 @app.route("/api/page/<int:page_id>/update", methods=["PUT"])
 def update_page(page_id):
+    user_id = session.get("user_id")
+    if db.MODE != "development" and user_id not in high_level_users: # bypass for high level users
+        return jsonify({"success":0,"message": "Page updating is only allowed in development mode"}), 403
     data = request.json
     content = data.get("content")
 
@@ -243,6 +267,9 @@ def search_pages():
 
 @app.route("/api/page/<int:page_id>/keywords", methods=["POST"])
 def add_keywords(page_id):
+    user_id = session.get("user_id")
+    if db.MODE != "development" and user_id not in high_level_users: # bypass for high level users
+        return jsonify({"error": "Adding keywords is only allowed in development mode"}), 403
     data = request.json
     keywords = data.get("keywords", [])
 
@@ -267,6 +294,8 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         arg = sys.argv[1]
+        db.MODE = "production"
+        print("[*] Running in production mode aka SAFE MODE ")
         if ':' in arg:
             ip, port = arg.split(':')
             port = int(port)

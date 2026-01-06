@@ -77,8 +77,14 @@ class Map:
     @staticmethod
     def get_children(map_id:int):
         res = db.call_procedure("getMapChildren", [map_id])
+
         # Convert list of tuples to list of dicts for pages
-        pages = [{"id": row[0], "title": row[1], "view": row[2], "ref_cnt": row[3]} for row in res[0]]
+        pages = [
+            {
+                "id": row[0]  ,
+                "title": "PRIVATE PAGE" if db.MODE != "development" and row[5] == 1 else row[1],
+                "view": row[2], "ref_cnt": row[3]} 
+            for row in res[0]]
         # Convert list of tuples to list of dicts for maps
         maps = [{"id": row[0], "title": row[1]} for row in res[1]]
         out = {
@@ -209,12 +215,16 @@ class Page:
     @staticmethod
     def getPage(page_id):
         # Get page title and keywords from SQL
-        res = db.run(f"SELECT title FROM page WHERE id = {page_id}")
+        res = db.run(f"SELECT title,access FROM page WHERE id = {page_id}")
         # Update last_accessed to current timestamp
         db.run(f"UPDATE page SET last_accessed = CURRENT_TIMESTAMP, view = view + 1 WHERE id = {page_id} ")
         if not res:
             return None
         title = res[0][0]
+        access = res[0][1]
+        # access is 1 means private
+        if access == 1 and db.MODE != "development":
+            return {"id": page_id, "title": title, "html": "This page is private."}
         content = read_file(os.path.join(HTML_PATH,str(page_id)))
         return {"id": page_id, "title": title, "html": content}
     
